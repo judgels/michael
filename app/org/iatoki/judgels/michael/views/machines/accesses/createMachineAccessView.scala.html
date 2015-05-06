@@ -1,0 +1,6 @@
+@(machineId: Long)
+
+@import play.i18n.Messages
+
+<a href="@org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createKeyMachineAccess(machineId)" class="btn btn-primary">@Messages.get("machine.access.createKey")</a>
+<a href="@org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createPasswordMachineAccess(machineId)" class="btn btn-primary">@Messages.get("machine.access.createPassword")</a>

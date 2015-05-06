@@ -1,0 +1,82 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Imports
+->          /                               commons.Routes
+
+
+# Home page
+GET     /                                                                                   @org.iatoki.judgels.michael.controllers.UserController.index()
+GET     /login                                                                              @org.iatoki.judgels.michael.controllers.UserController.login()
+POST    /login                                                                              @org.iatoki.judgels.michael.controllers.UserController.postLogin()
+GET     /logout                                                                             @org.iatoki.judgels.michael.controllers.UserController.logout()
+
+GET     /applications                                                                       @org.iatoki.judgels.michael.controllers.ApplicationController.index()
+GET     /applications/                                                                      @org.iatoki.judgels.michael.controllers.ApplicationController.listApplications(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /applications/create                                                                @org.iatoki.judgels.michael.controllers.ApplicationController.createApplication()
+POST    /applications/create                                                                @org.iatoki.judgels.michael.controllers.ApplicationController.postCreateApplication()
+GET     /applications/$aId<[0-9]{1,18}>/update/general                                      @org.iatoki.judgels.michael.controllers.ApplicationController.updateApplicationGeneral(aId: Long)
+POST    /applications/$aId<[0-9]{1,18}>/update/general                                      @org.iatoki.judgels.michael.controllers.ApplicationController.postUpdateApplicationGeneral(aId: Long)
+GET     /applications/$aId<[0-9]{1,18}>/view                                                @org.iatoki.judgels.michael.controllers.ApplicationController.viewApplication(aId: Long)
+
+GET     /applications/$aId<[0-9]{1,18}>/versions                                            @org.iatoki.judgels.michael.controllers.ApplicationVersionController.viewApplicationVersions(aId: Long)
+GET     /applications/$aId<[0-9]{1,18}>/versions/                                           @org.iatoki.judgels.michael.controllers.ApplicationVersionController.listApplicationVersions(aId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /applications/$aId<[0-9]{1,18}>/versions/create                                     @org.iatoki.judgels.michael.controllers.ApplicationVersionController.createApplicationVersion(aId: Long)
+POST    /applications/$aId<[0-9]{1,18}>/versions/create                                     @org.iatoki.judgels.michael.controllers.ApplicationVersionController.postCreateApplicationVersion(aId: Long)
+
+GET     /dashboards                                                                         @org.iatoki.judgels.michael.controllers.DashboardController.index()
+GET     /dashboards/                                                                        @org.iatoki.judgels.michael.controllers.DashboardController.listDashboards(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /dashboards/create                                                                  @org.iatoki.judgels.michael.controllers.DashboardController.createDashboard()
+POST    /dashboards/create                                                                  @org.iatoki.judgels.michael.controllers.DashboardController.postCreateDashboard()
+GET     /dashboards/$dId<[0-9]{1,18}>/update/general                                        @org.iatoki.judgels.michael.controllers.DashboardController.updateDashboardGeneral(dId: Long)
+POST    /dashboards/$dId<[0-9]{1,18}>/update/general                                        @org.iatoki.judgels.michael.controllers.DashboardController.postUpdateDashboardGeneral(dId: Long)
+GET     /dashboards/$dId<[0-9]{1,18}>/view                                                  @org.iatoki.judgels.michael.controllers.DashboardController.viewDashboard(dId: Long)
+
+GET     /machines                                                                           @org.iatoki.judgels.michael.controllers.MachineController.index()
+GET     /machines/                                                                          @org.iatoki.judgels.michael.controllers.MachineController.listMachines(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /machines/create                                                                    @org.iatoki.judgels.michael.controllers.MachineController.createMachine()
+POST    /machines/create                                                                    @org.iatoki.judgels.michael.controllers.MachineController.postCreateMachine()
+GET     /machines/$mId<[0-9]{1,18}>/update                                                  @org.iatoki.judgels.michael.controllers.MachineController.updateMachineGeneral(mId: Long)
+POST    /machines/$mId<[0-9]{1,18}>/update/general                                          @org.iatoki.judgels.michael.controllers.MachineController.postUpdateMachineGeneral(mId: Long)
+GET     /machines/$mId<[0-9]{1,18}>/view                                                    @org.iatoki.judgels.michael.controllers.MachineController.viewMachine(mId: Long)
+
+GET     /machines/$mId<[0-9]{1,18}>/accesses                                                @org.iatoki.judgels.michael.controllers.MachineAccessController.viewMachineAccesses(mId: Long)
+GET     /machines/$mId<[0-9]{1,18}>/accesses/                                               @org.iatoki.judgels.michael.controllers.MachineAccessController.listMachineAccesses(mId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /machines/$mId<[0-9]{1,18}>/accesses/create                                         @org.iatoki.judgels.michael.controllers.MachineAccessController.createMachineAccess(mId: Long)
+GET     /machines/$mId<[0-9]{1,18}>/accesses/createKey                                      @org.iatoki.judgels.michael.controllers.MachineAccessController.createKeyMachineAccess(mId: Long)
+POST    /machines/$mId<[0-9]{1,18}>/accesses/createKey                                      @org.iatoki.judgels.michael.controllers.MachineAccessController.postCreateKeyMachineAccess(mId: Long)
+GET     /machines/$mId<[0-9]{1,18}>/accesses/createPassword                                 @org.iatoki.judgels.michael.controllers.MachineAccessController.createPasswordMachineAccess(mId: Long)
+POST    /machines/$mId<[0-9]{1,18}>/accesses/createPassword                                 @org.iatoki.judgels.michael.controllers.MachineAccessController.postCreatePasswordMachineAccess(mId: Long)
+
+GET     /machines/$mId<[0-9]{1,18}>/watchers                                                @org.iatoki.judgels.michael.controllers.MachineWatcherController.viewMachineWatchers(mId: Long)
+GET     /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/enable                            @org.iatoki.judgels.michael.controllers.MachineWatcherController.enableMachineWatcher(mId: Long, watcherType: String)
+POST    /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/enable                            @org.iatoki.judgels.michael.controllers.MachineWatcherController.postEnableMachineWatcher(mId: Long, watcherType: String)
+GET     /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/update                            @org.iatoki.judgels.michael.controllers.MachineWatcherController.updateMachineWatcher(mId: Long, watcherType: String)
+POST    /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/$mWId<[0-9]{1,18}>/update         @org.iatoki.judgels.michael.controllers.MachineWatcherController.postUpdateMachineWatcher(mId: Long, mWId: Long, watcherType: String)
+
+GET     /operations                                                                         @org.iatoki.judgels.michael.controllers.OperationController.index()
+GET     /operations/                                                                        @org.iatoki.judgels.michael.controllers.OperationController.listOperations(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET     /operations/create                                                                  @org.iatoki.judgels.michael.controllers.OperationController.createOperation()
+GET     /operations/createSingleMachine                                                     @org.iatoki.judgels.michael.controllers.OperationController.createSingleMachineOperation()
+POST    /operations/createSingleMachine                                                     @org.iatoki.judgels.michael.controllers.OperationController.postCreateSingleMachineOperation()
+GET     /operations/createCopy                                                              @org.iatoki.judgels.michael.controllers.OperationController.createCopyOperation()
+POST    /operations/createCopy                                                              @org.iatoki.judgels.michael.controllers.OperationController.postCreateCopyOperation()
+GET     /operations/$oId<[0-9]{1,18}>/updateSingleMachine                                   @org.iatoki.judgels.michael.controllers.OperationController.updateSingleMachineOperation(oId: Long)
+POST    /operations/$oId<[0-9]{1,18}>/updateSingleMachine                                   @org.iatoki.judgels.michael.controllers.OperationController.postUpdateSingleMachineOperation(oId: Long)
+GET     /operations/$oId<[0-9]{1,18}>/updateCopy                                            @org.iatoki.judgels.michael.controllers.OperationController.updateCopyOperation(oId: Long)
+POST    /operations/$oId<[0-9]{1,18}>/updateCopy                                            @org.iatoki.judgels.michael.controllers.OperationController.postUpdateCopyOperation(oId: Long)
+GET     /operations/$oId<[0-9]{1,18}>/runSingleMachine                                      @org.iatoki.judgels.michael.controllers.OperationController.runSingleMachineOperation(oId: Long)
+POST    /operations/$oId<[0-9]{1,18}>/runSingleMachine                                      @org.iatoki.judgels.michael.controllers.OperationController.postRunSingleMachineOperation(oId: Long)
+GET     /operations/$oId<[0-9]{1,18}>/runCopy                                               @org.iatoki.judgels.michael.controllers.OperationController.runCopyOperation(oId: Long)
+POST    /operations/$oId<[0-9]{1,18}>/runCopy                                               @org.iatoki.judgels.michael.controllers.OperationController.postRunCopyOperation(oId: Long)
+GET     /operations/$oId<[0-9]{1,18}>/success                                               @org.iatoki.judgels.michael.controllers.OperationController.operationSuccess(oId: Long)
+GET     /operations/$oId<[0-9]{1,18}>/fail                                                  @org.iatoki.judgels.michael.controllers.OperationController.operationFail(oId: Long)
+
+POST    /services/versionList                                                               @org.iatoki.judgels.michael.controllers.apis.ApplicationVersionAPIController.versionList()
+POST    /services/accessList                                                                @org.iatoki.judgels.michael.controllers.apis.MachineAccessAPIController.accessList()
+POST    /services/dataPoints/$mId<[0-9]{1,18}>/:watcherType                                 @org.iatoki.judgels.michael.controllers.apis.MachineWatcherAPIController.getDataPoints(mId: Long, watcherType: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                   controllers.Assets.at(path="/public", file)
+GET     /vassets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
