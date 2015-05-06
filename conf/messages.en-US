@@ -1,0 +1,94 @@
+login.heading.login=Login
+general.login=Login
+
+application.application=Application
+application.applications=Applications
+application.name=Name
+application.type=Type
+
+application.list=Applications
+application.create=Create Application
+application.update=Update Application
+
+application.version=Application Version
+application.version.name=Name
+
+application.version.list=Versions
+application.version.create=Create Version
+
+dashboard.dashboard=Dashboard
+dashboard.dashboards=Dashboards
+dashboard.name=Name
+dashboard.description=Description
+
+dashboard.list=Dashboards
+dashboard.create=Create Dashboard
+dashboard.update=Update Dashboard
+
+machine.machine=Machine
+machine.machines=Machines
+machine.displayName=Display Name
+machine.instanceName=Instance Name
+machine.baseDir=Base Directory
+machine.type=Type
+machine.ipAddress=IP Address
+machine.state=State
+
+machine.list=Machines
+machine.create=Create Machine
+machine.update=Update Machine
+machine.view=View Machine
+
+machine.access=Machine Access
+machine.access.name=Name
+machine.access.username=Username
+machine.access.port=Port
+machine.access.key.key=Key
+machine.access.password.password=Password
+machine.access.type=Access Type
+
+machine.access.list=Accesses
+machine.access.create=Create Machine Access
+machine.access.createKey=Using Key
+machine.access.key.create=Create Using Key
+machine.access.createPassword=Using Username Password
+machine.access.password.create=Create Using Password
+
+machine.watcher=Machine Watcher
+machine.watcher.enabled=Enabled Watchers
+machine.watcher.unenabled=Unenabled Watchers
+machine.watcher.awsEC2.useKeyCredential=Use Key Credentials?
+machine.watcher.awsEC2.accessKey=AWS Access Key
+machine.watcher.awsEC2.secretKey=AWS Secret Key
+machine.watcher.awsEC2.regionId=AWS Region Id
+
+machine.watcher.list=Watchers
+machine.watcher.enable=Enable
+machine.watcher.update=Update
+
+operation.operation=Operation
+operation.operations=Operations
+operation.name=Name
+operation.type=Type
+operation.singleMachine.command=Command
+operation.singleMachine.machine=Target Machine
+operation.singleMachine.access=Target Access
+operation.singleMachine.application=Application
+operation.singleMachine.version=Version
+operation.copy.file1=Source File
+operation.copy.file2=Target File
+operation.copy.machine1=Source Machine
+operation.copy.access1=Source Access
+operation.copy.machine2=Target Machine
+operation.copy.access2=Target Access
+operation.copy.application=Application
+operation.copy.version=Version
+
+operation.list=Operations
+operation.create=Create Operation
+operation.createSingleMachine=Create Single Machine Operation
+operation.singleMachine.create=Create Single Machine Operation
+operation.createCopy=Create Copy Operation
+operation.copy.create=Create Copy Operation
+operation.update=Update Operation
+operation.run=Run

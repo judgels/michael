@@ -1,0 +1,37 @@
+@(machine: org.iatoki.judgels.michael.Machine, adapters: List[org.iatoki.judgels.michael.MachineWatcherAdapter])
+
+@import play.i18n.Messages
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>@Messages.get("commons.id")</td>
+            <td>@machine.getId</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("commons.jid")</td>
+            <td>@machine.getJid</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("machine.displayName")</td>
+            <td>@machine.getDisplayName</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("machine.instanceName")</td>
+            <td>@machine.getInstanceName</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("machine.baseDir")</td>
+            <td>@machine.getBaseDir</td>
+        </tr>
+    </tbody>
+</table>
+
+@for(adapter <- adapters) {
+    <h3>@adapter.getType.name()</h3>
+    <div class="well clearfix">
+        @adapter.renderWatcher()
+    </div>
+}

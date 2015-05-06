@@ -1,0 +1,8 @@
+@(form: Form[org.iatoki.judgels.michael.MachineAccessUpsertKeyForm])(implicit fieldConstructor: b3.B3FieldConstructor)
+
+@import play.i18n.Messages
+
+@b3.text(form("name"), '_label -> Messages.get("machine.access.name"))
+@b3.text(form("username"), '_label -> Messages.get("machine.access.username"))
+@b3.textarea(form("key"), '_label -> Messages.get("machine.access.key.key"))
+@b3.number(form("port"), '_label -> Messages.get("machine.access.port"))
