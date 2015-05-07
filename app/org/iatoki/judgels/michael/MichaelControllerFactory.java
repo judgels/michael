@@ -3,6 +3,7 @@ package org.iatoki.judgels.michael;
 import org.iatoki.judgels.michael.controllers.ApplicationController;
 import org.iatoki.judgels.michael.controllers.ApplicationVersionController;
 import org.iatoki.judgels.michael.controllers.DashboardController;
+import org.iatoki.judgels.michael.controllers.DashboardMachineController;
 import org.iatoki.judgels.michael.controllers.MachineAccessController;
 import org.iatoki.judgels.michael.controllers.MachineController;
 import org.iatoki.judgels.michael.controllers.MachineWatcherController;
@@ -19,6 +20,8 @@ public interface MichaelControllerFactory {
     ApplicationVersionController createApplicationVersionController();
 
     DashboardController createDashboardController();
+
+    DashboardMachineController createDashboardMachineController();
 
     MachineAccessController createMachineAccessController();
 

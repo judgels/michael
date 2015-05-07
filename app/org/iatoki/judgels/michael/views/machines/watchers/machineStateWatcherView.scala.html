@@ -1,5 +1,6 @@
-@(state: String)
+@(machineName: String, state: String)
 
 @import play.i18n.Messages
 
+<h3>@machineName</h3>
 @Messages.get("machine.state") @state

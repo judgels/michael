@@ -8,6 +8,8 @@ public interface MichaelServiceFactory {
 
     DashboardService createDashboardService();
 
+    DashboardMachineService createDashboardMachineService();
+
     MachineService createMachineService();
 
     MachineAccessService createMachineAccessService();

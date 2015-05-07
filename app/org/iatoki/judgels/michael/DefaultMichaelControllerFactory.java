@@ -3,6 +3,7 @@ package org.iatoki.judgels.michael;
 import org.iatoki.judgels.michael.controllers.ApplicationController;
 import org.iatoki.judgels.michael.controllers.ApplicationVersionController;
 import org.iatoki.judgels.michael.controllers.DashboardController;
+import org.iatoki.judgels.michael.controllers.DashboardMachineController;
 import org.iatoki.judgels.michael.controllers.MachineAccessController;
 import org.iatoki.judgels.michael.controllers.MachineController;
 import org.iatoki.judgels.michael.controllers.MachineWatcherController;
@@ -32,7 +33,12 @@ public final class DefaultMichaelControllerFactory implements MichaelControllerF
 
     @Override
     public DashboardController createDashboardController() {
-        return new DashboardController(michaelServiceFactory.createDashboardService(), michaelServiceFactory.createMachineService());
+        return new DashboardController(michaelServiceFactory.createDashboardService(), michaelServiceFactory.createDashboardMachineService(), michaelServiceFactory.createMachineWatcherService());
+    }
+
+    @Override
+    public DashboardMachineController createDashboardMachineController() {
+        return new DashboardMachineController(michaelServiceFactory.createDashboardService(), michaelServiceFactory.createDashboardMachineService());
     }
 
     @Override

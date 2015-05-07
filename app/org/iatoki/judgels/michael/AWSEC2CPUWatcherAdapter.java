@@ -34,7 +34,7 @@ public final class AWSEC2CPUWatcherAdapter implements GraphMachineWatcherAdapter
 
     @Override
     public Html renderWatcher() {
-        return machineCPUUtilizationWatcherView.render("CPU Util", org.iatoki.judgels.michael.controllers.apis.routes.MachineWatcherAPIController.getDataPoints(machine.getId(), getType().name()).toString(), 60000L);
+        return machineCPUUtilizationWatcherView.render(machine.getDisplayName() + " - CPU Util", org.iatoki.judgels.michael.controllers.apis.routes.MachineWatcherAPIController.getDataPoints(machine.getId(), getType().name()).toString(), 60000L);
     }
 
     @Override

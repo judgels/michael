@@ -35,8 +35,6 @@ import java.util.List;
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineWatcherController extends BaseController {
 
-    private static final long PAGE_SIZE = 20;
-
     private final MachineService machineService;
     private final MachineWatcherService machineWatcherService;
 
