@@ -7,7 +7,7 @@ import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.MachineService;
 import org.iatoki.judgels.michael.MachineWatcher;
-import org.iatoki.judgels.michael.MachineWatcherConfFactory;
+import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.MachineWatcherService;
 import org.iatoki.judgels.michael.MachineWatcherTypes;
 import org.iatoki.judgels.michael.MachineWatcherUtils;
@@ -37,8 +37,8 @@ public final class MachineWatcherAPIController extends Controller {
         try {
             Machine machine = machineService.findByMachineId(machineId);
             if (EnumUtils.isValidEnum(MachineWatcherTypes.class, watcherType)) {
-                if (machineWatcherService.isWatcherEnabled(machine.getJid(), MachineWatcherTypes.valueOf(watcherType))) {
-                    MachineWatcherConfFactory factory = MachineWatcherUtils.getMachineWatcherConfFactory(machine, MachineWatcherTypes.valueOf(watcherType));
+                if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherTypes.valueOf(watcherType))) {
+                    MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherTypes.valueOf(watcherType));
                     if (factory != null) {
                         MachineWatcher machineWatcher = machineWatcherService.findByMachineJidAndWatcherType(machine.getJid(), MachineWatcherTypes.valueOf(watcherType));
                         GraphMachineWatcherAdapter machineWatcherAdapter = (GraphMachineWatcherAdapter)factory.createMachineWatcherAdapter(machine, machineWatcher.getConf());

@@ -1,9 +1,0 @@
-@(form: Form[org.iatoki.judgels.michael.CopyOperationUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
-
-@import play.i18n.Messages
-@import org.iatoki.judgels.michael.CopyOperationTypes
-
-@b3.text(form("name"), '_label -> Messages.get("operation.name"))
-@b3.select(form("type"), CopyOperationTypes.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("operation.type"), 'class -> "selectpicker")
-@b3.text(form("file1"), '_label -> Messages.get("operation.copy.file1"))
-@b3.text(form("file2"), '_label -> Messages.get("operation.copy.file2"))

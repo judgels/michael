@@ -2,7 +2,6 @@ package org.iatoki.judgels.michael;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import org.iatoki.judgels.commons.IdentityUtils;
 import org.iatoki.judgels.commons.Page;
 import org.iatoki.judgels.michael.models.dao.interfaces.OperationDao;
@@ -39,50 +38,22 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createSingleMachineOperation(String name, SingleMachineOperationTypes operationTypes, String command) {
-        SingleMachineOperationCommand operationCommand = new SingleMachineOperationCommand(command);
+    public void createOperation(String name, OperationTypes types, String conf) {
         OperationModel operationModel = new OperationModel();
         operationModel.name = name;
-        operationModel.type = operationTypes.name();
-        operationModel.command = new Gson().toJson(operationCommand);
+        operationModel.type = types.name();
+        operationModel.conf = conf;
 
         operationDao.persist(operationModel, "michael", IdentityUtils.getIpAddress());
     }
 
     @Override
-    public void updateSingleMachineOperation(long operationId, String name, SingleMachineOperationTypes operationTypes, String command) throws OperationNotFoundException {
+    public void updateOperation(long operationId, String name, OperationTypes types, String conf) throws OperationNotFoundException {
         OperationModel operationModel = operationDao.findById(operationId);
         if (operationModel != null) {
-            SingleMachineOperationCommand operationCommand = new SingleMachineOperationCommand(command);
             operationModel.name = name;
-            operationModel.type = operationTypes.name();
-            operationModel.command = new Gson().toJson(operationCommand);
-
-            operationDao.edit(operationModel, "michael", IdentityUtils.getIpAddress());
-        } else {
-            throw new OperationNotFoundException("Operation not found.");
-        }
-    }
-
-    @Override
-    public void createCopyOperation(String name, CopyOperationTypes operationTypes, String file1, String file2) {
-        CopyOperationCommand operationCommand = new CopyOperationCommand(file1, file2);
-        OperationModel operationModel = new OperationModel();
-        operationModel.name = name;
-        operationModel.type = operationTypes.name();
-        operationModel.command = new Gson().toJson(operationCommand);
-
-        operationDao.persist(operationModel, "michael", IdentityUtils.getIpAddress());
-    }
-
-    @Override
-    public void updateCopyOperation(long operationId, String name, CopyOperationTypes operationTypes, String file1, String file2) throws OperationNotFoundException {
-        OperationModel operationModel = operationDao.findById(operationId);
-        if (operationModel != null) {
-            CopyOperationCommand operationCommand = new CopyOperationCommand(file1, file2);
-            operationModel.name = name;
-            operationModel.type = operationTypes.name();
-            operationModel.command = new Gson().toJson(operationCommand);
+            operationModel.type = types.name();
+            operationModel.conf = conf;
 
             operationDao.edit(operationModel, "michael", IdentityUtils.getIpAddress());
         } else {
@@ -91,6 +62,6 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     private Operation createOperationFromModel(OperationModel operationModel) {
-        return new Operation(operationModel.id, operationModel.jid, operationModel.name, operationModel.type, operationModel.command);
+        return new Operation(operationModel.id, operationModel.jid, operationModel.name, operationModel.type, operationModel.conf);
     }
 }

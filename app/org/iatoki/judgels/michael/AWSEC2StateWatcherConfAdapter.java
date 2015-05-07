@@ -2,7 +2,7 @@ package org.iatoki.judgels.michael;
 
 import com.google.gson.Gson;
 
-public final class AWSEC2StateWatcherConfFactory extends AbstractAWSEC2ConfFactory {
+public final class AWSEC2StateWatcherConfAdapter extends AbstractAWSEC2ConfAdapter {
 
     @Override
     public MachineWatcherAdapter createMachineWatcherAdapter(Machine machine, String conf) {

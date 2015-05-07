@@ -2,18 +2,17 @@ package org.iatoki.judgels.michael;
 
 import play.data.validation.Constraints;
 
-public final class MachineAccessUpsertPasswordForm {
+public final class OperationOneMachineOneAppExecForm {
 
     @Constraints.Required
-    public String name;
+    public String machineJid;
 
     @Constraints.Required
-    public String username;
+    public long accessId;
 
     @Constraints.Required
-    public String password;
+    public String applicationJid;
 
     @Constraints.Required
-    public int port;
-
+    public long versionId;
 }

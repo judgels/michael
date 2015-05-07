@@ -1,4 +1,4 @@
-@(form: Form[org.iatoki.judgels.michael.AWSEC2WatcherConfForm], target: play.api.mvc.Call)
+@(form: Form[org.iatoki.judgels.michael.AWSEC2WatcherConfForm], target: play.api.mvc.Call, submitLabel: String)
 @import com.amazonaws.regions.Regions
 
 @import play.i18n.Messages
@@ -15,7 +15,7 @@
     @b3.checkbox(form("useKeyCredential"), '_label -> Messages.get("machine.watcher.awsEC2.useKeyCredential"))
     @b3.text(form("accessKey"), '_label -> Messages.get("machine.watcher.awsEC2.accessKey"))
     @b3.text(form("secretKey"), '_label -> Messages.get("machine.watcher.awsEC2.secretKey"))
-    @b3.select(form("regionId"), Regions.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.watcher.awsEC2.regionId"), 'class -> "selectpicker")
+    @b3.select(form("regionId"), Regions.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.watcher.awsEC2.regionId"), 'class -> "form-control selectpicker")
 
-    @b3.submit('class -> "btn btn-primary") { @Messages.get("machine.watcher.enable") }
+    @b3.submit('class -> "btn btn-primary") { @submitLabel }
 }

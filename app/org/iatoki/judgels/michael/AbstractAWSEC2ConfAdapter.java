@@ -8,7 +8,7 @@ import play.data.Form;
 import play.mvc.Http;
 import play.twirl.api.Html;
 
-public abstract class AbstractAWSEC2ConfFactory implements MachineWatcherConfFactory {
+public abstract class AbstractAWSEC2ConfAdapter implements MachineWatcherConfAdapter {
 
     @Override
     public Form generateForm() {
@@ -29,8 +29,8 @@ public abstract class AbstractAWSEC2ConfFactory implements MachineWatcherConfFac
     }
 
     @Override
-    public Html getConfHtml(Form form, Call target) {
-        return awsEC2ConfView.render(form, target);
+    public Html getConfHtml(Form form, Call target, String submitLabel) {
+        return awsEC2ConfView.render(form, target, submitLabel);
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class AbstractAWSEC2ConfFactory implements MachineWatcherConfFac
     }
 
     @Override
-    public String proccessRequestForm(Form form) {
+    public String processRequestForm(Form form) {
         Form<AWSEC2WatcherConfForm> realForm = (Form<AWSEC2WatcherConfForm>)form;
         AWSEC2WatcherConfForm watcherConfForm = realForm.get();
         AWSEC2WatcherConf awsec2WatcherConf = new AWSEC2WatcherConf();

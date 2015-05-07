@@ -8,11 +8,7 @@ public interface OperationService {
 
     Operation findByOperationId(long operationId) throws OperationNotFoundException;
 
-    void createSingleMachineOperation(String name, SingleMachineOperationTypes operationTypes, String command);
+    void createOperation(String name, OperationTypes types, String conf);
 
-    void updateSingleMachineOperation(long operationId, String name, SingleMachineOperationTypes operationTypes, String command) throws OperationNotFoundException;
-
-    void createCopyOperation(String name, CopyOperationTypes operationTypes, String file1, String file2);
-
-    void updateCopyOperation(long operationId, String name, CopyOperationTypes operationTypes, String file1, String file2) throws OperationNotFoundException;
+    void updateOperation(long operationId, String name, OperationTypes types, String conf) throws OperationNotFoundException;
 }

@@ -15,7 +15,7 @@ import org.iatoki.judgels.michael.MachineTypes;
 import org.iatoki.judgels.michael.MachineUpsertForm;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherAdapter;
-import org.iatoki.judgels.michael.MachineWatcherConfFactory;
+import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.MachineWatcherService;
 import org.iatoki.judgels.michael.MachineWatcherUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
@@ -71,7 +71,7 @@ public final class MachineController extends BaseController {
         ImmutableList.Builder<MachineWatcherAdapter> machineWatcherAdapterBuilder = ImmutableList.builder();
         if (machine.getType().equals(MachineTypes.AWS_EC2)) {
             for (MachineWatcher machineWatcher : machineWatchers) {
-                MachineWatcherConfFactory factory = MachineWatcherUtils.getMachineWatcherConfFactory(machine, machineWatcher.getType());
+                MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
                 if (factory != null) {
                     machineWatcherAdapterBuilder.add(factory.createMachineWatcherAdapter(machine, machineWatcher.getConf()));
                 }
@@ -160,7 +160,7 @@ public final class MachineController extends BaseController {
               new InternalLink(Messages.get("machine.access"), routes.MachineAccessController.viewMachineAccesses(machine.getId())),
               new InternalLink(Messages.get("machine.watcher"), routes.MachineWatcherController.viewMachineWatchers(machine.getId()))
         ), c));
-        content.appendLayout(c -> headingLayout.render(Messages.get("machine.machine") + " #" + machine.getId() + ": " + machine.getDisplayName(), c));
+        content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.machine") + " #" + machine.getId() + ": " + machine.getDisplayName(), new InternalLink(Messages.get("commons.enter"), routes.MachineController.viewMachine(machine.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),

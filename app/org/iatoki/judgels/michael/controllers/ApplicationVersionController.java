@@ -9,6 +9,7 @@ import org.iatoki.judgels.commons.views.html.layouts.headingLayout;
 import org.iatoki.judgels.commons.views.html.layouts.headingWithActionLayout;
 import org.iatoki.judgels.commons.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.ApplicationService;
+import org.iatoki.judgels.michael.ApplicationVersionNotFoundException;
 import org.iatoki.judgels.michael.ApplicationVersionService;
 import org.iatoki.judgels.michael.Application;
 import org.iatoki.judgels.michael.ApplicationVersion;
@@ -84,6 +85,18 @@ public final class ApplicationVersionController extends BaseController {
             applicationVersionService.createApplicationVersion(application.getJid(), applicationVersionUpsertForm.name);
 
             return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
+        }
+    }
+
+    public Result removeApplicationVersion(long applicationId, long applicationVersionId) throws ApplicationNotFoundException, ApplicationVersionNotFoundException {
+        Application application = applicationService.findByApplicationId(applicationId);
+        ApplicationVersion applicationVersion = applicationVersionService.findByApplicationVersionId(applicationVersionId);
+        if (application.getJid().equals(applicationVersion.getApplicationJid())) {
+            applicationVersionService.removeApplicationVersion(applicationVersionId);
+
+            return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
+        } else {
+            return badRequest();
         }
     }
 

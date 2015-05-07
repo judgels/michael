@@ -1,21 +1,19 @@
 package org.iatoki.judgels.michael;
 
-import com.google.gson.Gson;
-
 public final class Operation {
 
     private final long id;
     private final String jid;
     private final String name;
     private final String type;
-    private final String command;
+    private final String conf;
 
-    public Operation(long id, String jid, String name, String type, String command) {
+    public Operation(long id, String jid, String name, String type, String conf) {
         this.id = id;
         this.jid = jid;
         this.name = name;
         this.type = type;
-        this.command = command;
+        this.conf = conf;
     }
 
     public long getId() {
@@ -34,7 +32,7 @@ public final class Operation {
         return type;
     }
 
-    public <T> T getCommand(Class<T> clazz) {
-        return new Gson().fromJson(command, clazz);
+    public String getConf() {
+        return conf;
     }
 }

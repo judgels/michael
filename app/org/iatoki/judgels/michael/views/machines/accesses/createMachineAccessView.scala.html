@@ -1,6 +1,13 @@
-@(machineId: Long)
+@(machineId: Long, form: Form[org.iatoki.judgels.michael.MachineAccessCreateForm])
 
+@import org.iatoki.judgels.michael.MachineAccessTypes
 @import play.i18n.Messages
 
-<a href="@org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createKeyMachineAccess(machineId)" class="btn btn-primary">@Messages.get("machine.access.createKey")</a>
-<a href="@org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createPasswordMachineAccess(machineId)" class="btn btn-primary">@Messages.get("machine.access.createPassword")</a>
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@b3.form(org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createDefinedMachineAccess(machineId, null)) {
+
+    @b3.select(form("machineAccessType"), MachineAccessTypes.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.access.type"), 'class -> "form-control selectpicker")
+
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
+}
