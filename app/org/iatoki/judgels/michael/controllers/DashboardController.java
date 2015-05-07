@@ -1,18 +1,29 @@
 package org.iatoki.judgels.michael.controllers;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.iatoki.judgels.commons.InternalLink;
 import org.iatoki.judgels.commons.LazyHtml;
 import org.iatoki.judgels.commons.Page;
 import org.iatoki.judgels.commons.controllers.BaseController;
 import org.iatoki.judgels.commons.views.html.layouts.headingLayout;
 import org.iatoki.judgels.commons.views.html.layouts.headingWithActionLayout;
+import org.iatoki.judgels.commons.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Dashboard;
-import org.iatoki.judgels.michael.DashboardService;
-import org.iatoki.judgels.michael.Dashboard;
+import org.iatoki.judgels.michael.DashboardMachineService;
 import org.iatoki.judgels.michael.DashboardNotFoundException;
+import org.iatoki.judgels.michael.DashboardService;
 import org.iatoki.judgels.michael.DashboardUpsertForm;
-import org.iatoki.judgels.michael.MachineService;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineTypes;
+import org.iatoki.judgels.michael.MachineWatcher;
+import org.iatoki.judgels.michael.MachineWatcherAdapter;
+import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
+import org.iatoki.judgels.michael.MachineWatcherService;
+import org.iatoki.judgels.michael.MachineWatcherTypes;
+import org.iatoki.judgels.michael.MachineWatcherUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
 import org.iatoki.judgels.michael.views.html.dashboards.createDashboardView;
 import org.iatoki.judgels.michael.views.html.dashboards.listDashboardsView;
@@ -26,6 +37,9 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.List;
+import java.util.Map;
+
 @Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class DashboardController extends BaseController {
@@ -33,11 +47,13 @@ public final class DashboardController extends BaseController {
     private static final long PAGE_SIZE = 20;
 
     private final DashboardService dashboardService;
-    private final MachineService machineService;
+    private final DashboardMachineService dashboardMachineService;
+    private final MachineWatcherService machineWatcherService;
 
-    public DashboardController(DashboardService dashboardService, MachineService machineService) {
+    public DashboardController(DashboardService dashboardService, DashboardMachineService dashboardMachineService, MachineWatcherService machineWatcherService) {
         this.dashboardService = dashboardService;
-        this.machineService = machineService;
+        this.dashboardMachineService = dashboardMachineService;
+        this.machineWatcherService = machineWatcherService;
     }
 
     public Result index() {
@@ -60,7 +76,25 @@ public final class DashboardController extends BaseController {
 
     public Result viewDashboard(long dashboardId) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        LazyHtml content = new LazyHtml(viewDashboardView.render(dashboard));
+        List<Machine> machineList = dashboardMachineService.findAllIncludedMachinesByDashboardJid(dashboard.getJid());
+        Map<MachineWatcherTypes, List<MachineWatcherAdapter>> adapterMap = Maps.newHashMap();
+        for (Machine machine : machineList) {
+            List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
+            if (machine.getType().equals(MachineTypes.AWS_EC2)) {
+                for (MachineWatcher machineWatcher : machineWatchers) {
+                    MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
+                    if (factory != null) {
+                        if (!adapterMap.containsKey(machineWatcher.getType())) {
+                            adapterMap.put(machineWatcher.getType(), Lists.newArrayList());
+                        }
+                        List<MachineWatcherAdapter> adapters = adapterMap.get(machineWatcher.getType());
+                        adapters.add(factory.createMachineWatcherAdapter(machine, machineWatcher.getConf()));
+                    }
+                }
+            }
+        }
+
+        LazyHtml content = new LazyHtml(viewDashboardView.render(dashboard, adapterMap));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), new InternalLink(Messages.get("commons.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -134,7 +168,11 @@ public final class DashboardController extends BaseController {
 
     private Result showUpdateDashboardGeneral(Form<DashboardUpsertForm> form, Dashboard dashboard) {
         LazyHtml content = new LazyHtml(updateDashboardGeneralView.render(form, dashboard.getId()));
-        content.appendLayout(c -> headingLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), c));
+        content.appendLayout(c -> tabLayout.render(ImmutableList.of(
+              new InternalLink(Messages.get("dashboard.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId())),
+              new InternalLink(Messages.get("dashboard.machine"), routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()))
+        ), c));
+        content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), new InternalLink(Messages.get("commons.enter"), routes.DashboardController.viewDashboard(dashboard.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index()),

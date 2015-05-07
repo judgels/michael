@@ -24,6 +24,11 @@ public final class DefaultMichaelServiceFactory implements MichaelServiceFactory
     }
 
     @Override
+    public DashboardMachineService createDashboardMachineService() {
+        return new DashboardMachineServiceImpl(michaelDaoFactory.createDashboardMachineDao(), michaelDaoFactory.createMachineDao());
+    }
+
+    @Override
     public MachineService createMachineService() {
         return new MachineServiceImpl(michaelDaoFactory.createMachineDao());
     }

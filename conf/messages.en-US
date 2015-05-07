@@ -25,6 +25,10 @@ dashboard.list=Dashboards
 dashboard.create=Create Dashboard
 dashboard.update=Update Dashboard
 
+dashboard.machine=Dashboard Machines
+dashboard.machine.list=Dashboard Machines
+dashboard.machine.machineJid=Machines
+
 machine.machine=Machine
 machine.machines=Machines
 machine.displayName=Display Name

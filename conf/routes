@@ -34,6 +34,11 @@ GET         /dashboards/$dId<[0-9]{1,18}>/update/general                        
 POST        /dashboards/$dId<[0-9]{1,18}>/update/general                                       @org.iatoki.judgels.michael.controllers.DashboardController.postUpdateDashboardGeneral(dId: Long)
 GET         /dashboards/$dId<[0-9]{1,18}>/view                                                 @org.iatoki.judgels.michael.controllers.DashboardController.viewDashboard(dId: Long)
 
+GET         /dashboards/$dId<[0-9]{1,18}>/machines                                             @org.iatoki.judgels.michael.controllers.DashboardMachineController.viewDashboardMachines(dId: Long)
+GET         /dashboards/$dId<[0-9]{1,18}>/machines/                                            @org.iatoki.judgels.michael.controllers.DashboardMachineController.listCreateDashboardMachines(dId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+POST        /dashboards/$dId<[0-9]{1,18}>/machines/create                                      @org.iatoki.judgels.michael.controllers.DashboardMachineController.postCreateDashboardMachine(dId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET         /dashboards/$dId<[0-9]{1,18}>/machines/$dmId<[0-9]{1,18}>/remove                   @org.iatoki.judgels.michael.controllers.DashboardMachineController.removeDashboardMachine(dId: Long, dmId: Long)
+
 GET         /machines                                                                          @org.iatoki.judgels.michael.controllers.MachineController.index()
 GET         /machines/                                                                         @org.iatoki.judgels.michael.controllers.MachineController.listMachines(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
 GET         /machines/create                                                                   @org.iatoki.judgels.michael.controllers.MachineController.createMachine()

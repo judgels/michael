@@ -6,6 +6,7 @@ import com.typesafe.config.ConfigFactory;
 import org.iatoki.judgels.commons.JudgelsProperties;
 import org.iatoki.judgels.michael.controllers.ApplicationController;
 import org.iatoki.judgels.michael.controllers.ApplicationVersionController;
+import org.iatoki.judgels.michael.controllers.DashboardMachineController;
 import org.iatoki.judgels.michael.controllers.MachineWatcherController;
 import org.iatoki.judgels.michael.controllers.OperationController;
 import org.iatoki.judgels.michael.controllers.DashboardController;
@@ -34,6 +35,7 @@ public class Global extends org.iatoki.judgels.commons.Global {
               .put(ApplicationController.class, michaelControllerFactory.createApplicationController())
               .put(ApplicationVersionController.class, michaelControllerFactory.createApplicationVersionController())
               .put(DashboardController.class, michaelControllerFactory.createDashboardController())
+              .put(DashboardMachineController.class, michaelControllerFactory.createDashboardMachineController())
               .put(MachineAccessController.class, michaelControllerFactory.createMachineAccessController())
               .put(MachineController.class, michaelControllerFactory.createMachineController())
               .put(MachineWatcherController.class, michaelControllerFactory.createMachineWatcherController())

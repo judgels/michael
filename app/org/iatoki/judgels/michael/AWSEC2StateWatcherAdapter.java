@@ -29,7 +29,7 @@ public final class AWSEC2StateWatcherAdapter implements MachineWatcherAdapter {
 
     @Override
     public Html renderWatcher() {
-        return machineStateWatcherView.render(getState());
+        return machineStateWatcherView.render(machine.getDisplayName(), getState());
     }
 
     private String getState() {
