@@ -25,6 +25,30 @@ public final class MachineWatcherUtils {
                 confAdapter = new AWSEC2CPUWatcherConfAdapter();
                 break;
             }
+            case DISK_READ_BYTES: {
+                confAdapter = new AWSEC2DiskReadBytesWatcherConfAdapter();
+                break;
+            }
+            case DISK_READ_OPS: {
+                confAdapter = new AWSEC2DiskReadOpsWatcherConfAdapter();
+                break;
+            }
+            case DISK_WRITE_BYTES: {
+                confAdapter = new AWSEC2DiskWriteBytesWatcherConfAdapter();
+                break;
+            }
+            case DISK_WRITE_OPS: {
+                confAdapter = new AWSEC2DiskWriteOpsWatcherConfAdapter();
+                break;
+            }
+            case NETWORK_IN: {
+                confAdapter = new AWSEC2NetworkInWatcherConfAdapter();
+                break;
+            }
+            case NETWORK_OUT: {
+                confAdapter = new AWSEC2NetworkOutWatcherConfAdapter();
+                break;
+            }
             case STATE: {
                 confAdapter = new AWSEC2StateWatcherConfAdapter();
                 break;

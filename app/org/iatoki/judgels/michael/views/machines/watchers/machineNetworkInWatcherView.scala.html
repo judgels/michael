@@ -1,0 +1,4 @@
+@(label: String, dataPointUrl: String, interval: Long)
+
+<div class="realtime_highcharts col-md-12" data-title="@label" data-url="@dataPointUrl" data-interval="@interval"></div>
+<script type="text/javascript" src="@controllers.routes.Assets.versioned("javascripts/highcharts.js")"></script>
