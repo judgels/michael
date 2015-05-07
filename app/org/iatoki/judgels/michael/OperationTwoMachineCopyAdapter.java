@@ -126,7 +126,7 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
                                         channel = (ChannelSftp) session2.openChannel("sftp");
                                         channel.connect();
                                         channel.cd(FilenameUtils.getFullPathNoEndSeparator(filename2));
-                                        channel.put(new FileInputStream(tempFile), FilenameUtils.getBaseName(filename2));
+                                        channel.put(new FileInputStream(tempFile), FilenameUtils.getName(filename2));
                                         channel.disconnect();
 
                                         session1.disconnect();

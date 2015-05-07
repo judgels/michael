@@ -89,7 +89,9 @@ operation.copy.application=Application
 operation.copy.version=Version
 
 operation.success=Operation Success
+operation.result.success=Operation Success
 operation.fail=Operation Fail
+operation.result.fail=Operation Fail
 
 operation.list=Operations
 operation.create=Create Operation
