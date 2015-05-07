@@ -7,11 +7,9 @@ import org.iatoki.judgels.commons.LazyHtml;
 import org.iatoki.judgels.commons.Page;
 import org.iatoki.judgels.commons.controllers.BaseController;
 import org.iatoki.judgels.commons.views.html.layouts.headingLayout;
-import org.iatoki.judgels.commons.views.html.layouts.headingWithActionLayout;
 import org.iatoki.judgels.commons.views.html.layouts.messageView;
 import org.iatoki.judgels.michael.ApplicationService;
 import org.iatoki.judgels.michael.ApplicationVersionService;
-import org.iatoki.judgels.michael.MachineAccessCreateForm;
 import org.iatoki.judgels.michael.MachineAccessService;
 import org.iatoki.judgels.michael.MachineService;
 import org.iatoki.judgels.michael.Operation;
@@ -22,8 +20,7 @@ import org.iatoki.judgels.michael.OperationService;
 import org.iatoki.judgels.michael.OperationTypes;
 import org.iatoki.judgels.michael.OperationUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
-import org.iatoki.judgels.michael.views.html.operations.createOperationView;
-import org.iatoki.judgels.michael.views.html.operations.listOperationsView;
+import org.iatoki.judgels.michael.views.html.operations.listCreateOperationsView;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.filters.csrf.AddCSRFToken;
@@ -58,52 +55,43 @@ public final class OperationController extends BaseController {
     }
 
     public Result listOperations(long page, String orderBy, String orderDir, String filterString) {
+        Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
         Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listOperationsView.render(currentPage, orderBy, orderDir, filterString));
-        content.appendLayout(c -> headingWithActionLayout.render(Messages.get("operation.list"), new InternalLink(Messages.get("commons.create"), routes.OperationController.createOperation()), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
-              new InternalLink(Messages.get("operation.operations"), routes.OperationController.index())
-        ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operations");
-
-        return ControllerUtils.getInstance().lazyOk(content);
-    }
-
-    public Result createOperation() {
-        Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-
-        return showCreateOperation(form);
+        return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
     }
 
     @AddCSRFToken
-    public Result createDefinedOperation(String operationType) {
+    public Result createOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
         if (EnumUtils.isValidEnum(OperationTypes.class, operationType)) {
             OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operationType));
             if (adapter != null) {
                 Form form = adapter.generateConfForm();
-                return showCreateDefinedOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateDefinedOperation(operationType), Messages.get("commons.create")));
+                return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
             } else {
                 Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
                 form.reject("error.operation.undefined");
-                return showCreateOperation(form);
+                Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+                return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
             }
         } else {
             Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
             form.reject("error.operation.undefined");
-            return showCreateOperation(form);
+            Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
         }
     }
 
     @RequireCSRFCheck
-    public Result postCreateDefinedOperation(String operationType) {
+    public Result postCreateOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
         if (EnumUtils.isValidEnum(OperationTypes.class, operationType)) {
             OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operationType));
             if (adapter != null) {
                 Form form = adapter.bindConfFormFromRequest(request());
                 if (form.hasErrors() || form.hasGlobalErrors()) {
-                    return showCreateDefinedOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateDefinedOperation(operationType), Messages.get("commons.create")));
+                    return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
                 } else {
                     operationService.createOperation(adapter.getNameFromConfForm(form), OperationTypes.valueOf(operationType), adapter.processConfForm(form));
 
@@ -112,12 +100,16 @@ public final class OperationController extends BaseController {
             } else {
                 Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
                 form.reject("error.operation.undefined");
-                return showCreateOperation(form);
+                Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+                return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
             }
         } else {
             Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
             form.reject("error.operation.undefined");
-            return showCreateOperation(form);
+            Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
         }
     }
 
@@ -173,29 +165,27 @@ public final class OperationController extends BaseController {
         }
     }
 
-    private Result showCreateOperation(Form<OperationCreateForm> form) {
-        LazyHtml content = new LazyHtml(createOperationView.render(form));
-        content.appendLayout(c -> headingLayout.render(Messages.get("operation.create"), c));
+    private Result showListCreateOperation(Page<Operation> currentPage, String orderBy, String orderDir, String filterString, Form<OperationCreateForm> form) {
+        LazyHtml content = new LazyHtml(listCreateOperationsView.render(currentPage, orderBy, orderDir, filterString, form));
+        content.appendLayout(c -> headingLayout.render(Messages.get("operation.list"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
-              new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
-              new InternalLink(Messages.get("operation.create"), routes.OperationController.createOperation())
+              new InternalLink(Messages.get("operation.operations"), routes.OperationController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Create");
+        ControllerUtils.getInstance().appendTemplateLayout(content, "Operations");
 
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
-    private Result showCreateDefinedOperation(String operationType, Html html) {
+    private Result showCreateOperation(String operationType, Html html, long page, String orderBy, String orderDir, String filterString) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.create"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
-              new InternalLink(Messages.get("operation.create"), routes.OperationController.createOperation()),
-              new InternalLink(Messages.get("operation.createDefined"), routes.OperationController.createDefinedOperation(operationType))
+              new InternalLink(Messages.get("operation.create"), routes.OperationController.createOperation(operationType, page, orderBy, orderDir, filterString))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Create Defined");
+        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Create");
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
