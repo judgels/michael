@@ -113,6 +113,7 @@ public final class OperationOneMachineOneAppExecAdapter implements OperationAdap
                                             channel.connect();
 
                                             String commandsString = execConf.command;
+                                            commandsString = commandsString.replace("<[(BASE_DIR)]>", machine.getBaseDir());
                                             commandsString = commandsString.replace("<[(APP_NAME)]>", application.getName());
                                             commandsString = commandsString.replace("<[(APP_VERSION)]>", applicationVersion.getName());
                                             String[] commands = commandsString.split("\n");

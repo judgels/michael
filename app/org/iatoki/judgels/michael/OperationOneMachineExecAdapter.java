@@ -109,6 +109,7 @@ public final class OperationOneMachineExecAdapter implements OperationAdapter {
                                     channel.connect();
 
                                     String commandsString = execConf.command;
+                                    commandsString = commandsString.replace("<[(BASE_DIR)]>", machine.getBaseDir());
                                     String[] commands = commandsString.split("\n");
                                     for (String commandString : commands) {
                                         printStream.println(commandString);
