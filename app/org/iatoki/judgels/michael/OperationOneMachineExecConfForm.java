@@ -13,7 +13,6 @@ public final class OperationOneMachineExecConfForm {
     @Constraints.Required
     public String terminationType;
 
-    @Constraints.Required
     public String terminationValue;
 
 }
