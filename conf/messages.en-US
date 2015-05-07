@@ -88,6 +88,9 @@ operation.copy.access2=Target Access
 operation.copy.application=Application
 operation.copy.version=Version
 
+operation.success=Operation Success
+operation.fail=Operation Fail
+
 operation.list=Operations
 operation.create=Create Operation
 operation.createDefined=Create Defined Operation
