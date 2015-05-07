@@ -57,26 +57,14 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     }
 
     @Override
-    public void createKeyMachineAccess(String machineJid, String name, String username, String key, int port) {
+    public void createMachineAccess(String machineJid, String name, MachineAccessTypes types, String conf) {
         MachineAccessModel machineAccessModel = new MachineAccessModel();
         machineAccessModel.machineJid = machineJid;
         machineAccessModel.name = name;
-        machineAccessModel.type = MachineAccesses.KEY.name();
-        machineAccessModel.conf = new Gson().toJson(new MachineAccessKeyConf(username, key, port));
+        machineAccessModel.type = types.name();
+        machineAccessModel.conf = conf;
 
         machineAccessDao.persist(machineAccessModel, "michael", IdentityUtils.getIpAddress());
-    }
-
-    @Override
-    public void createPasswordMachineAccess(String machineJid, String name, String username, String password, int port) {
-        MachineAccessModel machineAccessModel = new MachineAccessModel();
-        machineAccessModel.machineJid = machineJid;
-        machineAccessModel.name = name;
-        machineAccessModel.type = MachineAccesses.PASSWORD.name();
-        machineAccessModel.conf = new Gson().toJson(new MachineAccessPasswordConf(username, password, port));
-
-        machineAccessDao.persist(machineAccessModel, "michael", IdentityUtils.getIpAddress());
-
     }
 
     private MachineAccess createMachineAccessFromModel(MachineAccessModel machineAccessModel) {

@@ -2,17 +2,18 @@ package org.iatoki.judgels.michael;
 
 import play.data.validation.Constraints;
 
-public final class MachineAccessUpsertKeyForm {
+public final class OperationOneMachineExecConfForm {
 
     @Constraints.Required
     public String name;
 
     @Constraints.Required
-    public String username;
+    public String command;
 
     @Constraints.Required
-    public String key;
+    public String terminationType;
 
     @Constraints.Required
-    public int port;
+    public String terminationValue;
+
 }

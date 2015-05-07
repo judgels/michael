@@ -1,8 +1,0 @@
-@(form: Form[org.iatoki.judgels.michael.SingleMachineOperationUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
-
-@import play.i18n.Messages
-@import org.iatoki.judgels.michael.SingleMachineOperationTypes
-
-@b3.text(form("name"), '_label -> Messages.get("operation.name"))
-@b3.select(form("type"), SingleMachineOperationTypes.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("operation.type"), 'class -> "selectpicker")
-@b3.textarea(form("command"), '_label -> Messages.get("operation.singleMachine.command"))

@@ -6,7 +6,7 @@ public interface MachineWatcherService {
 
     List<MachineWatcherTypes> findEnabledWatcherByMachineJid(String machineJid);
 
-    boolean isWatcherEnabled(String machineJid, MachineWatcherTypes types);
+    boolean isWatcherActivated(String machineJid, MachineWatcherTypes types);
 
     MachineWatcher findByWatcherId(long watcherId) throws MachineWatcherNotFoundException;
 
@@ -17,4 +17,6 @@ public interface MachineWatcherService {
     void createWatcher(String machineJid, MachineWatcherTypes types, String conf);
 
     void updateWatcher(long machineWatcherId, String machineJid, MachineWatcherTypes types, String conf);
+
+    void removeWatcher(String machineJid, MachineWatcherTypes types);
 }

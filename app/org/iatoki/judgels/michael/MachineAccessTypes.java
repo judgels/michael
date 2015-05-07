@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael;
 
-public enum MachineAccesses {
+public enum MachineAccessTypes {
 
     KEY,
     PASSWORD

@@ -14,4 +14,6 @@ public interface ApplicationVersionService {
 
     void createApplicationVersion(String applicationJid, String name);
 
+    void removeApplicationVersion(long applicationVersionId) throws ApplicationVersionNotFoundException;
+
 }

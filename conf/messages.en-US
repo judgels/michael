@@ -49,34 +49,34 @@ machine.access.type=Access Type
 
 machine.access.list=Accesses
 machine.access.create=Create Machine Access
-machine.access.createKey=Using Key
-machine.access.key.create=Create Using Key
-machine.access.createPassword=Using Username Password
-machine.access.password.create=Create Using Password
+machine.access.createDefined=Create Defined Machine Access
 
 machine.watcher=Machine Watcher
-machine.watcher.enabled=Enabled Watchers
-machine.watcher.unenabled=Unenabled Watchers
+machine.watcher.active=Active Watchers
+machine.watcher.inactive=Inactive Watchers
 machine.watcher.awsEC2.useKeyCredential=Use Key Credentials?
 machine.watcher.awsEC2.accessKey=AWS Access Key
 machine.watcher.awsEC2.secretKey=AWS Secret Key
 machine.watcher.awsEC2.regionId=AWS Region Id
 
 machine.watcher.list=Watchers
-machine.watcher.enable=Enable
+machine.watcher.activate=Activate
 machine.watcher.update=Update
+machine.watcher.deactivate=Deactivate
 
 operation.operation=Operation
 operation.operations=Operations
 operation.name=Name
 operation.type=Type
-operation.singleMachine.command=Command
+operation.singleMachine.conf=Command
 operation.singleMachine.machine=Target Machine
 operation.singleMachine.access=Target Access
 operation.singleMachine.application=Application
 operation.singleMachine.version=Version
-operation.copy.file1=Source File
-operation.copy.file2=Target File
+operation.termination.type=Termination Type
+operation.termination.value=Termination Value
+operation.copy.sourceFile=Source File
+operation.copy.targetFile=Target File
 operation.copy.machine1=Source Machine
 operation.copy.access1=Source Access
 operation.copy.machine2=Target Machine
@@ -86,9 +86,9 @@ operation.copy.version=Version
 
 operation.list=Operations
 operation.create=Create Operation
-operation.createSingleMachine=Create Single Machine Operation
-operation.singleMachine.create=Create Single Machine Operation
-operation.createCopy=Create Copy Operation
-operation.copy.create=Create Copy Operation
+operation.createDefined=Create Defined Operation
 operation.update=Update Operation
 operation.run=Run
+
+error.machine.access.undefined=Undefined Machine Access
+error.operation.undefined=Undefined Operation

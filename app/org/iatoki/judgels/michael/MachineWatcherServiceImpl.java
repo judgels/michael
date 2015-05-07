@@ -24,7 +24,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public boolean isWatcherEnabled(String machineJid, MachineWatcherTypes types) {
+    public boolean isWatcherActivated(String machineJid, MachineWatcherTypes types) {
         return machineWatcherDao.existByMachineJidAndWatcherType(machineJid, types.name());
     }
 
@@ -66,6 +66,13 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
         machineWatcherModel.conf = conf;
 
         machineWatcherDao.edit(machineWatcherModel, "michael", IdentityUtils.getIpAddress());
+    }
+
+    @Override
+    public void removeWatcher(String machineJid, MachineWatcherTypes types) {
+        MachineWatcherModel machineWatcherModel = machineWatcherDao.findByMachineJidAndWatcherType(machineJid, types.name());
+
+        machineWatcherDao.remove(machineWatcherModel);
     }
 
     private MachineWatcher createMachineWatcherFromModel(MachineWatcherModel machineWatcherModel) {

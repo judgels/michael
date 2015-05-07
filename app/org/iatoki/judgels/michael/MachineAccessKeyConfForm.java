@@ -2,17 +2,17 @@ package org.iatoki.judgels.michael;
 
 import play.data.validation.Constraints;
 
-public final class CopyOperationUpsertForm {
+public final class MachineAccessKeyConfForm {
 
     @Constraints.Required
     public String name;
 
     @Constraints.Required
-    public String type;
+    public String username;
 
     @Constraints.Required
-    public String file1;
+    public String key;
 
     @Constraints.Required
-    public String file2;
+    public int port;
 }

@@ -8,22 +8,23 @@
 @import org.iatoki.judgels.commons.views.html.table.searchView
 @import org.iatoki.judgels.commons.views.html.table.paginationView
 
-<h3>@Messages.get("machine.watcher.enabled")</h3>
+<h3>@Messages.get("machine.watcher.active")</h3>
 @for(enabledWatcher <- enabledWatchers) {
     <div class="well clearfix">
         @enabledWatcher.name()
         <div class="pull-right">
             <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.updateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.update")</a>
+            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.deactivateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.deactivate")</a>
         </div>
     </div>
 }
 
-<h3>@Messages.get("machine.watcher.unenabled")</h3>
+<h3>@Messages.get("machine.watcher.inactive")</h3>
 @for(unenabledWatcher <- unenabledWatchers) {
     <div class="well clearfix">
         @unenabledWatcher.name()
         <div class="pull-right">
-            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.enableMachineWatcher(machineId, unenabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.enable")</a>
+            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.activateMachineWatcher(machineId, unenabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.activate")</a>
         </div>
     </div>
 }

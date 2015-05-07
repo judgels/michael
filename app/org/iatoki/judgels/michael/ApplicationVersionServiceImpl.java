@@ -37,7 +37,12 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
 
     @Override
     public ApplicationVersion findByApplicationVersionId(long applicationVersionId) throws ApplicationVersionNotFoundException {
-        return createApplicationVersionFromModel(applicationVersionDao.findById(applicationVersionId));
+        ApplicationVersionModel applicationVersionModel = applicationVersionDao.findById(applicationVersionId);
+        if (applicationVersionModel != null) {
+            return createApplicationVersionFromModel(applicationVersionModel);
+        } else {
+            throw new ApplicationVersionNotFoundException("Application Version not found.");
+        }
     }
 
     @Override
@@ -49,6 +54,15 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
         applicationVersionDao.persist(applicationVersionModel, "michael", IdentityUtils.getIpAddress());
     }
 
+    @Override
+    public void removeApplicationVersion(long applicationVersionId) throws ApplicationVersionNotFoundException {
+        ApplicationVersionModel applicationVersionModel = applicationVersionDao.findById(applicationVersionId);
+        if (applicationVersionModel != null) {
+            applicationVersionDao.remove(applicationVersionModel);
+        } else {
+            throw new ApplicationVersionNotFoundException("Application Version not found.");
+        }
+    }
 
     private ApplicationVersion createApplicationVersionFromModel(ApplicationVersionModel applicationVersionModel) {
         return new ApplicationVersion(applicationVersionModel.id, applicationVersionModel.applicationJid, applicationVersionModel.name);

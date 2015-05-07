@@ -5,17 +5,17 @@ import play.api.mvc.Call;
 import play.mvc.Http;
 import play.twirl.api.Html;
 
-public interface MachineWatcherConfFactory {
+public interface MachineWatcherConfAdapter {
 
     Form generateForm();
 
     Form generateForm(String conf);
 
-    Html getConfHtml(Form form, Call target);
+    Html getConfHtml(Form form, Call target, String submitLabel);
 
     Form bindFormFromRequest(Http.Request request);
 
-    String proccessRequestForm(Form form);
+    String processRequestForm(Form form);
 
     MachineWatcherAdapter createMachineWatcherAdapter(Machine machine, String conf);
 

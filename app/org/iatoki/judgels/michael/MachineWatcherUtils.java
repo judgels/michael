@@ -2,32 +2,36 @@ package org.iatoki.judgels.michael;
 
 public final class MachineWatcherUtils {
 
-    public static MachineWatcherConfFactory getMachineWatcherConfFactory(Machine machine, MachineWatcherTypes watcherTypes) {
-        MachineWatcherConfFactory confFactory = null;
+    public static MachineWatcherConfAdapter getMachineWatcherConfAdapter(Machine machine, MachineWatcherTypes watcherTypes) {
+        MachineWatcherConfAdapter confAdapter = null;
         switch (machine.getType()) {
-            case AWS_EC2:
-                confFactory = getAWSEC2ConfFactory(watcherTypes);
+            case AWS_EC2: {
+                confAdapter = getAWSEC2ConfAdapter(watcherTypes);
                 break;
-            case LOCAL:
+            }
+            case BARE_METAL: {
                 break;
+            }
             default: break;
         }
 
-        return confFactory;
+        return confAdapter;
     }
 
-    private static MachineWatcherConfFactory getAWSEC2ConfFactory(MachineWatcherTypes watcherTypes) {
-        MachineWatcherConfFactory confFactory = null;
+    private static MachineWatcherConfAdapter getAWSEC2ConfAdapter(MachineWatcherTypes watcherTypes) {
+        MachineWatcherConfAdapter confAdapter = null;
         switch (watcherTypes) {
-            case CPU:
-                confFactory = new AWSEC2CPUWatcherConfFactory();
+            case CPU: {
+                confAdapter = new AWSEC2CPUWatcherConfAdapter();
                 break;
-            case STATE:
-                confFactory = new AWSEC2StateWatcherConfFactory();
+            }
+            case STATE: {
+                confAdapter = new AWSEC2StateWatcherConfAdapter();
                 break;
+            }
             default: break;
         }
 
-        return confFactory;
+        return confAdapter;
     }
 }
