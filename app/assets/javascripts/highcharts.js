@@ -10,8 +10,8 @@ requirejs.config({
 
 require(["jquery", "highcharts"], function( __tes__ ) {
     $(document).ready(function() {
-        var time;
         $(".realtime_highcharts").each(function () {
+            var time;
             var title = $(this).attr("data-title");
             var url = $(this).attr("data-url");
             var interval = parseInt($(this).attr("data-interval"));

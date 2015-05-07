@@ -21,7 +21,7 @@ import play.mvc.Security;
 
 import java.util.Date;
 
-@Transactional
+@Transactional(readOnly = true)
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineWatcherAPIController extends Controller {
 

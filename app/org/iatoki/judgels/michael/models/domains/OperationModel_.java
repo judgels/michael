@@ -12,7 +12,7 @@ public abstract class OperationModel_ extends AbstractJudgelsModel_ {
 
     public static volatile SingularAttribute<OperationModel, String> name;
     public static volatile SingularAttribute<OperationModel, String> type;
-    public static volatile SingularAttribute<OperationModel, String> command;
+    public static volatile SingularAttribute<OperationModel, String> conf;
 
 }
 
