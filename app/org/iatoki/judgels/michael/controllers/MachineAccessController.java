@@ -19,8 +19,7 @@ import org.iatoki.judgels.michael.MachineAccessUtils;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.MachineService;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
-import org.iatoki.judgels.michael.views.html.machines.accesses.createMachineAccessView;
-import org.iatoki.judgels.michael.views.html.machines.accesses.listMachineAccessesView;
+import org.iatoki.judgels.michael.views.html.machines.accesses.listCreateMachineAccessesView;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.filters.csrf.AddCSRFToken;
@@ -45,15 +44,75 @@ public final class MachineAccessController extends BaseController {
     }
 
     public Result viewMachineAccesses(long machineId) throws MachineNotFoundException {
-        return listMachineAccesses(machineId, 0, "id", "asc", "");
+        return listCreateMachineAccesses(machineId, 0, "id", "asc", "");
     }
 
-    public Result listMachineAccesses(long machineId, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
+    public Result listCreateMachineAccesses(long machineId, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
+        Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
         Page<MachineAccess> currentPage = machineAccessService.pageMachineAccesses(machine.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listMachineAccessesView.render(machine.getId(), currentPage, orderBy, orderDir, filterString));
-        content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.access.list"), new InternalLink(Messages.get("commons.create"), routes.MachineAccessController.createMachineAccess(machine.getId())), c));
+        return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
+    }
+
+    @AddCSRFToken
+    public Result createMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
+        Machine machine = machineService.findByMachineId(machineId);
+
+        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
+            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
+            if (adapter != null) {
+                return showCreateMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateMachineAccess(machineId, machineAccessType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
+            } else {
+                Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
+                form.reject("error.machine.access.undefined");
+                Page<MachineAccess> currentPage = machineAccessService.pageMachineAccesses(machine.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+                return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
+            }
+        } else {
+            Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
+            form.reject("error.machine.access.undefined");
+            Page<MachineAccess> currentPage = machineAccessService.pageMachineAccesses(machine.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
+        }
+    }
+
+    @RequireCSRFCheck
+    public Result postCreateMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
+        Machine machine = machineService.findByMachineId(machineId);
+
+        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
+            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
+            if (adapter != null) {
+                Form form = adapter.bindFormFromRequest(request());
+                if (form.hasErrors() || form.hasGlobalErrors()) {
+                    return showCreateMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateMachineAccess(machineId, machineAccessType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
+                } else {
+                    machineAccessService.createMachineAccess(machine.getJid(), adapter.getNameFromForm(form), MachineAccessTypes.valueOf(machineAccessType), adapter.processRequestForm(form));
+
+                    return redirect(routes.MachineAccessController.viewMachineAccesses(machine.getId()));
+                }
+            } else {
+                Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
+                form.reject("error.machine.access.undefined");
+                Page<MachineAccess> currentPage = machineAccessService.pageMachineAccesses(machine.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+                return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
+            }
+        } else {
+            Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
+            form.reject("error.machine.access.undefined");
+            Page<MachineAccess> currentPage = machineAccessService.pageMachineAccesses(machine.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
+        }
+    }
+
+    private Result showListCreateMachineAccesses(Machine machine, Page<MachineAccess> currentPage, String orderBy, String orderDir, String filterString, Form<MachineAccessCreateForm> form) {
+        LazyHtml content = new LazyHtml(listCreateMachineAccessesView.render(machine.getId(), currentPage, orderBy, orderDir, filterString, form));
+        content.appendLayout(c -> headingLayout.render(Messages.get("machine.access.list"), c));
         appendTabLayout(content, machine);
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -65,87 +124,17 @@ public final class MachineAccessController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
-    public Result createMachineAccess(long machineId) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
-
-        return showCreateMachineAccess(machine, form);
-    }
-
-    @AddCSRFToken
-    public Result createDefinedMachineAccess(long machineId, String machineAccessType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-
-        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
-            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
-            if (adapter != null) {
-                return showCreateDefinedMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateDefinedMachineAccess(machineId, machineAccessType), Messages.get("commons.create")));
-            } else {
-                Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
-                form.reject("error.machine.access.undefined");
-                return showCreateMachineAccess(machine, form);
-            }
-        } else {
-            Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
-            form.reject("error.machine.access.undefined");
-            return showCreateMachineAccess(machine, form);
-        }
-    }
-
-    @RequireCSRFCheck
-    public Result postCreateDefinedMachineAccess(long machineId, String machineAccessType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-
-        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
-            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
-            if (adapter != null) {
-                Form form = adapter.bindFormFromRequest(request());
-                if (form.hasErrors() || form.hasGlobalErrors()) {
-                    return showCreateDefinedMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateDefinedMachineAccess(machineId, machineAccessType), Messages.get("commons.create")));
-                } else {
-                    machineAccessService.createMachineAccess(machine.getJid(), adapter.getNameFromForm(form), MachineAccessTypes.valueOf(machineAccessType), adapter.processRequestForm(form));
-
-                    return redirect(routes.MachineAccessController.viewMachineAccesses(machine.getId()));
-                }
-            } else {
-                Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
-                form.reject("error.machine.access.undefined");
-                return showCreateMachineAccess(machine, form);
-            }
-        } else {
-            Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
-            form.reject("error.machine.access.undefined");
-            return showCreateMachineAccess(machine, form);
-        }
-    }
-
-    private Result showCreateMachineAccess(Machine machine, Form<MachineAccessCreateForm> form) {
-        LazyHtml content = new LazyHtml(createMachineAccessView.render(machine.getId(), form));
+    private Result showCreateMachineAccess(Machine machine, String accessType, Html html, long page, String orderBy, String orderDir, String filterString) {
+        LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.access.create"), c));
         appendTabLayout(content, machine);
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.access.list"), routes.MachineAccessController.viewMachineAccesses(machine.getId())),
-              new InternalLink(Messages.get("machine.access.create"), routes.MachineAccessController.createMachineAccess(machine.getId()))
+              new InternalLink(Messages.get("machine.access.create"), routes.MachineAccessController.createMachineAccess(machine.getId(), accessType, page, orderBy, orderDir, filterString))
         ));
         ControllerUtils.getInstance().appendTemplateLayout(content, "Machines - Create");
-
-        return ControllerUtils.getInstance().lazyOk(content);
-    }
-
-    private Result showCreateDefinedMachineAccess(Machine machine, String accessType, Html html) {
-        LazyHtml content = new LazyHtml(html);
-        content.appendLayout(c -> headingLayout.render(Messages.get("machine.access.createDefined"), c));
-        appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
-              new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
-              new InternalLink(Messages.get("machine.access.list"), routes.MachineAccessController.viewMachineAccesses(machine.getId())),
-              new InternalLink(Messages.get("machine.access.create"), routes.MachineAccessController.createMachineAccess(machine.getId())),
-              new InternalLink(Messages.get("machine.access.createDefined"), routes.MachineAccessController.createDefinedMachineAccess(machine.getId(), accessType))
-        ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machines - Create Defined");
 
         return ControllerUtils.getInstance().lazyOk(content);
     }

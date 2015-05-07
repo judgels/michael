@@ -48,10 +48,9 @@ POST        /machines/$mId<[0-9]{1,18}>/update/general                          
 GET         /machines/$mId<[0-9]{1,18}>/view                                                   @org.iatoki.judgels.michael.controllers.MachineController.viewMachine(mId: Long)
 
 GET         /machines/$mId<[0-9]{1,18}>/accesses                                               @org.iatoki.judgels.michael.controllers.MachineAccessController.viewMachineAccesses(mId: Long)
-GET         /machines/$mId<[0-9]{1,18}>/accesses/                                              @org.iatoki.judgels.michael.controllers.MachineAccessController.listMachineAccesses(mId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
-GET         /machines/$mId<[0-9]{1,18}>/accesses/create                                        @org.iatoki.judgels.michael.controllers.MachineAccessController.createMachineAccess(mId: Long)
-GET         /machines/$mId<[0-9]{1,18}>/accesses/createDefined                                 @org.iatoki.judgels.michael.controllers.MachineAccessController.createDefinedMachineAccess(mId: Long, machineAccessType: String)
-POST        /machines/$mId<[0-9]{1,18}>/accesses/createDefined                                 @org.iatoki.judgels.michael.controllers.MachineAccessController.postCreateDefinedMachineAccess(mId: Long, machineAccessType: String)
+GET         /machines/$mId<[0-9]{1,18}>/accesses/                                              @org.iatoki.judgels.michael.controllers.MachineAccessController.listCreateMachineAccesses(mId: Long, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+GET         /machines/$mId<[0-9]{1,18}>/accesses/create                                        @org.iatoki.judgels.michael.controllers.MachineAccessController.createMachineAccess(mId: Long, machineAccessType: String, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+POST        /machines/$mId<[0-9]{1,18}>/accesses/create                                        @org.iatoki.judgels.michael.controllers.MachineAccessController.postCreateMachineAccess(mId: Long, machineAccessType: String, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
 
 GET         /machines/$mId<[0-9]{1,18}>/watchers                                               @org.iatoki.judgels.michael.controllers.MachineWatcherController.viewMachineWatchers(mId: Long)
 GET         /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/activate                         @org.iatoki.judgels.michael.controllers.MachineWatcherController.activateMachineWatcher(mId: Long, watcherType: String)
@@ -62,9 +61,8 @@ GET         /machines/$mId<[0-9]{1,18}>/watchers/:watcherType/deactivate        
 
 GET         /operations                                                                        @org.iatoki.judgels.michael.controllers.OperationController.index()
 GET         /operations/                                                                       @org.iatoki.judgels.michael.controllers.OperationController.listOperations(pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
-GET         /operations/create                                                                 @org.iatoki.judgels.michael.controllers.OperationController.createOperation()
-GET         /operations/createDefined                                                          @org.iatoki.judgels.michael.controllers.OperationController.createDefinedOperation(operationType: String)
-POST        /operations/createDefined                                                          @org.iatoki.judgels.michael.controllers.OperationController.postCreateDefinedOperation(operationType: String)
+GET         /operations/create                                                                 @org.iatoki.judgels.michael.controllers.OperationController.createOperation(operationType: String, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
+POST        /operations/create                                                                 @org.iatoki.judgels.michael.controllers.OperationController.postCreateOperation(operationType: String, pageIndex: Long ?= 0, orderBy ?= "id", orderDir ?= "asc", filterString ?= "")
 GET         /operations/$oId<[0-9]{1,18}>/update                                               @org.iatoki.judgels.michael.controllers.OperationController.updateOperation(oId: Long)
 POST        /operations/$oId<[0-9]{1,18}>/update                                               @org.iatoki.judgels.michael.controllers.OperationController.postUpdateOperation(oId: Long)
 GET         /operations/$oId<[0-9]{1,18}>/run                                                  @org.iatoki.judgels.michael.controllers.OperationController.runOperation(oId: Long)
