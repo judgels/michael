@@ -34,7 +34,7 @@
     @for((watcherType, adapterList) <- adapterMap) {
         <div id="@watcherType.name()" class="clearfix">
             @for(adapter <- adapterList) {
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="well clearfix">
                         @adapter.renderWatcher()
                     </div>
