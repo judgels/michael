@@ -1,10 +1,4 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
-# Imports
-->          /                                                                                  commons.Routes
-
+->          /                                                                                  playcommons.Routes
 
 # Home page
 GET         /                                                                                  @org.iatoki.judgels.michael.controllers.UserController.index()
