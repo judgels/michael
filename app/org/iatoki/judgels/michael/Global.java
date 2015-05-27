@@ -23,9 +23,13 @@ import java.util.Map;
 
 public class Global extends org.iatoki.judgels.commons.Global {
 
-    private final Map<Class<?>, Controller> controllersRegistry;
+    private Map<Class<?>, Controller> controllersRegistry;
 
-    public Global() {
+    @Override
+    public void onStart(Application app) {
+        org.iatoki.judgels.michael.BuildInfo$ buildInfo = org.iatoki.judgels.michael.BuildInfo$.MODULE$;
+        JudgelsProperties.buildInstance(buildInfo.name(), buildInfo.version(), ConfigFactory.load());
+
         Config config = ConfigFactory.load();
         MichaelProperties.buildInstance(config);
 
@@ -45,12 +49,6 @@ public class Global extends org.iatoki.judgels.commons.Global {
               .put(MachineAccessAPIController.class, michaelControllerFactory.createMachineAccessApiController())
               .put(MachineWatcherAPIController.class, michaelControllerFactory.createMachineWatcherApiController())
               .build();
-    }
-
-    @Override
-    public void onStart(Application app) {
-        org.iatoki.judgels.michael.BuildInfo$ buildInfo = org.iatoki.judgels.michael.BuildInfo$.MODULE$;
-        JudgelsProperties.buildInstance(buildInfo.name(), buildInfo.version(), ConfigFactory.load());
 
         super.onStart(app);
     }
