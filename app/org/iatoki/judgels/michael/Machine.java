@@ -7,10 +7,10 @@ public final class Machine {
     private final String instanceName;
     private final String displayName;
     private final String baseDir;
-    private final MachineTypes type;
+    private final MachineType type;
     private final String ipAddress;
 
-    public Machine(long id, String jid, String instanceName, String displayName, String baseDir, MachineTypes type, String ipAddress) {
+    public Machine(long id, String jid, String instanceName, String displayName, String baseDir, MachineType type, String ipAddress) {
         this.id = id;
         this.jid = jid;
         this.instanceName = instanceName;
@@ -40,7 +40,7 @@ public final class Machine {
         return baseDir;
     }
 
-    public MachineTypes getType() {
+    public MachineType getType() {
         return type;
     }
 

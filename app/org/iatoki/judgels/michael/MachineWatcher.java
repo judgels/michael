@@ -4,10 +4,10 @@ public final class MachineWatcher {
 
     private final long id;
     private final String machineJid;
-    private final MachineWatcherTypes type;
+    private final MachineWatcherType type;
     private final String conf;
 
-    public MachineWatcher(long id, String machineJid, MachineWatcherTypes type, String conf) {
+    public MachineWatcher(long id, String machineJid, MachineWatcherType type, String conf) {
         this.id = id;
         this.machineJid = machineJid;
         this.type = type;
@@ -22,7 +22,7 @@ public final class MachineWatcher {
         return machineJid;
     }
 
-    public MachineWatcherTypes getType() {
+    public MachineWatcherType getType() {
         return type;
     }
 

@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael;
 
-public enum MachineTypes {
+public enum MachineType {
     AWS_EC2,
     BARE_METAL
 }
