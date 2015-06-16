@@ -1,7 +1,7 @@
 @(machineId: Long, page: org.iatoki.judgels.commons.Page[org.iatoki.judgels.michael.MachineAccess], orderBy: String, orderDir: String, filterString: String, form: Form[org.iatoki.judgels.michael.MachineAccessCreateForm])
 
 @import org.iatoki.judgels.michael.controllers.routes
-@import org.iatoki.judgels.michael.MachineAccessTypes
+@import org.iatoki.judgels.michael.MachineAccessType
 @import play.i18n.Messages
 @import org.iatoki.judgels.commons.views.html.table.tableView
 @import org.iatoki.judgels.commons.views.html.table.tableHeadersView
@@ -14,7 +14,7 @@
 
 @b3.form(org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createMachineAccess(machineId, null, page.getPageIndex, orderBy, orderDir, filterString)) {
 
-    @b3.select(form("machineAccessType"), MachineAccessTypes.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.access.type"), 'class -> "form-control selectpicker")
+    @b3.select(form("machineAccessType"), MachineAccessType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.access.type"), 'class -> "form-control selectpicker")
 
     @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
 }

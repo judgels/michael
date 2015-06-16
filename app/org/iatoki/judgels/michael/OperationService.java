@@ -8,7 +8,7 @@ public interface OperationService {
 
     Operation findByOperationId(long operationId) throws OperationNotFoundException;
 
-    void createOperation(String name, OperationTypes types, String conf);
+    void createOperation(String name, OperationType types, String conf);
 
-    void updateOperation(long operationId, String name, OperationTypes types, String conf) throws OperationNotFoundException;
+    void updateOperation(long operationId, String name, OperationType types, String conf) throws OperationNotFoundException;
 }

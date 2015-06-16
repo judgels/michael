@@ -16,7 +16,7 @@ public interface ApplicationService {
 
     Application findByApplicationId(long applicationId) throws ApplicationNotFoundException;
 
-    void createApplication(String name, ApplicationTypes applicationTypes);
+    void createApplication(String name, ApplicationType applicationTypes);
 
-    void updateApplication(long applicationId, String name, ApplicationTypes applicationTypes) throws ApplicationNotFoundException;
+    void updateApplication(long applicationId, String name, ApplicationType applicationTypes) throws ApplicationNotFoundException;
 }

@@ -14,5 +14,5 @@ public interface MachineAccessService {
 
     <T> T getMachineAccessConf(long machineAccessId, Class<T> clazz) throws MachineAccessNotFoundException;
 
-    void createMachineAccess(String machineJid, String name, MachineAccessTypes types, String conf);
+    void createMachineAccess(String machineJid, String name, MachineAccessType types, String conf);
 }

@@ -9,7 +9,7 @@ import org.iatoki.judgels.michael.MachineService;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.MachineWatcherService;
-import org.iatoki.judgels.michael.MachineWatcherTypes;
+import org.iatoki.judgels.michael.MachineWatcherType;
 import org.iatoki.judgels.michael.MachineWatcherUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
 import play.data.DynamicForm;
@@ -36,11 +36,11 @@ public final class MachineWatcherAPIController extends Controller {
     public Result getDataPoints(long machineId, String watcherType) {
         try {
             Machine machine = machineService.findByMachineId(machineId);
-            if (EnumUtils.isValidEnum(MachineWatcherTypes.class, watcherType)) {
-                if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherTypes.valueOf(watcherType))) {
-                    MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherTypes.valueOf(watcherType));
+            if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
+                if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+                    MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
                     if (factory != null) {
-                        MachineWatcher machineWatcher = machineWatcherService.findByMachineJidAndWatcherType(machine.getJid(), MachineWatcherTypes.valueOf(watcherType));
+                        MachineWatcher machineWatcher = machineWatcherService.findByMachineJidAndWatcherType(machine.getJid(), MachineWatcherType.valueOf(watcherType));
                         GraphMachineWatcherAdapter machineWatcherAdapter = (GraphMachineWatcherAdapter)factory.createMachineWatcherAdapter(machine, machineWatcher.getConf());
 
                         DynamicForm form = Form.form().bindFromRequest();

@@ -38,7 +38,7 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void createOperation(String name, OperationTypes types, String conf) {
+    public void createOperation(String name, OperationType types, String conf) {
         OperationModel operationModel = new OperationModel();
         operationModel.name = name;
         operationModel.type = types.name();
@@ -48,7 +48,7 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public void updateOperation(long operationId, String name, OperationTypes types, String conf) throws OperationNotFoundException {
+    public void updateOperation(long operationId, String name, OperationType types, String conf) throws OperationNotFoundException {
         OperationModel operationModel = operationDao.findById(operationId);
         if (operationModel != null) {
             operationModel.name = name;

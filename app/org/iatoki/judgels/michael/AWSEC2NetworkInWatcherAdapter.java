@@ -59,7 +59,7 @@ public final class AWSEC2NetworkInWatcherAdapter implements GraphMachineWatcherA
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.NETWORK_IN;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.NETWORK_IN;
     }
 }

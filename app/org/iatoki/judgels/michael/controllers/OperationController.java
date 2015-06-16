@@ -17,7 +17,7 @@ import org.iatoki.judgels.michael.OperationAdapter;
 import org.iatoki.judgels.michael.OperationCreateForm;
 import org.iatoki.judgels.michael.OperationNotFoundException;
 import org.iatoki.judgels.michael.OperationService;
-import org.iatoki.judgels.michael.OperationTypes;
+import org.iatoki.judgels.michael.OperationType;
 import org.iatoki.judgels.michael.OperationUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
 import org.iatoki.judgels.michael.views.html.operations.listCreateOperationsView;
@@ -63,8 +63,8 @@ public final class OperationController extends BaseController {
 
     @AddCSRFToken
     public Result createOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
-        if (EnumUtils.isValidEnum(OperationTypes.class, operationType)) {
-            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operationType));
+        if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
+            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
             if (adapter != null) {
                 Form form = adapter.generateConfForm();
                 return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
@@ -86,14 +86,14 @@ public final class OperationController extends BaseController {
 
     @RequireCSRFCheck
     public Result postCreateOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
-        if (EnumUtils.isValidEnum(OperationTypes.class, operationType)) {
-            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operationType));
+        if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
+            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
             if (adapter != null) {
                 Form form = adapter.bindConfFormFromRequest(request());
                 if (form.hasErrors() || form.hasGlobalErrors()) {
                     return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
                 } else {
-                    operationService.createOperation(adapter.getNameFromConfForm(form), OperationTypes.valueOf(operationType), adapter.processConfForm(form));
+                    operationService.createOperation(adapter.getNameFromConfForm(form), OperationType.valueOf(operationType), adapter.processConfForm(form));
 
                     return redirect(routes.OperationController.index());
                 }
@@ -116,7 +116,7 @@ public final class OperationController extends BaseController {
     @AddCSRFToken
     public Result updateOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operation.getType()));
+        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
         Form form = adapter.generateConfForm(operation.getName(), operation.getConf());
         Html html = adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update"));
@@ -126,13 +126,13 @@ public final class OperationController extends BaseController {
     @RequireCSRFCheck
     public Result postUpdateOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operation.getType()));
+        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
         Form form = adapter.bindConfFormFromRequest(request());
         if (form.hasErrors() || form.hasGlobalErrors()) {
             return showUpdateOperation(operation, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update")));
         } else {
-            operationService.updateOperation(operation.getId(), adapter.getNameFromConfForm(form), OperationTypes.valueOf(operation.getType()), adapter.processConfForm(form));
+            operationService.updateOperation(operation.getId(), adapter.getNameFromConfForm(form), OperationType.valueOf(operation.getType()), adapter.processConfForm(form));
 
             return redirect(routes.OperationController.index());
         }
@@ -141,7 +141,7 @@ public final class OperationController extends BaseController {
     @AddCSRFToken
     public Result runOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operation.getType()));
+        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
         Form form = adapter.generateRunForm();
         Html html = adapter.getRunHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postRunOperation(operation.getId()), Messages.get("operation.run"), machineService.findAll(), applicationService.findAll());
@@ -151,7 +151,7 @@ public final class OperationController extends BaseController {
     @RequireCSRFCheck
     public Result postRunOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationTypes.valueOf(operation.getType()));
+        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
         Form form = adapter.bindRunFormFromRequest(request());
         if (form.hasErrors() || form.hasGlobalErrors()) {

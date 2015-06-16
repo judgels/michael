@@ -14,7 +14,7 @@ import org.iatoki.judgels.michael.MachineAccess;
 import org.iatoki.judgels.michael.MachineAccessConfAdapter;
 import org.iatoki.judgels.michael.MachineAccessCreateForm;
 import org.iatoki.judgels.michael.MachineAccessService;
-import org.iatoki.judgels.michael.MachineAccessTypes;
+import org.iatoki.judgels.michael.MachineAccessType;
 import org.iatoki.judgels.michael.MachineAccessUtils;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.MachineService;
@@ -59,8 +59,8 @@ public final class MachineAccessController extends BaseController {
     public Result createMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
 
-        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
-            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
+        if (EnumUtils.isValidEnum(MachineAccessType.class, machineAccessType)) {
+            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessType.valueOf(machineAccessType));
             if (adapter != null) {
                 return showCreateMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateMachineAccess(machineId, machineAccessType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
             } else {
@@ -83,14 +83,14 @@ public final class MachineAccessController extends BaseController {
     public Result postCreateMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
 
-        if (EnumUtils.isValidEnum(MachineAccessTypes.class, machineAccessType)) {
-            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessTypes.valueOf(machineAccessType));
+        if (EnumUtils.isValidEnum(MachineAccessType.class, machineAccessType)) {
+            MachineAccessConfAdapter adapter = MachineAccessUtils.getMachineAccessConfAdapter(MachineAccessType.valueOf(machineAccessType));
             if (adapter != null) {
                 Form form = adapter.bindFormFromRequest(request());
                 if (form.hasErrors() || form.hasGlobalErrors()) {
                     return showCreateMachineAccess(machine, machineAccessType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineAccessController.postCreateMachineAccess(machineId, machineAccessType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
                 } else {
-                    machineAccessService.createMachineAccess(machine.getJid(), adapter.getNameFromForm(form), MachineAccessTypes.valueOf(machineAccessType), adapter.processRequestForm(form));
+                    machineAccessService.createMachineAccess(machine.getJid(), adapter.getNameFromForm(form), MachineAccessType.valueOf(machineAccessType), adapter.processRequestForm(form));
 
                     return redirect(routes.MachineAccessController.viewMachineAccesses(machine.getId()));
                 }

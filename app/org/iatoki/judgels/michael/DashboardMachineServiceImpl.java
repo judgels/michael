@@ -85,7 +85,7 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     }
 
     private Machine createMachineFromModel(MachineModel machineModel) {
-        return new Machine(machineModel.id, machineModel.jid, machineModel.instanceName, machineModel.displayName, machineModel.baseDir, MachineTypes.valueOf(machineModel.type), machineModel.ipAddress);
+        return new Machine(machineModel.id, machineModel.jid, machineModel.instanceName, machineModel.displayName, machineModel.baseDir, MachineType.valueOf(machineModel.type), machineModel.ipAddress);
     }
 
     private DashboardMachine createDashboardMachineFromModel(DashboardMachineModel model) {
