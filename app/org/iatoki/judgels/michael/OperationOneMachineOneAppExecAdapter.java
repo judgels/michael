@@ -89,7 +89,7 @@ public final class OperationOneMachineOneAppExecAdapter implements OperationAdap
         OperationOneMachineOneAppExecForm execForm = realForm.get();
 
         OperationOneMachineExecConf execConf = new Gson().fromJson(conf, OperationOneMachineExecConf.class);
-        if (EnumUtils.isValidEnum(OperationExecTerminationTypes.class, execConf.terminationType)) {
+        if (EnumUtils.isValidEnum(OperationExecTerminationType.class, execConf.terminationType)) {
             try {
                 if (applicationService.existByApplicationJid(execForm.applicationJid)) {
                     Application application = applicationService.findByApplicationJid(execForm.applicationJid);
@@ -121,7 +121,7 @@ public final class OperationOneMachineOneAppExecAdapter implements OperationAdap
                                                 printStream.println(commandString);
                                             }
                                             printStream.flush();
-                                            switch (OperationExecTerminationTypes.valueOf(execConf.terminationType)) {
+                                            switch (OperationExecTerminationType.valueOf(execConf.terminationType)) {
                                                 case AVAILABLE_TERMINATION_KEY: {
                                                     final String terminationKey = execConf.terminationValue;
                                                     printStream.println(terminationKey);

@@ -57,7 +57,7 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     }
 
     @Override
-    public void createMachineAccess(String machineJid, String name, MachineAccessTypes types, String conf) {
+    public void createMachineAccess(String machineJid, String name, MachineAccessType types, String conf) {
         MachineAccessModel machineAccessModel = new MachineAccessModel();
         machineAccessModel.machineJid = machineJid;
         machineAccessModel.name = name;

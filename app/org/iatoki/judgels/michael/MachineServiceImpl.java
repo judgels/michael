@@ -54,7 +54,7 @@ public final class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public void createMachine(String instanceName, String displayName, String baseDir, MachineTypes machineTypes, String ipAddress) {
+    public void createMachine(String instanceName, String displayName, String baseDir, MachineType machineTypes, String ipAddress) {
         MachineModel machineModel = new MachineModel();
         machineModel.instanceName = instanceName;
         machineModel.displayName = displayName;
@@ -66,7 +66,7 @@ public final class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public void updateMachine(long machineId, String instanceName, String displayName, String baseDir, MachineTypes machineTypes, String ipAddress) throws MachineNotFoundException {
+    public void updateMachine(long machineId, String instanceName, String displayName, String baseDir, MachineType machineTypes, String ipAddress) throws MachineNotFoundException {
         MachineModel machineModel = machineDao.findById(machineId);
         if (machineModel != null) {
             machineModel.instanceName = instanceName;
@@ -82,6 +82,6 @@ public final class MachineServiceImpl implements MachineService {
     }
 
     private Machine createMachineFromModel(MachineModel machineModel) {
-        return new Machine(machineModel.id, machineModel.jid, machineModel.instanceName, machineModel.displayName, machineModel.baseDir, MachineTypes.valueOf(machineModel.type), machineModel.ipAddress);
+        return new Machine(machineModel.id, machineModel.jid, machineModel.instanceName, machineModel.displayName, machineModel.baseDir, MachineType.valueOf(machineModel.type), machineModel.ipAddress);
     }
 }

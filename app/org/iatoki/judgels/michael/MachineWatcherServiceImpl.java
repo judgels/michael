@@ -18,13 +18,13 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public List<MachineWatcherTypes> findEnabledWatcherByMachineJid(String machineJid) {
+    public List<MachineWatcherType> findEnabledWatcherByMachineJid(String machineJid) {
         List<MachineWatcherModel> machineWatcherModels = machineWatcherDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(MachineWatcherModel_.machineJid, machineJid), ImmutableMap.of(), 0, -1);
-        return machineWatcherModels.stream().map(m -> MachineWatcherTypes.valueOf(m.type)).collect(Collectors.toList());
+        return machineWatcherModels.stream().map(m -> MachineWatcherType.valueOf(m.type)).collect(Collectors.toList());
     }
 
     @Override
-    public boolean isWatcherActivated(String machineJid, MachineWatcherTypes types) {
+    public boolean isWatcherActivated(String machineJid, MachineWatcherType types) {
         return machineWatcherDao.existByMachineJidAndWatcherType(machineJid, types.name());
     }
 
@@ -39,7 +39,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public MachineWatcher findByMachineJidAndWatcherType(String machineJid, MachineWatcherTypes types) {
+    public MachineWatcher findByMachineJidAndWatcherType(String machineJid, MachineWatcherType types) {
         return createMachineWatcherFromModel(machineWatcherDao.findByMachineJidAndWatcherType(machineJid, types.name()));
     }
 
@@ -49,7 +49,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public void createWatcher(String machineJid, MachineWatcherTypes types, String conf) {
+    public void createWatcher(String machineJid, MachineWatcherType types, String conf) {
         MachineWatcherModel machineWatcherModel = new MachineWatcherModel();
         machineWatcherModel.machineJid = machineJid;
         machineWatcherModel.type = types.name();
@@ -59,7 +59,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public void updateWatcher(long machineWatcherId, String machineJid, MachineWatcherTypes types, String conf) {
+    public void updateWatcher(long machineWatcherId, String machineJid, MachineWatcherType types, String conf) {
         MachineWatcherModel machineWatcherModel = machineWatcherDao.findById(machineWatcherId);
         machineWatcherModel.machineJid = machineJid;
         machineWatcherModel.type = types.name();
@@ -69,13 +69,13 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
     }
 
     @Override
-    public void removeWatcher(String machineJid, MachineWatcherTypes types) {
+    public void removeWatcher(String machineJid, MachineWatcherType types) {
         MachineWatcherModel machineWatcherModel = machineWatcherDao.findByMachineJidAndWatcherType(machineJid, types.name());
 
         machineWatcherDao.remove(machineWatcherModel);
     }
 
     private MachineWatcher createMachineWatcherFromModel(MachineWatcherModel machineWatcherModel) {
-        return new MachineWatcher(machineWatcherModel.id, machineWatcherModel.machineJid, MachineWatcherTypes.valueOf(machineWatcherModel.type), machineWatcherModel.conf);
+        return new MachineWatcher(machineWatcherModel.id, machineWatcherModel.machineJid, MachineWatcherType.valueOf(machineWatcherModel.type), machineWatcherModel.conf);
     }
 }

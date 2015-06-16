@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael;
 
-public enum MachineWatcherTypes {
+public enum MachineWatcherType {
     STATE,
     CPU,
     DISK_READ_BYTES,

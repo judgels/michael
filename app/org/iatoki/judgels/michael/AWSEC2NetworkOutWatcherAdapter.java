@@ -59,7 +59,7 @@ public final class AWSEC2NetworkOutWatcherAdapter implements GraphMachineWatcher
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.NETWORK_OUT;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.NETWORK_OUT;
     }
 }

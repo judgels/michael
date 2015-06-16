@@ -59,7 +59,7 @@ public final class AWSEC2CPUWatcherAdapter implements GraphMachineWatcherAdapter
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.CPU;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.CPU;
     }
 }

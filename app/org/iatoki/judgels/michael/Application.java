@@ -5,9 +5,9 @@ public final class Application {
     private final long id;
     private final String jid;
     private final String name;
-    private final ApplicationTypes type;
+    private final ApplicationType type;
 
-    public Application(long id, String jid, String name, ApplicationTypes type) {
+    public Application(long id, String jid, String name, ApplicationType type) {
         this.id = id;
         this.jid = jid;
         this.name = name;
@@ -26,7 +26,7 @@ public final class Application {
         return name;
     }
 
-    public ApplicationTypes getType() {
+    public ApplicationType getType() {
         return type;
     }
 }

@@ -11,7 +11,7 @@ import org.iatoki.judgels.commons.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.MachineService;
-import org.iatoki.judgels.michael.MachineTypes;
+import org.iatoki.judgels.michael.MachineType;
 import org.iatoki.judgels.michael.MachineUpsertForm;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherAdapter;
@@ -69,7 +69,7 @@ public final class MachineController extends BaseController {
         Machine machine = machineService.findByMachineId(machineId);
         List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
         ImmutableList.Builder<MachineWatcherAdapter> machineWatcherAdapterBuilder = ImmutableList.builder();
-        if (machine.getType().equals(MachineTypes.AWS_EC2)) {
+        if (machine.getType().equals(MachineType.AWS_EC2)) {
             for (MachineWatcher machineWatcher : machineWatchers) {
                 MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
                 if (factory != null) {
@@ -105,7 +105,7 @@ public final class MachineController extends BaseController {
             return showCreateMachine(form);
         } else {
             MachineUpsertForm machineUpsertForm = form.get();
-            machineService.createMachine(machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineTypes.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
+            machineService.createMachine(machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineType.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
 
             return redirect(routes.MachineController.index());
         }
@@ -135,7 +135,7 @@ public final class MachineController extends BaseController {
             return showUpdateMachineGeneral(form, machine);
         } else {
             MachineUpsertForm machineUpsertForm = form.get();
-            machineService.updateMachine(machine.getId(), machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineTypes.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
+            machineService.updateMachine(machine.getId(), machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineType.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
 
             return redirect(routes.MachineController.index());
         }

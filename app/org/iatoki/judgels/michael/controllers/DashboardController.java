@@ -1,7 +1,6 @@
 package org.iatoki.judgels.michael.controllers;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.iatoki.judgels.commons.InternalLink;
@@ -17,12 +16,12 @@ import org.iatoki.judgels.michael.DashboardNotFoundException;
 import org.iatoki.judgels.michael.DashboardService;
 import org.iatoki.judgels.michael.DashboardUpsertForm;
 import org.iatoki.judgels.michael.Machine;
-import org.iatoki.judgels.michael.MachineTypes;
+import org.iatoki.judgels.michael.MachineType;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherAdapter;
 import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.MachineWatcherService;
-import org.iatoki.judgels.michael.MachineWatcherTypes;
+import org.iatoki.judgels.michael.MachineWatcherType;
 import org.iatoki.judgels.michael.MachineWatcherUtils;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
 import org.iatoki.judgels.michael.views.html.dashboards.createDashboardView;
@@ -77,10 +76,10 @@ public final class DashboardController extends BaseController {
     public Result viewDashboard(long dashboardId) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
         List<Machine> machineList = dashboardMachineService.findAllIncludedMachinesByDashboardJid(dashboard.getJid());
-        Map<MachineWatcherTypes, List<MachineWatcherAdapter>> adapterMap = Maps.newHashMap();
+        Map<MachineWatcherType, List<MachineWatcherAdapter>> adapterMap = Maps.newHashMap();
         for (Machine machine : machineList) {
             List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
-            if (machine.getType().equals(MachineTypes.AWS_EC2)) {
+            if (machine.getType().equals(MachineType.AWS_EC2)) {
                 for (MachineWatcher machineWatcher : machineWatchers) {
                     MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
                     if (factory != null) {

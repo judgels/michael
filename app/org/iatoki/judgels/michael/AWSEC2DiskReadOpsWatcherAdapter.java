@@ -59,7 +59,7 @@ public final class AWSEC2DiskReadOpsWatcherAdapter implements GraphMachineWatche
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.DISK_READ_OPS;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.DISK_READ_OPS;
     }
 }

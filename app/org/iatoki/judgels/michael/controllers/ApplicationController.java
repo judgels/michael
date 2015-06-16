@@ -11,7 +11,7 @@ import org.iatoki.judgels.commons.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Application;
 import org.iatoki.judgels.michael.ApplicationNotFoundException;
 import org.iatoki.judgels.michael.ApplicationService;
-import org.iatoki.judgels.michael.ApplicationTypes;
+import org.iatoki.judgels.michael.ApplicationType;
 import org.iatoki.judgels.michael.ApplicationUpsertForm;
 import org.iatoki.judgels.michael.controllers.security.LoggedIn;
 import org.iatoki.judgels.michael.views.html.applications.createApplicationView;
@@ -85,7 +85,7 @@ public final class ApplicationController extends BaseController {
             return showCreateApplication(form);
         } else {
             ApplicationUpsertForm applicationUpsertForm = form.get();
-            applicationService.createApplication(applicationUpsertForm.name, ApplicationTypes.valueOf(applicationUpsertForm.type));
+            applicationService.createApplication(applicationUpsertForm.name, ApplicationType.valueOf(applicationUpsertForm.type));
 
             return redirect(routes.ApplicationController.index());
         }
@@ -112,7 +112,7 @@ public final class ApplicationController extends BaseController {
             return showUpdateApplicationGeneral(form, application);
         } else {
             ApplicationUpsertForm applicationUpsertForm = form.get();
-            applicationService.updateApplication(application.getId(), applicationUpsertForm.name, ApplicationTypes.valueOf(applicationUpsertForm.type));
+            applicationService.updateApplication(application.getId(), applicationUpsertForm.name, ApplicationType.valueOf(applicationUpsertForm.type));
 
             return redirect(routes.ApplicationController.index());
         }

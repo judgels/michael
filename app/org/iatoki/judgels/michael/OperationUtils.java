@@ -2,7 +2,7 @@ package org.iatoki.judgels.michael;
 
 public final class OperationUtils {
 
-    public static OperationAdapter getOperationAdapter(OperationTypes operationTypes) {
+    public static OperationAdapter getOperationAdapter(OperationType operationTypes) {
         OperationAdapter adapter = null;
         switch (operationTypes) {
             case ONE_MACHINE_EXEC: {

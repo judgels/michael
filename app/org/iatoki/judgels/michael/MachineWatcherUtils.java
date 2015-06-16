@@ -2,7 +2,7 @@ package org.iatoki.judgels.michael;
 
 public final class MachineWatcherUtils {
 
-    public static MachineWatcherConfAdapter getMachineWatcherConfAdapter(Machine machine, MachineWatcherTypes watcherTypes) {
+    public static MachineWatcherConfAdapter getMachineWatcherConfAdapter(Machine machine, MachineWatcherType watcherTypes) {
         MachineWatcherConfAdapter confAdapter = null;
         switch (machine.getType()) {
             case AWS_EC2: {
@@ -18,7 +18,7 @@ public final class MachineWatcherUtils {
         return confAdapter;
     }
 
-    private static MachineWatcherConfAdapter getAWSEC2ConfAdapter(MachineWatcherTypes watcherTypes) {
+    private static MachineWatcherConfAdapter getAWSEC2ConfAdapter(MachineWatcherType watcherTypes) {
         MachineWatcherConfAdapter confAdapter = null;
         switch (watcherTypes) {
             case CPU: {

@@ -45,7 +45,7 @@ public final class AWSEC2StateWatcherAdapter implements MachineWatcherAdapter {
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.STATE;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.STATE;
     }
 }

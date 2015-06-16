@@ -16,7 +16,7 @@ public interface MachineService {
 
     Machine findByMachineId(long machineId) throws MachineNotFoundException;
 
-    void createMachine(String instanceName, String displayName, String baseDir, MachineTypes machineTypes, String ipAddress);
+    void createMachine(String instanceName, String displayName, String baseDir, MachineType machineTypes, String ipAddress);
 
-    void updateMachine(long machineId, String instanceName, String displayName, String baseDir, MachineTypes machineTypes, String ipAddress) throws MachineNotFoundException;
+    void updateMachine(long machineId, String instanceName, String displayName, String baseDir, MachineType machineTypes, String ipAddress) throws MachineNotFoundException;
 }

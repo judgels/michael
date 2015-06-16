@@ -7,13 +7,13 @@
 @import org.iatoki.judgels.commons.views.html.table.tableHeadersView
 @import org.iatoki.judgels.commons.views.html.table.searchView
 @import org.iatoki.judgels.commons.views.html.table.paginationView
-@import org.iatoki.judgels.michael.OperationTypes
+@import org.iatoki.judgels.michael.OperationType
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 
 @b3.form(org.iatoki.judgels.michael.controllers.routes.OperationController.createOperation(null, page.getPageIndex, orderBy, orderDir, filterString)) {
 
-    @b3.select(form("operationType"), OperationTypes.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("operation.type"), 'class -> "form-control selectpicker")
+    @b3.select(form("operationType"), OperationType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("operation.type"), 'class -> "form-control selectpicker")
 
     @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
 }

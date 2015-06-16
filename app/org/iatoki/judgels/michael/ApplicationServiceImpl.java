@@ -54,7 +54,7 @@ public final class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void createApplication(String name, ApplicationTypes applicationTypes) {
+    public void createApplication(String name, ApplicationType applicationTypes) {
         ApplicationModel applicationModel = new ApplicationModel();
         applicationModel.name = name;
         applicationModel.type = applicationTypes.name();
@@ -63,7 +63,7 @@ public final class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void updateApplication(long applicationId, String name, ApplicationTypes applicationTypes) throws ApplicationNotFoundException {
+    public void updateApplication(long applicationId, String name, ApplicationType applicationTypes) throws ApplicationNotFoundException {
         ApplicationModel applicationModel = applicationDao.findById(applicationId);
         if (applicationModel != null) {
             applicationModel.name = name;
@@ -76,6 +76,6 @@ public final class ApplicationServiceImpl implements ApplicationService {
     }
 
     private Application createApplicationFromModel(ApplicationModel applicationModel) {
-        return new Application(applicationModel.id, applicationModel.jid, applicationModel.name, ApplicationTypes.valueOf(applicationModel.type));
+        return new Application(applicationModel.id, applicationModel.jid, applicationModel.name, ApplicationType.valueOf(applicationModel.type));
     }
 }

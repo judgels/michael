@@ -6,6 +6,6 @@ public interface MachineWatcherAdapter {
 
     Html renderWatcher();
 
-    MachineWatcherTypes getType();
+    MachineWatcherType getType();
 
 }

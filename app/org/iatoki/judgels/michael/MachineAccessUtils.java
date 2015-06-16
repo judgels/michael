@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public final class MachineAccessUtils {
 
-    public static MachineAccessConfAdapter getMachineAccessConfAdapter(MachineAccessTypes accessTypes) {
+    public static MachineAccessConfAdapter getMachineAccessConfAdapter(MachineAccessType accessTypes) {
         MachineAccessConfAdapter confAdapter = null;
         switch (accessTypes) {
             case KEY: {
@@ -29,7 +29,7 @@ public final class MachineAccessUtils {
 
     public static Session getMachineSession(MachineAccessService machineAccessService, JSch jSch, Machine machine, MachineAccess machineAccess) throws IOException, JSchException, MachineAccessNotFoundException {
         Session session = null;
-        if (MachineAccessTypes.KEY.name().equals(machineAccess.getType())) {
+        if (MachineAccessType.KEY.name().equals(machineAccess.getType())) {
             MachineAccessKeyConf conf = machineAccessService.getMachineAccessConf(machineAccess.getId(), MachineAccessKeyConf.class);
             File temp = File.createTempFile("tempkey", ".pem");
             FileUtils.writeStringToFile(temp, conf.key);
@@ -41,7 +41,7 @@ public final class MachineAccessUtils {
             session.connect();
 
             temp.delete();
-        } else if (MachineAccessTypes.PASSWORD.name().equals(machineAccess.getType())) {
+        } else if (MachineAccessType.PASSWORD.name().equals(machineAccess.getType())) {
             MachineAccessPasswordConf conf = machineAccessService.getMachineAccessConf(machineAccess.getId(), MachineAccessPasswordConf.class);
 
             session = jSch.getSession(conf.username, machine.getIpAddress(), conf.port);

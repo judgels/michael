@@ -59,7 +59,7 @@ public final class AWSEC2DiskWriteBytesWatcherAdapter implements GraphMachineWat
     }
 
     @Override
-    public MachineWatcherTypes getType() {
-        return MachineWatcherTypes.DISK_WRITE_BYTES;
+    public MachineWatcherType getType() {
+        return MachineWatcherType.DISK_WRITE_BYTES;
     }
 }
