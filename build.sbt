@@ -5,8 +5,8 @@ import sbtbuildinfo.Plugin._
 lazy val michael = (project in file("."))
     .enablePlugins(PlayJava, SbtWeb)
     .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
-    .dependsOn(playcommons)
-    .aggregate(playcommons)
+    .dependsOn(michaelcommons)
+    .aggregate(michaelcommons)
     .settings(
         name := "michael",
         version := IO.read(file("version.properties")).trim,
@@ -43,4 +43,4 @@ lazy val michael = (project in file("."))
         buildInfoPackage := "org.iatoki.judgels.michael"
     )
 
-lazy val playcommons = RootProject(file("../judgels-play-commons"))
+lazy val michaelcommons = RootProject(file("../judgels-michael-commons"))
