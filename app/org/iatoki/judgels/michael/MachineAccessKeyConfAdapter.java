@@ -1,7 +1,8 @@
 package org.iatoki.judgels.michael;
 
 import com.google.gson.Gson;
-import org.iatoki.judgels.michael.views.html.machines.accesses.keyMachineAccessConfView;
+import org.iatoki.judgels.michael.controllers.forms.MachineAccessKeyConfForm;
+import org.iatoki.judgels.michael.views.html.machine.access.keyMachineAccessConfView;
 import play.api.mvc.Call;
 import play.data.Form;
 import play.mvc.Http;

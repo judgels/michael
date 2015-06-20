@@ -1,8 +1,8 @@
 package org.iatoki.judgels.michael.controllers.apis;
 
 import com.google.gson.Gson;
-import org.iatoki.judgels.michael.ApplicationVersionService;
-import org.iatoki.judgels.michael.controllers.security.LoggedIn;
+import org.iatoki.judgels.michael.services.ApplicationVersionService;
+import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
 import play.data.DynamicForm;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;

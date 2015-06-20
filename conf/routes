@@ -1,4 +1,4 @@
-->          /                                                                                  playcommons.Routes
+->          /                                                                                  michaelcommons.Routes
 
 # Home page
 GET         /                                                                                  @org.iatoki.judgels.michael.controllers.UserController.index()

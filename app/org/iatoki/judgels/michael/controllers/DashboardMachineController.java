@@ -10,14 +10,14 @@ import org.iatoki.judgels.commons.views.html.layouts.headingWithActionLayout;
 import org.iatoki.judgels.commons.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Dashboard;
 import org.iatoki.judgels.michael.DashboardMachine;
-import org.iatoki.judgels.michael.DashboardMachineCreateForm;
+import org.iatoki.judgels.michael.controllers.forms.DashboardMachineCreateForm;
 import org.iatoki.judgels.michael.DashboardMachineNotFoundException;
-import org.iatoki.judgels.michael.DashboardMachineService;
+import org.iatoki.judgels.michael.services.DashboardMachineService;
 import org.iatoki.judgels.michael.DashboardNotFoundException;
-import org.iatoki.judgels.michael.DashboardService;
+import org.iatoki.judgels.michael.services.DashboardService;
 import org.iatoki.judgels.michael.Machine;
-import org.iatoki.judgels.michael.controllers.security.LoggedIn;
-import org.iatoki.judgels.michael.views.html.dashboards.machines.listCreateDashboardMachinesView;
+import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
+import org.iatoki.judgels.michael.views.html.dashboard.machine.listCreateDashboardMachinesView;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.filters.csrf.AddCSRFToken;
@@ -25,7 +25,6 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
-import play.twirl.api.Html;
 
 import java.util.List;
 
