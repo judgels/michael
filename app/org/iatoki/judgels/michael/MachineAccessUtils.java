@@ -4,6 +4,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import org.apache.commons.io.FileUtils;
+import org.iatoki.judgels.michael.services.MachineAccessService;
 
 import java.io.File;
 import java.io.IOException;

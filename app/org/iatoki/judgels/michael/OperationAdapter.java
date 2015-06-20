@@ -1,5 +1,9 @@
 package org.iatoki.judgels.michael;
 
+import org.iatoki.judgels.michael.services.ApplicationService;
+import org.iatoki.judgels.michael.services.ApplicationVersionService;
+import org.iatoki.judgels.michael.services.MachineAccessService;
+import org.iatoki.judgels.michael.services.MachineService;
 import play.api.mvc.Call;
 import play.data.Form;
 import play.mvc.Http;

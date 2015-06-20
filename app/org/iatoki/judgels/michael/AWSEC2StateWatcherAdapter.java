@@ -9,7 +9,7 @@ import com.amazonaws.services.ec2.model.DescribeInstanceStatusRequest;
 import com.amazonaws.services.ec2.model.DescribeInstanceStatusResult;
 import com.amazonaws.services.ec2.model.InstanceStatus;
 import com.google.common.collect.ImmutableList;
-import org.iatoki.judgels.michael.views.html.machines.watchers.machineStateWatcherView;
+import org.iatoki.judgels.michael.views.html.machine.watcher.machineStateWatcherView;
 import play.twirl.api.Html;
 
 public final class AWSEC2StateWatcherAdapter implements MachineWatcherAdapter {

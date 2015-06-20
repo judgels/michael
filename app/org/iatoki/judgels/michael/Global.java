@@ -7,7 +7,9 @@ import org.iatoki.judgels.commons.JudgelsProperties;
 import org.iatoki.judgels.michael.controllers.ApplicationController;
 import org.iatoki.judgels.michael.controllers.ApplicationVersionController;
 import org.iatoki.judgels.michael.controllers.DashboardMachineController;
+import org.iatoki.judgels.michael.controllers.DefaultMichaelControllerFactory;
 import org.iatoki.judgels.michael.controllers.MachineWatcherController;
+import org.iatoki.judgels.michael.controllers.MichaelControllerFactory;
 import org.iatoki.judgels.michael.controllers.OperationController;
 import org.iatoki.judgels.michael.controllers.DashboardController;
 import org.iatoki.judgels.michael.controllers.MachineAccessController;
@@ -16,6 +18,8 @@ import org.iatoki.judgels.michael.controllers.UserController;
 import org.iatoki.judgels.michael.controllers.apis.ApplicationVersionAPIController;
 import org.iatoki.judgels.michael.controllers.apis.MachineAccessAPIController;
 import org.iatoki.judgels.michael.controllers.apis.MachineWatcherAPIController;
+import org.iatoki.judgels.michael.models.daos.impls.HibernateMichaelDaoFactory;
+import org.iatoki.judgels.michael.services.impls.DefaultMichaelServiceFactory;
 import play.Application;
 import play.mvc.Controller;
 
