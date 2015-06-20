@@ -11,7 +11,7 @@ import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsRequest;
 import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsResult;
 import com.amazonaws.services.cloudwatch.model.Statistic;
 import com.google.common.collect.ImmutableList;
-import org.iatoki.judgels.michael.views.html.machines.watchers.machineDiskReadBytesWatcherView;
+import org.iatoki.judgels.michael.views.html.machine.watcher.machineDiskReadBytesWatcherView;
 import play.twirl.api.Html;
 
 import java.util.Date;

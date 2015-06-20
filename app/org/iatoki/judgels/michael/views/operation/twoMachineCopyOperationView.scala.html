@@ -1,0 +1,29 @@
+@(form: Form[org.iatoki.judgels.michael.controllers.forms.OperationTwoMachineCopyForm], target: play.api.mvc.Call, submitLabel: String, machines: List[org.iatoki.judgels.michael.Machine], applications: List[org.iatoki.judgels.michael.Application])
+
+@import play.i18n.Messages
+@import org.iatoki.judgels.commons.views.html.formErrorView
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(form)
+
+@b3.form(target) {
+
+    @helper.CSRF.formField
+
+    @b3.select(form("machineJid1"), machines.map(m => (m.getJid -> m.getDisplayName)).toSeq, '_label -> Messages.get("operation.copy.machine1"), 'class -> "form-control selectpicker")
+    @b3.select(form("accessId1"), Seq(), '_label -> Messages.get("operation.copy.access1"), 'class -> "selectpicker access_autocomplete", 'machineRef -> "machineJid1")
+    @b3.select(form("machineJid2"), machines.map(m => (m.getJid -> m.getDisplayName)).toSeq, '_label -> Messages.get("operation.copy.machine2"), 'class -> "form-control selectpicker")
+    @b3.select(form("accessId2"), Seq(), '_label -> Messages.get("operation.copy.access1"), 'class -> "selectpicker access_autocomplete", 'machineRef -> "machineJid2")
+    @b3.select(form("applicationJid"), applications.map(a => (a.getJid -> a.getName)).toSeq, '_label -> Messages.get("operation.copy.application"), 'class -> "form-control selectpicker")
+    @b3.select(form("versionId"), Seq(), '_label -> Messages.get("operation.copy.version"), 'class -> "selectpicker version_autocomplete", 'applicationRef -> "applicationJid")
+
+    <script type="text/javascript">
+        var accessListURL = "@org.iatoki.judgels.michael.controllers.apis.routes.MachineAccessAPIController.accessList()";
+        var versionListURL = "@org.iatoki.judgels.michael.controllers.apis.routes.ApplicationVersionAPIController.versionList()";
+    </script>
+    <script type="text/javascript" src="@controllers.routes.Assets.versioned("javascripts/machineAccess.js")"></script>
+    <script type="text/javascript" src="@controllers.routes.Assets.versioned("javascripts/applicationVersion.js")"></script>
+
+    @b3.submit('class -> "btn btn-primary") { @submitLabel }
+}

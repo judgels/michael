@@ -6,6 +6,7 @@ jdk:
 install:
   - git clone https://github.com/ia-toki/judgels-commons.git ../judgels-commons
   - git clone https://github.com/ia-toki/judgels-play-commons.git ../judgels-play-commons
+  - git clone https://github.com/ia-toki/judgels-michael-commons.git ../judgels-michael-commons
 
 script:
   - ./activator test
