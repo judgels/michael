@@ -3,7 +3,7 @@ package org.iatoki.judgels.michael.controllers;
 import org.iatoki.judgels.commons.LazyHtml;
 import org.iatoki.judgels.commons.controllers.BaseController;
 import org.iatoki.judgels.commons.views.html.layouts.centerLayout;
-import org.iatoki.judgels.michael.LoginForm;
+import org.iatoki.judgels.michael.controllers.forms.LoginForm;
 import org.iatoki.judgels.michael.views.html.indexView;
 import play.data.Form;
 import play.mvc.Result;
