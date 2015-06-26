@@ -29,7 +29,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 import play.twirl.api.Html;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineAccessController extends BaseController {
 
@@ -43,10 +42,12 @@ public final class MachineAccessController extends BaseController {
         this.machineAccessService = machineAccessService;
     }
 
+    @Transactional(readOnly = true)
     public Result viewMachineAccesses(long machineId) throws MachineNotFoundException {
         return listCreateMachineAccesses(machineId, 0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listCreateMachineAccesses(long machineId, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
         Form<MachineAccessCreateForm> form = Form.form(MachineAccessCreateForm.class);
@@ -55,6 +56,7 @@ public final class MachineAccessController extends BaseController {
         return showListCreateMachineAccesses(machine, currentPage, orderBy, orderDir, filterString, form);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -79,6 +81,7 @@ public final class MachineAccessController extends BaseController {
         }
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateMachineAccess(long machineId, String machineAccessType, long page, String orderBy, String orderDir, String filterString) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);

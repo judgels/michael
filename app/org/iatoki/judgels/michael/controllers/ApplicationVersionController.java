@@ -26,7 +26,6 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class ApplicationVersionController extends BaseController {
 
@@ -40,10 +39,12 @@ public final class ApplicationVersionController extends BaseController {
         this.applicationVersionService = applicationVersionService;
     }
 
+    @Transactional(readOnly = true)
     public Result viewApplicationVersions(long applicationId) throws ApplicationNotFoundException {
         return listApplicationVersions(applicationId, 0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listApplicationVersions(long applicationId, long page, String orderBy, String orderDir, String filterString) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
         Page<ApplicationVersion> currentPage = applicationVersionService.pageApplicationVersions(application.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
@@ -65,6 +66,7 @@ public final class ApplicationVersionController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createApplicationVersion(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
@@ -73,6 +75,7 @@ public final class ApplicationVersionController extends BaseController {
         return showCreateApplicationVersion(application, form);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateApplicationVersion(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
@@ -88,6 +91,7 @@ public final class ApplicationVersionController extends BaseController {
         }
     }
 
+    @Transactional
     public Result removeApplicationVersion(long applicationId, long applicationVersionId) throws ApplicationNotFoundException, ApplicationVersionNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
         ApplicationVersion applicationVersion = applicationVersionService.findByApplicationVersionId(applicationVersionId);

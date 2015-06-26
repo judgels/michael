@@ -9,7 +9,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineAccessAPIController extends Controller {
 
@@ -19,6 +18,7 @@ public final class MachineAccessAPIController extends Controller {
         this.machineAccessService = machineAccessService;
     }
 
+    @Transactional(readOnly = true)
     public Result accessList() {
         DynamicForm form = DynamicForm.form().bindFromRequest();
         String machineJid = form.get("machineJid");

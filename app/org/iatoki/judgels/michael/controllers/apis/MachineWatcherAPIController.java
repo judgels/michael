@@ -21,7 +21,6 @@ import play.mvc.Security;
 
 import java.util.Date;
 
-@Transactional(readOnly = true)
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineWatcherAPIController extends Controller {
 
@@ -33,6 +32,7 @@ public final class MachineWatcherAPIController extends Controller {
         this.machineWatcherService = machineWatcherService;
     }
 
+    @Transactional(readOnly = true)
     public Result getDataPoints(long machineId, String watcherType) {
         try {
             Machine machine = machineService.findByMachineId(machineId);

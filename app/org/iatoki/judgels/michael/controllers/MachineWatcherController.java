@@ -31,7 +31,6 @@ import play.twirl.api.Html;
 
 import java.util.List;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineWatcherController extends BaseController {
 
@@ -43,6 +42,7 @@ public final class MachineWatcherController extends BaseController {
         this.machineWatcherService = machineWatcherService;
     }
 
+    @Transactional(readOnly = true)
     public Result viewMachineWatchers(long machineId) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
         List<MachineWatcherType> enabledWatchers = machineWatcherService.findEnabledWatcherByMachineJid(machine.getJid());
@@ -62,6 +62,7 @@ public final class MachineWatcherController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result activateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -81,6 +82,7 @@ public final class MachineWatcherController extends BaseController {
         }
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postActivateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -108,6 +110,7 @@ public final class MachineWatcherController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -128,6 +131,7 @@ public final class MachineWatcherController extends BaseController {
         }
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postUpdateMachineWatcher(long machineId, long machineWatcherId, String watcherType) throws MachineNotFoundException, MachineWatcherNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -161,6 +165,7 @@ public final class MachineWatcherController extends BaseController {
         }
     }
 
+    @Transactional
     public Result deactivateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
         if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
