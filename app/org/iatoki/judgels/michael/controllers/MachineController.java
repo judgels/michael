@@ -33,7 +33,6 @@ import play.mvc.Security;
 
 import java.util.List;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class MachineController extends BaseController {
 
@@ -47,10 +46,12 @@ public final class MachineController extends BaseController {
         this.machineWatcherService = machineWatcherService;
     }
 
+    @Transactional(readOnly = true)
     public Result index() {
         return listMachines(0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listMachines(long page, String orderBy, String orderDir, String filterString) {
         Page<Machine> currentPage = machineService.pageMachines(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
@@ -65,6 +66,7 @@ public final class MachineController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     public Result viewMachine(long machineId) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
         List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
@@ -90,6 +92,7 @@ public final class MachineController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createMachine() {
         Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class);
@@ -97,6 +100,7 @@ public final class MachineController extends BaseController {
         return showCreateMachine(form);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateMachine() {
         Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class).bindFromRequest();
@@ -111,6 +115,7 @@ public final class MachineController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateMachineGeneral(long machineId) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);
@@ -126,6 +131,7 @@ public final class MachineController extends BaseController {
         return showUpdateMachineGeneral(form, machine);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postUpdateMachineGeneral(long machineId) throws MachineNotFoundException {
         Machine machine = machineService.findByMachineId(machineId);

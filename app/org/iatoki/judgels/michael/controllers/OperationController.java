@@ -30,7 +30,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 import play.twirl.api.Html;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class OperationController extends BaseController {
 
@@ -50,10 +49,12 @@ public final class OperationController extends BaseController {
         this.operationService = operationService;
     }
 
+    @Transactional(readOnly = true)
     public Result index() {
         return listOperations(0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listOperations(long page, String orderBy, String orderDir, String filterString) {
         Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
         Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
@@ -61,6 +62,7 @@ public final class OperationController extends BaseController {
         return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
         if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
@@ -84,6 +86,7 @@ public final class OperationController extends BaseController {
         }
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
         if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
@@ -113,6 +116,7 @@ public final class OperationController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
@@ -123,6 +127,7 @@ public final class OperationController extends BaseController {
         return showUpdateOperation(operation, html);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postUpdateOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
@@ -138,6 +143,7 @@ public final class OperationController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result runOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);
@@ -148,6 +154,7 @@ public final class OperationController extends BaseController {
         return showRunOperation(operation, html);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postRunOperation(long operationId) throws OperationNotFoundException {
         Operation operation = operationService.findByOperationId(operationId);

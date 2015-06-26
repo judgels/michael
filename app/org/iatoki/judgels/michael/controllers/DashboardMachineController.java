@@ -28,7 +28,6 @@ import play.mvc.Security;
 
 import java.util.List;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class DashboardMachineController extends BaseController {
 
@@ -42,11 +41,13 @@ public final class DashboardMachineController extends BaseController {
         this.dashboardMachineService = dashboardMachineService;
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result viewDashboardMachines(long dashboardId) throws DashboardNotFoundException {
         return listCreateDashboardMachines(dashboardId, 0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result listCreateDashboardMachines(long dashboardId, long page, String orderBy, String orderDir, String filterString) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
@@ -56,6 +57,7 @@ public final class DashboardMachineController extends BaseController {
         return showListCreateDashboardMachines(dashboard, currentPage, page, orderBy, orderDir, filterString, form, dashboardMachineService.findAllNotIncludedMachinesByDashboardJid(dashboard.getJid()));
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateDashboardMachine(long dashboardId, long page, String orderBy, String orderDir, String filterString) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
@@ -80,6 +82,7 @@ public final class DashboardMachineController extends BaseController {
         }
     }
 
+    @Transactional
     public Result removeDashboardMachine(long dashboardId, long dashboardMachineId) throws DashboardNotFoundException, DashboardMachineNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
         DashboardMachine dashboardMachine = dashboardMachineService.findByDashboardMachineId(dashboardMachineId);

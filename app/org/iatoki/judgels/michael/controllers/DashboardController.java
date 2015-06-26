@@ -39,7 +39,6 @@ import play.mvc.Security;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class DashboardController extends BaseController {
 
@@ -55,10 +54,12 @@ public final class DashboardController extends BaseController {
         this.machineWatcherService = machineWatcherService;
     }
 
+    @Transactional(readOnly = true)
     public Result index() {
         return listDashboards(0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listDashboards(long page, String orderBy, String orderDir, String filterString) {
         Page<Dashboard> currentPage = dashboardService.pageDashboards(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
@@ -73,6 +74,7 @@ public final class DashboardController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     public Result viewDashboard(long dashboardId) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
         List<Machine> machineList = dashboardMachineService.findAllIncludedMachinesByDashboardJid(dashboard.getJid());
@@ -105,6 +107,7 @@ public final class DashboardController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createDashboard() {
         Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class);
@@ -112,6 +115,7 @@ public final class DashboardController extends BaseController {
         return showCreateDashboard(form);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateDashboard() {
         Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class).bindFromRequest();
@@ -126,6 +130,7 @@ public final class DashboardController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateDashboardGeneral(long dashboardId) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
@@ -138,6 +143,7 @@ public final class DashboardController extends BaseController {
         return showUpdateDashboardGeneral(form, dashboard);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postUpdateDashboardGeneral(long dashboardId) throws DashboardNotFoundException {
         Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);

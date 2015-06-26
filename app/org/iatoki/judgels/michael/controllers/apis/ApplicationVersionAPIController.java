@@ -9,7 +9,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class ApplicationVersionAPIController extends Controller {
 
@@ -19,6 +18,7 @@ public final class ApplicationVersionAPIController extends Controller {
         this.applicationVersionService = applicationVersionService;
     }
 
+    @Transactional(readOnly = true)
     public Result versionList() {
         DynamicForm form = DynamicForm.form().bindFromRequest();
         String applicationJid = form.get("applicationJid");

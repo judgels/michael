@@ -26,7 +26,6 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
-@Transactional
 @Security.Authenticated(value = LoggedIn.class)
 public final class ApplicationController extends BaseController {
 
@@ -38,10 +37,12 @@ public final class ApplicationController extends BaseController {
         this.applicationService = applicationService;
     }
 
+    @Transactional(readOnly = true)
     public Result index() {
         return listApplications(0, "id", "asc", "");
     }
 
+    @Transactional(readOnly = true)
     public Result listApplications(long page, String orderBy, String orderDir, String filterString) {
         Page<Application> currentPage = applicationService.pageApplications(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
@@ -56,6 +57,7 @@ public final class ApplicationController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     public Result viewApplication(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
         LazyHtml content = new LazyHtml(viewApplicationView.render(application));
@@ -70,6 +72,7 @@ public final class ApplicationController extends BaseController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createApplication() {
         Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class);
@@ -77,6 +80,7 @@ public final class ApplicationController extends BaseController {
         return showCreateApplication(form);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postCreateApplication() {
         Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class).bindFromRequest();
@@ -91,6 +95,7 @@ public final class ApplicationController extends BaseController {
         }
     }
 
+    @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateApplicationGeneral(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
@@ -103,6 +108,7 @@ public final class ApplicationController extends BaseController {
         return showUpdateApplicationGeneral(form, application);
     }
 
+    @Transactional
     @RequireCSRFCheck
     public Result postUpdateApplicationGeneral(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
