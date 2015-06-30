@@ -19,14 +19,20 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.Date;
 
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class MachineWatcherAPIController extends Controller {
 
     private final MachineService machineService;
     private final MachineWatcherService machineWatcherService;
 
+    @Inject
     public MachineWatcherAPIController(MachineService machineService, MachineWatcherService machineWatcherService) {
         this.machineService = machineService;
         this.machineWatcherService = machineWatcherService;
@@ -59,6 +65,5 @@ public final class MachineWatcherAPIController extends Controller {
         } catch (MachineNotFoundException e) {
             return badRequest();
         }
-
     }
 }

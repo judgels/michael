@@ -8,6 +8,11 @@ import org.iatoki.judgels.michael.views.html.indexView;
 import play.data.Form;
 import play.mvc.Result;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+@Singleton
+@Named
 public final class UserController extends BaseController {
 
     public Result index() {

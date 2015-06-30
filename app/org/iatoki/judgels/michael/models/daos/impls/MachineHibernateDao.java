@@ -6,12 +6,16 @@ import org.iatoki.judgels.michael.models.entities.MachineModel;
 import org.iatoki.judgels.michael.models.entities.MachineModel_;
 import play.db.jpa.JPA;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.Collection;
 import java.util.List;
 
+@Singleton
+@Named("machineDao")
 public final class MachineHibernateDao extends AbstractJudgelsHibernateDao<MachineModel> implements MachineDao {
 
     public MachineHibernateDao() {

@@ -7,20 +7,23 @@ import org.iatoki.judgels.commons.Page;
 import org.iatoki.judgels.michael.Dashboard;
 import org.iatoki.judgels.michael.DashboardNotFoundException;
 import org.iatoki.judgels.michael.models.daos.DashboardDao;
-import org.iatoki.judgels.michael.models.daos.DashboardMachineDao;
 import org.iatoki.judgels.michael.models.entities.DashboardModel;
 import org.iatoki.judgels.michael.services.DashboardService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
+@Named("dashboardService")
 public final class DashboardServiceImpl implements DashboardService {
 
     private final DashboardDao dashboardDao;
-    private final DashboardMachineDao dashboardMachineDao;
 
-    public DashboardServiceImpl(DashboardDao dashboardDao, DashboardMachineDao dashboardMachineDao) {
+    @Inject
+    public DashboardServiceImpl(DashboardDao dashboardDao) {
         this.dashboardDao = dashboardDao;
-        this.dashboardMachineDao = dashboardMachineDao;
     }
 
     @Override

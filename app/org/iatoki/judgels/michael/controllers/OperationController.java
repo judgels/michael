@@ -30,7 +30,13 @@ import play.mvc.Result;
 import play.mvc.Security;
 import play.twirl.api.Html;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class OperationController extends BaseController {
 
     private static final long PAGE_SIZE = 20;
@@ -41,6 +47,7 @@ public final class OperationController extends BaseController {
     private final MachineAccessService machineAccessService;
     private final OperationService operationService;
 
+    @Inject
     public OperationController(ApplicationService applicationService, ApplicationVersionService applicationVersionService, MachineService machineService, MachineAccessService machineAccessService, OperationService operationService) {
         this.applicationService = applicationService;
         this.applicationVersionService = applicationVersionService;

@@ -11,12 +11,18 @@ import org.iatoki.judgels.michael.models.daos.OperationDao;
 import org.iatoki.judgels.michael.models.entities.OperationModel;
 import org.iatoki.judgels.michael.services.OperationService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
+@Named("operationService")
 public final class OperationServiceImpl implements OperationService {
 
     private final OperationDao operationDao;
 
+    @Inject
     public OperationServiceImpl(OperationDao operationDao) {
         this.operationDao = operationDao;
     }

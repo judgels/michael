@@ -6,10 +6,14 @@ import org.iatoki.judgels.michael.models.entities.MachineWatcherModel;
 import org.iatoki.judgels.michael.models.entities.MachineWatcherModel_;
 import play.db.jpa.JPA;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+@Singleton
+@Named("machineWatcherDao")
 public final class MachineWatcherHibernateDao extends AbstractHibernateDao<Long, MachineWatcherModel> implements MachineWatcherDao {
 
     public MachineWatcherHibernateDao() {

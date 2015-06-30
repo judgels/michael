@@ -11,13 +11,19 @@ import org.iatoki.judgels.michael.models.daos.ApplicationDao;
 import org.iatoki.judgels.michael.models.entities.ApplicationModel;
 import org.iatoki.judgels.michael.services.ApplicationService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("applicationService")
 public final class ApplicationServiceImpl implements ApplicationService {
 
     private final ApplicationDao applicationDao;
 
+    @Inject
     public ApplicationServiceImpl(ApplicationDao applicationDao) {
         this.applicationDao = applicationDao;
     }

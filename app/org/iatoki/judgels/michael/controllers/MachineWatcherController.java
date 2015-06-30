@@ -29,14 +29,20 @@ import play.mvc.Result;
 import play.mvc.Security;
 import play.twirl.api.Html;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class MachineWatcherController extends BaseController {
 
     private final MachineService machineService;
     private final MachineWatcherService machineWatcherService;
 
+    @Inject
     public MachineWatcherController(MachineService machineService, MachineWatcherService machineWatcherService) {
         this.machineService = machineService;
         this.machineWatcherService = machineWatcherService;

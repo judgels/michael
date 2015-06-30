@@ -11,13 +11,19 @@ import org.iatoki.judgels.michael.models.daos.MachineDao;
 import org.iatoki.judgels.michael.models.entities.MachineModel;
 import org.iatoki.judgels.michael.services.MachineService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("machineService")
 public final class MachineServiceImpl implements MachineService {
 
     private final MachineDao machineDao;
 
+    @Inject
     public MachineServiceImpl(MachineDao machineDao) {
         this.machineDao = machineDao;
     }

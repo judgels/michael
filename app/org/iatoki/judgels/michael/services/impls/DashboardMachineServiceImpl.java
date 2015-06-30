@@ -16,14 +16,20 @@ import org.iatoki.judgels.michael.models.entities.MachineModel;
 import org.iatoki.judgels.michael.models.entities.MachineModel_;
 import org.iatoki.judgels.michael.services.DashboardMachineService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("dashboardMachineService")
 public final class DashboardMachineServiceImpl implements DashboardMachineService {
 
     private final DashboardMachineDao dashboardMachineDao;
     private final MachineDao machineDao;
 
+    @Inject
     public DashboardMachineServiceImpl(DashboardMachineDao dashboardMachineDao, MachineDao machineDao) {
         this.dashboardMachineDao = dashboardMachineDao;
         this.machineDao = machineDao;

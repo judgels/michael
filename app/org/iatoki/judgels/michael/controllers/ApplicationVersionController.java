@@ -26,7 +26,13 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class ApplicationVersionController extends BaseController {
 
     private static final long PAGE_SIZE = 20;
@@ -34,6 +40,7 @@ public final class ApplicationVersionController extends BaseController {
     private final ApplicationService applicationService;
     private final ApplicationVersionService applicationVersionService;
 
+    @Inject
     public ApplicationVersionController(ApplicationService applicationService, ApplicationVersionService applicationVersionService) {
         this.applicationService = applicationService;
         this.applicationVersionService = applicationVersionService;

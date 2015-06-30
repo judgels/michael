@@ -26,9 +26,14 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class DashboardMachineController extends BaseController {
 
     private static final long PAGE_SIZE = 20;
@@ -36,6 +41,7 @@ public final class DashboardMachineController extends BaseController {
     private final DashboardService dashboardService;
     private final DashboardMachineService dashboardMachineService;
 
+    @Inject
     public DashboardMachineController(DashboardService dashboardService, DashboardMachineService dashboardMachineService) {
         this.dashboardService = dashboardService;
         this.dashboardMachineService = dashboardMachineService;

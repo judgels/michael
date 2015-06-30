@@ -26,13 +26,20 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class ApplicationController extends BaseController {
 
     private static final long PAGE_SIZE = 20;
 
     private final ApplicationService applicationService;
 
+    @Inject
     public ApplicationController(ApplicationService applicationService) {
         this.applicationService = applicationService;
     }

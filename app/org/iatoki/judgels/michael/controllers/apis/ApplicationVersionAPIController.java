@@ -9,11 +9,18 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class ApplicationVersionAPIController extends Controller {
 
     private final ApplicationVersionService applicationVersionService;
 
+    @Inject
     public ApplicationVersionAPIController(ApplicationVersionService applicationVersionService) {
         this.applicationVersionService = applicationVersionService;
     }

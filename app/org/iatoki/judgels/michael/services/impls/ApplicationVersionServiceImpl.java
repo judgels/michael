@@ -11,13 +11,19 @@ import org.iatoki.judgels.michael.models.entities.ApplicationVersionModel;
 import org.iatoki.judgels.michael.models.entities.ApplicationVersionModel_;
 import org.iatoki.judgels.michael.services.ApplicationVersionService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("applicationVersionService")
 public final class ApplicationVersionServiceImpl implements ApplicationVersionService {
 
     private final ApplicationVersionDao applicationVersionDao;
 
+    @Inject
     public ApplicationVersionServiceImpl(ApplicationVersionDao applicationVersionDao) {
         this.applicationVersionDao = applicationVersionDao;
     }

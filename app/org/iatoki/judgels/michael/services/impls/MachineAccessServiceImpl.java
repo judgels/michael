@@ -13,13 +13,19 @@ import org.iatoki.judgels.michael.models.daos.MachineAccessDao;
 import org.iatoki.judgels.michael.models.entities.MachineAccessModel;
 import org.iatoki.judgels.michael.models.entities.MachineAccessModel_;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("machineAccessService")
 public final class MachineAccessServiceImpl implements MachineAccessService {
 
     private final MachineAccessDao machineAccessDao;
 
+    @Inject
     public MachineAccessServiceImpl(MachineAccessDao machineAccessDao) {
         this.machineAccessDao = machineAccessDao;
     }

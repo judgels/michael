@@ -31,9 +31,14 @@ import play.i18n.Messages;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Security.Authenticated(value = LoggedIn.class)
+@Singleton
+@Named
 public final class MachineController extends BaseController {
 
     private static final long PAGE_SIZE = 20;
@@ -41,6 +46,7 @@ public final class MachineController extends BaseController {
     private final MachineService machineService;
     private final MachineWatcherService machineWatcherService;
 
+    @Inject
     public MachineController(MachineService machineService, MachineWatcherService machineWatcherService) {
         this.machineService = machineService;
         this.machineWatcherService = machineWatcherService;

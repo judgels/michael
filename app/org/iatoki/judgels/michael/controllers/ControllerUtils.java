@@ -13,7 +13,6 @@ public final class ControllerUtils extends AbstractControllerUtils {
     private static final ControllerUtils INSTANCE = new ControllerUtils();
 
     private ControllerUtils() {
-
     }
 
     @Override
@@ -27,7 +26,7 @@ public final class ControllerUtils extends AbstractControllerUtils {
         content.appendLayout(c -> sidebarLayout.render(sidebarContent.render(), c));
     }
 
-    public static final ControllerUtils getInstance() {
+    static final ControllerUtils getInstance() {
         return INSTANCE;
     }
 }

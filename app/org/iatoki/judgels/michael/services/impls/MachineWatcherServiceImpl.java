@@ -10,13 +10,19 @@ import org.iatoki.judgels.michael.models.daos.MachineWatcherDao;
 import org.iatoki.judgels.michael.models.entities.MachineWatcherModel;
 import org.iatoki.judgels.michael.models.entities.MachineWatcherModel_;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Singleton
+@Named("machineWatcherService")
 public final class MachineWatcherServiceImpl implements MachineWatcherService {
 
     private final MachineWatcherDao machineWatcherDao;
 
+    @Inject
     public MachineWatcherServiceImpl(MachineWatcherDao machineWatcherDao) {
         this.machineWatcherDao = machineWatcherDao;
     }

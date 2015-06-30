@@ -4,6 +4,11 @@ import org.iatoki.judgels.commons.models.daos.hibernate.AbstractJudgelsHibernate
 import org.iatoki.judgels.michael.models.daos.DashboardDao;
 import org.iatoki.judgels.michael.models.entities.DashboardModel;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+@Singleton
+@Named("dashboardDao")
 public final class DashboardHibernateDao extends AbstractJudgelsHibernateDao<DashboardModel> implements DashboardDao {
 
     public DashboardHibernateDao() {
