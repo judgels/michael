@@ -10,11 +10,12 @@ lazy val michael = (project in file("."))
     .settings(
         name := "michael",
         version := IO.read(file("version.properties")).trim,
-        scalaVersion := "2.11.1",
+        scalaVersion := "2.11.7",
         libraryDependencies ++= Seq(
             "org.webjars" % "highcharts" % "4.1.4",
             "com.jcraft" % "jsch" % "0.1.52"
-        )
+        ),
+        routesGenerator := InjectedRoutesGenerator
     )
     .settings(TestNGPlugin.testNGSettings: _*)
     .settings(
