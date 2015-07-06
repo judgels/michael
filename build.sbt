@@ -15,7 +15,8 @@ lazy val michael = (project in file("."))
             "org.webjars" % "highcharts" % "4.1.4",
             "com.jcraft" % "jsch" % "0.1.52"
         ),
-        routesGenerator := InjectedRoutesGenerator
+        routesGenerator := InjectedRoutesGenerator,
+        PlayKeys.externalizeResources := false
     )
     .settings(TestNGPlugin.testNGSettings: _*)
     .settings(
