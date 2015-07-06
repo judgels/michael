@@ -21,6 +21,7 @@ lazy val michael = (project in file("."))
     .settings(TestNGPlugin.testNGSettings: _*)
     .settings(
         aggregate in test := false,
+        aggregate in dist := false,
         aggregate in jacoco.cover := false,
         TestNGPlugin.testNGSuites := Seq("test/resources/testng.xml")
     )
