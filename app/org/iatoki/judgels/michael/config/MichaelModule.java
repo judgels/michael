@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael.config;
 
-import org.iatoki.judgels.commons.config.JudgelsAbstractModule;
+import org.iatoki.judgels.play.config.JudgelsAbstractModule;
 
 public class MichaelModule extends JudgelsAbstractModule {
 

@@ -1,7 +1,7 @@
 package org.iatoki.judgels.michael.services.impls;
 
 import com.google.common.collect.ImmutableMap;
-import org.iatoki.judgels.commons.IdentityUtils;
+import org.iatoki.judgels.play.IdentityUtils;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherNotFoundException;
 import org.iatoki.judgels.michael.services.MachineWatcherService;

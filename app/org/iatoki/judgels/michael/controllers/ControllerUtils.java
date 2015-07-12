@@ -1,11 +1,11 @@
 package org.iatoki.judgels.michael.controllers;
 
 import com.google.common.collect.ImmutableList;
-import org.iatoki.judgels.commons.InternalLink;
-import org.iatoki.judgels.commons.LazyHtml;
-import org.iatoki.judgels.commons.controllers.AbstractControllerUtils;
-import org.iatoki.judgels.commons.views.html.layouts.menusView;
-import org.iatoki.judgels.commons.views.html.layouts.sidebarLayout;
+import org.iatoki.judgels.play.InternalLink;
+import org.iatoki.judgels.play.LazyHtml;
+import org.iatoki.judgels.play.controllers.AbstractControllerUtils;
+import org.iatoki.judgels.play.views.html.layouts.menusView;
+import org.iatoki.judgels.play.views.html.layouts.sidebarLayout;
 import play.i18n.Messages;
 
 public final class ControllerUtils extends AbstractControllerUtils {

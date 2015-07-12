@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael.models.daos.impls;
 
-import org.iatoki.judgels.commons.models.daos.hibernate.AbstractJudgelsHibernateDao;
+import org.iatoki.judgels.play.models.daos.hibernate.AbstractJudgelsHibernateDao;
 import org.iatoki.judgels.michael.models.daos.MachineDao;
 import org.iatoki.judgels.michael.models.entities.MachineModel;
 import org.iatoki.judgels.michael.models.entities.MachineModel_;

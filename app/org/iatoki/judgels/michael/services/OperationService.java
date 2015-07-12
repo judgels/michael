@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael.services;
 
-import org.iatoki.judgels.commons.Page;
+import org.iatoki.judgels.play.Page;
 import org.iatoki.judgels.michael.Operation;
 import org.iatoki.judgels.michael.OperationNotFoundException;
 import org.iatoki.judgels.michael.OperationType;
