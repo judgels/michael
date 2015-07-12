@@ -13,7 +13,7 @@ import org.iatoki.judgels.michael.services.ApplicationVersionService;
 import org.iatoki.judgels.michael.services.MachineAccessService;
 import org.iatoki.judgels.michael.services.MachineService;
 import org.iatoki.judgels.michael.Operation;
-import org.iatoki.judgels.michael.OperationAdapter;
+import org.iatoki.judgels.michael.adapters.OperationAdapter;
 import org.iatoki.judgels.michael.forms.OperationCreateForm;
 import org.iatoki.judgels.michael.OperationNotFoundException;
 import org.iatoki.judgels.michael.services.OperationService;

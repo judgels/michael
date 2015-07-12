@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -9,6 +9,10 @@ import com.amazonaws.services.ec2.model.DescribeInstanceStatusRequest;
 import com.amazonaws.services.ec2.model.DescribeInstanceStatusResult;
 import com.amazonaws.services.ec2.model.InstanceStatus;
 import com.google.common.collect.ImmutableList;
+import org.iatoki.judgels.michael.AWSEC2WatcherConf;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineWatcherType;
+import org.iatoki.judgels.michael.adapters.MachineWatcherAdapter;
 import org.iatoki.judgels.michael.views.html.machine.watcher.machineStateWatcherView;
 import play.twirl.api.Html;
 

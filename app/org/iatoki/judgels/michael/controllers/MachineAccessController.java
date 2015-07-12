@@ -11,7 +11,7 @@ import org.iatoki.judgels.play.views.html.layouts.headingWithActionLayout;
 import org.iatoki.judgels.play.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineAccess;
-import org.iatoki.judgels.michael.MachineAccessConfAdapter;
+import org.iatoki.judgels.michael.adapters.MachineAccessConfAdapter;
 import org.iatoki.judgels.michael.forms.MachineAccessCreateForm;
 import org.iatoki.judgels.michael.services.MachineAccessService;
 import org.iatoki.judgels.michael.MachineAccessType;

@@ -1,6 +1,9 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.google.gson.Gson;
+import org.iatoki.judgels.michael.AWSEC2WatcherConf;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.adapters.MachineWatcherAdapter;
 
 public final class AWSEC2DiskReadOpsWatcherConfAdapter extends AbstractAWSEC2ConfAdapter {
 

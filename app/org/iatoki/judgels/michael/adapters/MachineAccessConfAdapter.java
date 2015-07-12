@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters;
 
 import play.api.mvc.Call;
 import play.data.Form;

@@ -1,5 +1,10 @@
 package org.iatoki.judgels.michael;
 
+import org.iatoki.judgels.michael.adapters.OperationAdapter;
+import org.iatoki.judgels.michael.adapters.impls.OperationOneMachineExecAdapter;
+import org.iatoki.judgels.michael.adapters.impls.OperationOneMachineOneAppExecAdapter;
+import org.iatoki.judgels.michael.adapters.impls.OperationTwoMachineCopyAdapter;
+
 public final class OperationUtils {
 
     public static OperationAdapter getOperationAdapter(OperationType operationTypes) {

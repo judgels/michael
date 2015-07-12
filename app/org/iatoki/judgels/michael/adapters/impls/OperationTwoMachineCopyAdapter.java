@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.google.gson.Gson;
 import com.jcraft.jsch.ChannelSftp;
@@ -7,6 +7,15 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import org.apache.commons.io.FilenameUtils;
+import org.iatoki.judgels.michael.Application;
+import org.iatoki.judgels.michael.ApplicationVersion;
+import org.iatoki.judgels.michael.ApplicationVersionNotFoundException;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineAccess;
+import org.iatoki.judgels.michael.MachineAccessNotFoundException;
+import org.iatoki.judgels.michael.MachineAccessUtils;
+import org.iatoki.judgels.michael.OperationTwoMachineCopyConf;
+import org.iatoki.judgels.michael.adapters.OperationAdapter;
 import org.iatoki.judgels.michael.forms.OperationTwoMachineCopyConfForm;
 import org.iatoki.judgels.michael.forms.OperationTwoMachineCopyForm;
 import org.iatoki.judgels.michael.services.ApplicationService;

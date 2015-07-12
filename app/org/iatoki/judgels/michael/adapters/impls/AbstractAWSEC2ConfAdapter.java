@@ -1,7 +1,9 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.amazonaws.regions.Regions;
 import com.google.gson.Gson;
+import org.iatoki.judgels.michael.AWSEC2WatcherConf;
+import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.forms.AWSEC2WatcherConfForm;
 import org.iatoki.judgels.michael.views.html.machine.watcher.awsEC2ConfView;
 import play.api.mvc.Call;

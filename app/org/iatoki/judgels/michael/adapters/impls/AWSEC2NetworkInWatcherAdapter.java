@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -11,6 +11,11 @@ import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsRequest;
 import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsResult;
 import com.amazonaws.services.cloudwatch.model.Statistic;
 import com.google.common.collect.ImmutableList;
+import org.iatoki.judgels.michael.AWSEC2WatcherConf;
+import org.iatoki.judgels.michael.DataPoint;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineWatcherType;
+import org.iatoki.judgels.michael.adapters.GraphMachineWatcherAdapter;
 import org.iatoki.judgels.michael.views.html.machine.watcher.machineNetworkInWatcherView;
 import play.twirl.api.Html;
 

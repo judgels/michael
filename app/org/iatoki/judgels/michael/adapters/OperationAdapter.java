@@ -1,5 +1,7 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters;
 
+import org.iatoki.judgels.michael.Application;
+import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.services.ApplicationService;
 import org.iatoki.judgels.michael.services.ApplicationVersionService;
 import org.iatoki.judgels.michael.services.MachineAccessService;

@@ -1,6 +1,8 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.google.gson.Gson;
+import org.iatoki.judgels.michael.MachineAccessPasswordConf;
+import org.iatoki.judgels.michael.adapters.MachineAccessConfAdapter;
 import org.iatoki.judgels.michael.forms.MachineAccessPasswordConfForm;
 import org.iatoki.judgels.michael.views.html.machine.access.passwordMachineAccessConfView;
 import play.api.mvc.Call;

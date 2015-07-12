@@ -1,5 +1,6 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters;
 
+import org.iatoki.judgels.michael.MachineWatcherType;
 import play.twirl.api.Html;
 
 public interface MachineWatcherAdapter {

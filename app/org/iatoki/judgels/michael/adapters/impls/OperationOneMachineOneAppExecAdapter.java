@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.google.gson.Gson;
 import com.jcraft.jsch.Channel;
@@ -6,6 +6,16 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import org.apache.commons.lang3.EnumUtils;
+import org.iatoki.judgels.michael.Application;
+import org.iatoki.judgels.michael.ApplicationVersion;
+import org.iatoki.judgels.michael.ApplicationVersionNotFoundException;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineAccess;
+import org.iatoki.judgels.michael.MachineAccessNotFoundException;
+import org.iatoki.judgels.michael.MachineAccessUtils;
+import org.iatoki.judgels.michael.OperationExecTerminationType;
+import org.iatoki.judgels.michael.OperationOneMachineExecConf;
+import org.iatoki.judgels.michael.adapters.OperationAdapter;
 import org.iatoki.judgels.michael.forms.OperationOneMachineExecConfForm;
 import org.iatoki.judgels.michael.forms.OperationOneMachineExecForm;
 import org.iatoki.judgels.michael.forms.OperationOneMachineOneAppExecForm;

@@ -1,4 +1,6 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters;
+
+import org.iatoki.judgels.michael.DataPoint;
 
 import java.util.Date;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael;
+package org.iatoki.judgels.michael.adapters.impls;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -11,18 +11,23 @@ import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsRequest;
 import com.amazonaws.services.cloudwatch.model.GetMetricStatisticsResult;
 import com.amazonaws.services.cloudwatch.model.Statistic;
 import com.google.common.collect.ImmutableList;
-import org.iatoki.judgels.michael.views.html.machine.watcher.machineDiskWriteOpsWatcherView;
+import org.iatoki.judgels.michael.AWSEC2WatcherConf;
+import org.iatoki.judgels.michael.DataPoint;
+import org.iatoki.judgels.michael.Machine;
+import org.iatoki.judgels.michael.MachineWatcherType;
+import org.iatoki.judgels.michael.adapters.GraphMachineWatcherAdapter;
+import org.iatoki.judgels.michael.views.html.machine.watcher.machineDiskReadBytesWatcherView;
 import play.twirl.api.Html;
 
 import java.util.Date;
 import java.util.List;
 
-public final class AWSEC2DiskWriteOpsWatcherAdapter implements GraphMachineWatcherAdapter {
+public final class AWSEC2DiskReadBytesWatcherAdapter implements GraphMachineWatcherAdapter {
 
     private final Machine machine;
     private final AmazonCloudWatch amazonCloudWatch;
 
-    public AWSEC2DiskWriteOpsWatcherAdapter(Machine machine, AWSEC2WatcherConf awsec2WatcherConf) {
+    public AWSEC2DiskReadBytesWatcherAdapter(Machine machine, AWSEC2WatcherConf awsec2WatcherConf) {
         this.machine = machine;
         if (awsec2WatcherConf.useKeyCredential) {
             this.amazonCloudWatch = new AmazonCloudWatchClient(new BasicAWSCredentials(awsec2WatcherConf.accessKey, awsec2WatcherConf.secretKey));
@@ -34,7 +39,7 @@ public final class AWSEC2DiskWriteOpsWatcherAdapter implements GraphMachineWatch
 
     @Override
     public Html renderWatcher() {
-        return machineDiskWriteOpsWatcherView.render(machine.getDisplayName() + " - Disk Write Ops", org.iatoki.judgels.michael.controllers.apis.routes.MachineWatcherAPIController.getDataPoints(machine.getId(), getType().name()).toString(), 60000L);
+        return machineDiskReadBytesWatcherView.render(machine.getDisplayName() + " - Disk Read Bytes", org.iatoki.judgels.michael.controllers.apis.routes.MachineWatcherAPIController.getDataPoints(machine.getId(), getType().name()).toString(), 60000L);
     }
 
     @Override
@@ -43,7 +48,7 @@ public final class AWSEC2DiskWriteOpsWatcherAdapter implements GraphMachineWatch
                 new GetMetricStatisticsRequest()
                         .withDimensions(new Dimension().withName("InstanceId").withValue(machine.getInstanceName()))
                         .withNamespace("AWS/EC2")
-                        .withMetricName("DiskWriteOps")
+                        .withMetricName("DiskReadBytes")
                         .withStartTime(startTime)
                         .withEndTime(endTime)
                         .withPeriod(Long.valueOf(period).intValue())
@@ -60,6 +65,6 @@ public final class AWSEC2DiskWriteOpsWatcherAdapter implements GraphMachineWatch
 
     @Override
     public MachineWatcherType getType() {
-        return MachineWatcherType.DISK_WRITE_OPS;
+        return MachineWatcherType.DISK_READ_BYTES;
     }
 }
