@@ -12,7 +12,7 @@ import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.services.MachineService;
 import org.iatoki.judgels.michael.MachineType;
-import org.iatoki.judgels.michael.controllers.forms.MachineUpsertForm;
+import org.iatoki.judgels.michael.forms.MachineUpsertForm;
 import org.iatoki.judgels.michael.MachineWatcher;
 import org.iatoki.judgels.michael.MachineWatcherAdapter;
 import org.iatoki.judgels.michael.MachineWatcherConfAdapter;

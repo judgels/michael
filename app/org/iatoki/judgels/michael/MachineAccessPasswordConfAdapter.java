@@ -1,7 +1,7 @@
 package org.iatoki.judgels.michael;
 
 import com.google.gson.Gson;
-import org.iatoki.judgels.michael.controllers.forms.MachineAccessPasswordConfForm;
+import org.iatoki.judgels.michael.forms.MachineAccessPasswordConfForm;
 import org.iatoki.judgels.michael.views.html.machine.access.passwordMachineAccessConfView;
 import play.api.mvc.Call;
 import play.data.Form;

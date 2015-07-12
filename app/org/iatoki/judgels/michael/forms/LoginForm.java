@@ -1,4 +1,4 @@
-package org.iatoki.judgels.michael.controllers.forms;
+package org.iatoki.judgels.michael.forms;
 
 import org.iatoki.judgels.michael.MichaelProperties;
 import play.data.validation.Constraints;

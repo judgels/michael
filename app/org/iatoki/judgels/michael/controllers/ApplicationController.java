@@ -12,7 +12,7 @@ import org.iatoki.judgels.michael.Application;
 import org.iatoki.judgels.michael.ApplicationNotFoundException;
 import org.iatoki.judgels.michael.services.ApplicationService;
 import org.iatoki.judgels.michael.ApplicationType;
-import org.iatoki.judgels.michael.controllers.forms.ApplicationUpsertForm;
+import org.iatoki.judgels.michael.forms.ApplicationUpsertForm;
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
 import org.iatoki.judgels.michael.views.html.application.createApplicationView;
 import org.iatoki.judgels.michael.views.html.application.listApplicationsView;

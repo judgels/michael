@@ -14,7 +14,7 @@ import org.iatoki.judgels.michael.Dashboard;
 import org.iatoki.judgels.michael.services.DashboardMachineService;
 import org.iatoki.judgels.michael.DashboardNotFoundException;
 import org.iatoki.judgels.michael.services.DashboardService;
-import org.iatoki.judgels.michael.controllers.forms.DashboardUpsertForm;
+import org.iatoki.judgels.michael.forms.DashboardUpsertForm;
 import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineType;
 import org.iatoki.judgels.michael.MachineWatcher;

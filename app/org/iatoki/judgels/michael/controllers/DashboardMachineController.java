@@ -10,7 +10,7 @@ import org.iatoki.judgels.play.views.html.layouts.headingWithActionLayout;
 import org.iatoki.judgels.play.views.html.layouts.tabLayout;
 import org.iatoki.judgels.michael.Dashboard;
 import org.iatoki.judgels.michael.DashboardMachine;
-import org.iatoki.judgels.michael.controllers.forms.DashboardMachineCreateForm;
+import org.iatoki.judgels.michael.forms.DashboardMachineCreateForm;
 import org.iatoki.judgels.michael.DashboardMachineNotFoundException;
 import org.iatoki.judgels.michael.services.DashboardMachineService;
 import org.iatoki.judgels.michael.DashboardNotFoundException;
