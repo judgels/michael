@@ -1,5 +1,15 @@
 package org.iatoki.judgels.michael;
 
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2CPUWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2DiskReadBytesWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2DiskReadOpsWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2DiskWriteBytesWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2DiskWriteOpsWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2NetworkInWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2NetworkOutWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.impls.AWSEC2StateWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
+
 public final class MachineWatcherUtils {
 
     public static MachineWatcherConfAdapter getMachineWatcherConfAdapter(Machine machine, MachineWatcherType watcherTypes) {

@@ -13,7 +13,7 @@ import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.services.MachineService;
 import org.iatoki.judgels.michael.MachineWatcher;
-import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.MachineWatcherNotFoundException;
 import org.iatoki.judgels.michael.services.MachineWatcherService;
 import org.iatoki.judgels.michael.MachineWatcherType;

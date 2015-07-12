@@ -13,7 +13,7 @@ import org.iatoki.judgels.michael.ApplicationVersionNotFoundException;
 import org.iatoki.judgels.michael.services.ApplicationVersionService;
 import org.iatoki.judgels.michael.Application;
 import org.iatoki.judgels.michael.ApplicationVersion;
-import org.iatoki.judgels.michael.controllers.forms.ApplicationVersionUpsertForm;
+import org.iatoki.judgels.michael.forms.ApplicationVersionUpsertForm;
 import org.iatoki.judgels.michael.ApplicationNotFoundException;
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
 import org.iatoki.judgels.michael.views.html.application.version.createApplicationVersionView;

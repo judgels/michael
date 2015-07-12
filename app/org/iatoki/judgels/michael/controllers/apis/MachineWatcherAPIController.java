@@ -2,12 +2,12 @@ package org.iatoki.judgels.michael.controllers.apis;
 
 import com.google.gson.Gson;
 import org.apache.commons.lang3.EnumUtils;
-import org.iatoki.judgels.michael.GraphMachineWatcherAdapter;
+import org.iatoki.judgels.michael.adapters.GraphMachineWatcherAdapter;
 import org.iatoki.judgels.michael.Machine;
 import org.iatoki.judgels.michael.MachineNotFoundException;
 import org.iatoki.judgels.michael.services.MachineService;
 import org.iatoki.judgels.michael.MachineWatcher;
-import org.iatoki.judgels.michael.MachineWatcherConfAdapter;
+import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.services.MachineWatcherService;
 import org.iatoki.judgels.michael.MachineWatcherType;
 import org.iatoki.judgels.michael.MachineWatcherUtils;
