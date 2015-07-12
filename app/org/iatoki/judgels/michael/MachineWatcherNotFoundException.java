@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael;
 
-import org.iatoki.judgels.commons.EntityNotFoundException;
+import org.iatoki.judgels.play.EntityNotFoundException;
 
 public final class MachineWatcherNotFoundException extends EntityNotFoundException {
 
