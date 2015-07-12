@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael.models.daos.impls;
 
-import org.iatoki.judgels.play.models.daos.hibernate.AbstractJudgelsHibernateDao;
+import org.iatoki.judgels.play.models.daos.impls.AbstractJudgelsHibernateDao;
 import org.iatoki.judgels.michael.models.daos.OperationDao;
 import org.iatoki.judgels.michael.models.entities.OperationModel;
 

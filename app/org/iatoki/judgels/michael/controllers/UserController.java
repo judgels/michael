@@ -1,7 +1,7 @@
 package org.iatoki.judgels.michael.controllers;
 
 import org.iatoki.judgels.play.LazyHtml;
-import org.iatoki.judgels.play.controllers.BaseController;
+import org.iatoki.judgels.play.controllers.AbstractJudgelsController;
 import org.iatoki.judgels.play.views.html.layouts.centerLayout;
 import org.iatoki.judgels.michael.controllers.forms.LoginForm;
 import org.iatoki.judgels.michael.views.html.indexView;
@@ -13,7 +13,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @Named
-public final class UserController extends BaseController {
+public final class UserController extends AbstractJudgelsController {
 
     public Result index() {
         return redirect(routes.UserController.login());

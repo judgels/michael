@@ -5,7 +5,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.iatoki.judgels.play.InternalLink;
 import org.iatoki.judgels.play.LazyHtml;
 import org.iatoki.judgels.play.Page;
-import org.iatoki.judgels.play.controllers.BaseController;
+import org.iatoki.judgels.play.controllers.AbstractJudgelsController;
 import org.iatoki.judgels.play.views.html.layouts.headingLayout;
 import org.iatoki.judgels.play.views.html.layouts.messageView;
 import org.iatoki.judgels.michael.services.ApplicationService;
@@ -37,7 +37,7 @@ import javax.inject.Singleton;
 @Security.Authenticated(value = LoggedIn.class)
 @Singleton
 @Named
-public final class OperationController extends BaseController {
+public final class OperationController extends AbstractJudgelsController {
 
     private static final long PAGE_SIZE = 20;
 

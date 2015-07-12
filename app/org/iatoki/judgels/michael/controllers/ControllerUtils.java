@@ -3,12 +3,12 @@ package org.iatoki.judgels.michael.controllers;
 import com.google.common.collect.ImmutableList;
 import org.iatoki.judgels.play.InternalLink;
 import org.iatoki.judgels.play.LazyHtml;
-import org.iatoki.judgels.play.controllers.AbstractControllerUtils;
+import org.iatoki.judgels.play.controllers.AbstractJudgelsControllerUtils;
 import org.iatoki.judgels.play.views.html.layouts.menusView;
 import org.iatoki.judgels.play.views.html.layouts.sidebarLayout;
 import play.i18n.Messages;
 
-public final class ControllerUtils extends AbstractControllerUtils {
+public final class ControllerUtils extends AbstractJudgelsControllerUtils {
 
     private static final ControllerUtils INSTANCE = new ControllerUtils();
 

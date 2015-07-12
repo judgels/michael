@@ -1,8 +1,8 @@
 package org.iatoki.judgels.michael.config;
 
-import org.iatoki.judgels.play.config.JudgelsAbstractModule;
+import org.iatoki.judgels.play.config.AbstractJudgelsModule;
 
-public class MichaelModule extends JudgelsAbstractModule {
+public class MichaelModule extends AbstractJudgelsModule {
 
     @Override
     protected String getDaosImplPackage() {
