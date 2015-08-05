@@ -1,0 +1,44 @@
+@(dashboardId: Long, page: org.iatoki.judgels.play.Page[org.iatoki.judgels.michael.DashboardMachine], orderBy: String, orderDir: String, filterString: String, form: Form[org.iatoki.judgels.michael.forms.DashboardMachineCreateForm], machines: List[org.iatoki.judgels.michael.Machine])
+
+@import play.i18n.Messages
+@import org.iatoki.judgels.play.views.html.table.tableView
+@import org.iatoki.judgels.play.views.html.table.tableHeadersView
+@import org.iatoki.judgels.play.views.html.table.paginationView
+@import org.iatoki.judgels.play.views.html.formErrorView
+
+@listFunc(newPageIndex: scala.Long, newOrderBy: String, newOrderDir: String, newFilterString: String) = @{org.iatoki.judgels.michael.controllers.routes.DashboardMachineController.listCreateDashboardMachines(dashboardId, newPageIndex, newOrderBy, newOrderDir, newFilterString)}
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(form)
+
+@b3.form(org.iatoki.judgels.michael.controllers.routes.DashboardMachineController.postCreateDashboardMachine(dashboardId)) {
+
+    @helper.CSRF.formField
+
+    @b3.select(form("machineJid"), machines.map(m => (m.getJid -> m.getDisplayName)).toSeq, '_label -> Messages.get("machine.machine"), 'class -> "form-control selectpicker")
+
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.add") }
+}
+
+<div class="clearfix"></div>
+
+@tableView() {
+    @tableHeadersView(page.getPageIndex, orderBy, orderDir, filterString, listFunc)(
+        "id" -> Messages.get("commons.id"),
+        "machineJid" -> Messages.get("dashboard.machine.machineJid")
+    )
+    <tbody>
+    @for(dashboardMachine <- page.getData) {
+        <tr>
+            <td>@dashboardMachine.getId</td>
+            <td>@dashboardMachine.getMachineJid</td>
+            <td class="text-center">
+                <a href="@org.iatoki.judgels.michael.controllers.routes.DashboardMachineController.removeDashboardMachine(dashboardId, dashboardMachine.getId)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+            </td>
+        </tr>
+    }
+    </tbody>
+}
+
+@paginationView(page, orderBy, orderDir, filterString, listFunc)

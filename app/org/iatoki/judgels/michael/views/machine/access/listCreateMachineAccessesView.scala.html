@@ -1,0 +1,45 @@
+@(machineId: Long, page: org.iatoki.judgels.play.Page[org.iatoki.judgels.michael.MachineAccess], orderBy: String, orderDir: String, filterString: String, form: Form[org.iatoki.judgels.michael.forms.MachineAccessCreateForm])
+
+@import org.iatoki.judgels.michael.controllers.routes
+@import org.iatoki.judgels.michael.MachineAccessType
+@import play.i18n.Messages
+@import org.iatoki.judgels.play.views.html.table.tableView
+@import org.iatoki.judgels.play.views.html.table.tableHeadersView
+@import org.iatoki.judgels.play.views.html.table.searchView
+@import org.iatoki.judgels.play.views.html.table.paginationView
+
+@listFunc(newPageIndex: scala.Long, newOrderBy: String, newOrderDir: String, newFilterString: String) = @{org.iatoki.judgels.michael.controllers.routes.MachineAccessController.listCreateMachineAccesses(machineId, newPageIndex, newOrderBy, newOrderDir, newFilterString)}
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@b3.form(org.iatoki.judgels.michael.controllers.routes.MachineAccessController.createMachineAccess(machineId, null, page.getPageIndex, orderBy, orderDir, filterString)) {
+
+    @b3.select(form("machineAccessType"), MachineAccessType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.access.type"), 'class -> "form-control selectpicker")
+
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
+}
+
+@searchView(page.getPageIndex, orderBy, orderDir, filterString, listFunc)
+
+<div class="clearfix"></div>
+
+@tableView() {
+    @tableHeadersView(page.getPageIndex, orderBy, orderDir, filterString, listFunc)(
+        "id" -> Messages.get("commons.id"),
+        "name" -> Messages.get("machine.access.name"),
+        "type" -> Messages.get("machine.access.type")
+    )
+    <tbody>
+    @for(machineAccess <- page.getData) {
+        <tr>
+            <td>@machineAccess.getId</td>
+            <td>@machineAccess.getName</td>
+            <td>@machineAccess.getType</td>
+            <td class="text-center">
+            </td>
+        </tr>
+    }
+    </tbody>
+}
+
+@paginationView(page, orderBy, orderDir, filterString, listFunc)
