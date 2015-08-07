@@ -43,11 +43,6 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
     }
 
     @Override
-    public Html getConfHtml(Form form, Call target, String submitLabel) {
-        return twoMachineCopyOperationConfView.render(form, target, submitLabel);
-    }
-
-    @Override
     public Form generateConfForm(String name, String conf) {
         OperationTwoMachineCopyConf copyConf = new Gson().fromJson(conf, OperationTwoMachineCopyConf.class);
         OperationTwoMachineCopyConfForm confForm = new OperationTwoMachineCopyConfForm();
@@ -60,13 +55,18 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
     }
 
     @Override
+    public Html getConfHtml(Form form, Call target, String submitLabel) {
+        return twoMachineCopyOperationConfView.render(form, target, submitLabel);
+    }
+
+    @Override
     public Form bindConfFormFromRequest(Http.Request request) {
         return Form.form(OperationTwoMachineCopyConfForm.class).bindFromRequest(request);
     }
 
     @Override
     public String getNameFromConfForm(Form form) {
-        Form<OperationTwoMachineCopyConfForm> realForm = (Form<OperationTwoMachineCopyConfForm>)form;
+        Form<OperationTwoMachineCopyConfForm> realForm = (Form<OperationTwoMachineCopyConfForm>) form;
         OperationTwoMachineCopyConfForm confForm = realForm.get();
 
         return confForm.name;
@@ -74,7 +74,7 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
 
     @Override
     public String processConfForm(Form form) {
-        Form<OperationTwoMachineCopyConfForm> realForm = (Form<OperationTwoMachineCopyConfForm>)form;
+        Form<OperationTwoMachineCopyConfForm> realForm = (Form<OperationTwoMachineCopyConfForm>) form;
         OperationTwoMachineCopyConfForm confForm = realForm.get();
         OperationTwoMachineCopyConf conf = new OperationTwoMachineCopyConf();
         conf.sourceFile = confForm.sourceFile;
@@ -100,7 +100,7 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
 
     @Override
     public boolean runOperation(Form form, MachineService machineService, MachineAccessService machineAccessService, ApplicationService applicationService, ApplicationVersionService applicationVersionService, String conf) {
-        Form<OperationTwoMachineCopyForm> realForm = (Form<OperationTwoMachineCopyForm>)form;
+        Form<OperationTwoMachineCopyForm> realForm = (Form<OperationTwoMachineCopyForm>) form;
         OperationTwoMachineCopyForm copyForm = realForm.get();
 
         OperationTwoMachineCopyConf copyConf = new Gson().fromJson(conf, OperationTwoMachineCopyConf.class);

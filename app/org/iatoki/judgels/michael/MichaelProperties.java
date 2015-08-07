@@ -5,6 +5,7 @@ import com.typesafe.config.Config;
 import java.io.File;
 
 public final class MichaelProperties {
+
     private static MichaelProperties INSTANCE;
 
     private final Config config;
@@ -12,16 +13,16 @@ public final class MichaelProperties {
     private String michaelUsername;
     private String michaelPassword;
 
+    private MichaelProperties(Config config) {
+        this.config = config;
+    }
+
     public String getMichaelUsername() {
         return michaelUsername;
     }
 
     public String getMichaelPassword() {
         return michaelPassword;
-    }
-
-    private MichaelProperties(Config config) {
-        this.config = config;
     }
 
     public static synchronized void buildInstance(Config config) {

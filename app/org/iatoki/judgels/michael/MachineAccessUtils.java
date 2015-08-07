@@ -14,17 +14,19 @@ import java.io.IOException;
 
 public final class MachineAccessUtils {
 
+    private MachineAccessUtils() {
+        // prevent instantiation
+    }
+
     public static MachineAccessConfAdapter getMachineAccessConfAdapter(MachineAccessType accessTypes) {
         MachineAccessConfAdapter confAdapter = null;
         switch (accessTypes) {
-            case KEY: {
+            case KEY:
                 confAdapter = new MachineAccessKeyConfAdapter();
                 break;
-            }
-            case PASSWORD: {
+            case PASSWORD:
                 confAdapter = new MachineAccessPasswordConfAdapter();
                 break;
-            }
             default: break;
         }
 

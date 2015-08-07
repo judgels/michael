@@ -42,7 +42,7 @@ public final class MachineAccessKeyConfAdapter implements MachineAccessConfAdapt
 
     @Override
     public String getNameFromForm(Form form) {
-        Form<MachineAccessKeyConfForm> realForm = (Form<MachineAccessKeyConfForm>)form;
+        Form<MachineAccessKeyConfForm> realForm = (Form<MachineAccessKeyConfForm>) form;
         MachineAccessKeyConfForm accessKeyConfForm = realForm.get();
 
         return accessKeyConfForm.name;
@@ -50,7 +50,7 @@ public final class MachineAccessKeyConfAdapter implements MachineAccessConfAdapt
 
     @Override
     public String processRequestForm(Form form) {
-        Form<MachineAccessKeyConfForm> realForm = (Form<MachineAccessKeyConfForm>)form;
+        Form<MachineAccessKeyConfForm> realForm = (Form<MachineAccessKeyConfForm>) form;
         MachineAccessKeyConfForm accessKeyConfForm = realForm.get();
         MachineAccessKeyConf accessKeyConf = new MachineAccessKeyConf();
         accessKeyConf.username = accessKeyConfForm.username;

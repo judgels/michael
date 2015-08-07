@@ -47,7 +47,7 @@ public final class MachineWatcherAPIController extends Controller {
                     MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
                     if (factory != null) {
                         MachineWatcher machineWatcher = machineWatcherService.findByMachineJidAndWatcherType(machine.getJid(), MachineWatcherType.valueOf(watcherType));
-                        GraphMachineWatcherAdapter machineWatcherAdapter = (GraphMachineWatcherAdapter)factory.createMachineWatcherAdapter(machine, machineWatcher.getConf());
+                        GraphMachineWatcherAdapter machineWatcherAdapter = (GraphMachineWatcherAdapter) factory.createMachineWatcherAdapter(machine, machineWatcher.getConf());
 
                         DynamicForm form = Form.form().bindFromRequest();
                         long startTime = Long.parseLong(form.get("startTime"));

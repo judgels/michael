@@ -26,7 +26,7 @@ public final class ControllerUtils extends AbstractJudgelsControllerUtils {
         content.appendLayout(c -> sidebarLayout.render(sidebarContent.render(), c));
     }
 
-    static final ControllerUtils getInstance() {
+    static ControllerUtils getInstance() {
         return INSTANCE;
     }
 }

@@ -43,7 +43,7 @@ public abstract class AbstractAWSEC2ConfAdapter implements MachineWatcherConfAda
 
     @Override
     public String processRequestForm(Form form) {
-        Form<AWSEC2WatcherConfForm> realForm = (Form<AWSEC2WatcherConfForm>)form;
+        Form<AWSEC2WatcherConfForm> realForm = (Form<AWSEC2WatcherConfForm>) form;
         AWSEC2WatcherConfForm watcherConfForm = realForm.get();
         AWSEC2WatcherConf awsec2WatcherConf = new AWSEC2WatcherConf();
         awsec2WatcherConf.regionId = Regions.valueOf(watcherConfForm.regionId).name();

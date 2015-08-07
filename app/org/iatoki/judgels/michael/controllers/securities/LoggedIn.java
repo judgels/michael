@@ -8,7 +8,7 @@ public final class LoggedIn extends Security.Authenticator {
 
     @Override
     public String getUsername(Context ctx) {
-        if ((ctx.session().get("username")!=null) && ("michael".equals(ctx.session().get("username")))) {
+        if ((ctx.session().get("username") != null) && ("michael".equals(ctx.session().get("username")))) {
             return ctx.session().get("username");
         } else {
             return null;

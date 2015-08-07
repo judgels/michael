@@ -42,7 +42,7 @@ public final class MachineAccessPasswordConfAdapter implements MachineAccessConf
 
     @Override
     public String getNameFromForm(Form form) {
-        Form<MachineAccessPasswordConfForm> realForm = (Form<MachineAccessPasswordConfForm>)form;
+        Form<MachineAccessPasswordConfForm> realForm = (Form<MachineAccessPasswordConfForm>) form;
         MachineAccessPasswordConfForm accessPasswordConfForm = realForm.get();
 
         return accessPasswordConfForm.name;
@@ -50,7 +50,7 @@ public final class MachineAccessPasswordConfAdapter implements MachineAccessConf
 
     @Override
     public String processRequestForm(Form form) {
-        Form<MachineAccessPasswordConfForm> realForm = (Form<MachineAccessPasswordConfForm>)form;
+        Form<MachineAccessPasswordConfForm> realForm = (Form<MachineAccessPasswordConfForm>) form;
         MachineAccessPasswordConfForm accessPasswordConfForm = realForm.get();
         MachineAccessPasswordConf accessPasswordConf = new MachineAccessPasswordConf();
         accessPasswordConf.username = accessPasswordConfForm.username;

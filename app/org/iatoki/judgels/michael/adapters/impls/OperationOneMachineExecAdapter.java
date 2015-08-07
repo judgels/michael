@@ -64,7 +64,7 @@ public final class OperationOneMachineExecAdapter implements OperationAdapter {
 
     @Override
     public String getNameFromConfForm(Form form) {
-        Form<OperationOneMachineExecConfForm> realForm = (Form<OperationOneMachineExecConfForm>)form;
+        Form<OperationOneMachineExecConfForm> realForm = (Form<OperationOneMachineExecConfForm>) form;
         OperationOneMachineExecConfForm confForm = realForm.get();
 
         return confForm.name;
@@ -72,7 +72,7 @@ public final class OperationOneMachineExecAdapter implements OperationAdapter {
 
     @Override
     public String processConfForm(Form form) {
-        Form<OperationOneMachineExecConfForm> realForm = (Form<OperationOneMachineExecConfForm>)form;
+        Form<OperationOneMachineExecConfForm> realForm = (Form<OperationOneMachineExecConfForm>) form;
         OperationOneMachineExecConfForm confForm = realForm.get();
         OperationOneMachineExecConf conf = new OperationOneMachineExecConf();
         conf.command = confForm.command;
@@ -99,7 +99,7 @@ public final class OperationOneMachineExecAdapter implements OperationAdapter {
 
     @Override
     public boolean runOperation(Form form, MachineService machineService, MachineAccessService machineAccessService, ApplicationService applicationService, ApplicationVersionService applicationVersionService, String conf) {
-        Form<OperationOneMachineExecForm> realForm = (Form<OperationOneMachineExecForm>)form;
+        Form<OperationOneMachineExecForm> realForm = (Form<OperationOneMachineExecForm>) form;
         OperationOneMachineExecForm execForm = realForm.get();
 
         OperationOneMachineExecConf execConf = new Gson().fromJson(conf, OperationOneMachineExecConf.class);
@@ -130,56 +130,53 @@ public final class OperationOneMachineExecAdapter implements OperationAdapter {
                                     }
                                     printStream.flush();
                                     switch (OperationExecTerminationType.valueOf(execConf.terminationType)) {
-                                        case AVAILABLE_TERMINATION_KEY: {
-                                            final String terminationKey = execConf.terminationValue;
-                                            printStream.println(terminationKey);
+                                        case AVAILABLE_TERMINATION_KEY:
+                                            final String terminationValue = execConf.terminationValue;
+                                            printStream.println(terminationValue);
                                             printStream.flush();
                                             StringBuilder sb = new StringBuilder();
                                             boolean end = false;
                                             while (!end) {
                                                 int readByte = input.read();
                                                 sb.append((char) readByte);
-                                                if ((readByte == (int) '#') && (sb.toString().equals(terminationKey))) {
+                                                if ((readByte == (int) '#') && (sb.toString().equals(terminationValue))) {
                                                     end = true;
                                                 }
-                                                if (sb.length() == terminationKey.length()) {
+                                                if (sb.length() == terminationValue.length()) {
                                                     sb.deleteCharAt(0);
                                                 }
                                             }
                                             break;
-                                        }
-                                        case GENERATED_TERMINATION_KEY: {
+                                        case GENERATED_TERMINATION_KEY:
                                             final String terminationKey = "#$JUDGELS_END_SHELL$#";
                                             printStream.println(terminationKey);
                                             printStream.flush();
-                                            StringBuilder sb = new StringBuilder();
-                                            boolean end = false;
-                                            while (!end) {
+                                            StringBuilder sb2 = new StringBuilder();
+                                            boolean end2 = false;
+                                            while (!end2) {
                                                 int readByte = input.read();
-                                                sb.append((char) readByte);
-                                                if ((readByte == (int) '#') && (sb.toString().equals(terminationKey))) {
-                                                    end = true;
+                                                sb2.append((char) readByte);
+                                                if ((readByte == (int) '#') && (sb2.toString().equals(terminationKey))) {
+                                                    end2 = true;
                                                 }
-                                                if (sb.length() == terminationKey.length()) {
-                                                    sb.deleteCharAt(0);
+                                                if (sb2.length() == terminationKey.length()) {
+                                                    sb2.deleteCharAt(0);
                                                 }
                                             }
                                             break;
-                                        }
-                                        case EXIT_TERMINATION_KEY: {
+                                        case EXIT_TERMINATION_KEY:
                                             printStream.println("exit");
                                             printStream.flush();
-                                            while (channel.isConnected()) ;
+                                            while (channel.isConnected()) {
+                                            }
                                             break;
-                                        }
-                                        case TIME_TERMINATION: {
+                                        case TIME_TERMINATION:
                                             try {
                                                 Thread.sleep(Long.valueOf(execConf.terminationValue));
                                             } catch (InterruptedException e) {
                                                 return false;
                                             }
                                             break;
-                                        }
                                         default: return false;
                                     }
 
