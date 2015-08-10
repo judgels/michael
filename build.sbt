@@ -46,4 +46,4 @@ lazy val michael = (project in file("."))
         buildInfoPackage := "org.iatoki.judgels.michael"
     )
 
-lazy val playcommons = RootProject(file("../playcommons"))
+lazy val playcommons = RootProject(file("../play-commons"))
