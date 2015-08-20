@@ -15,5 +15,4 @@ public final class MachineAccessPasswordConfForm {
 
     @Constraints.Required
     public int port;
-
 }

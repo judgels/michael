@@ -15,6 +15,4 @@ public abstract class MachineAccessModel_ extends AbstractModel_ {
     public static volatile SingularAttribute<MachineAccessModel, String> name;
     public static volatile SingularAttribute<MachineAccessModel, String> type;
     public static volatile SingularAttribute<MachineAccessModel, String> conf;
-
 }
-

@@ -51,9 +51,9 @@ public final class ApplicationController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result listApplications(long page, String orderBy, String orderDir, String filterString) {
-        Page<Application> currentPage = applicationService.pageApplications(page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Page<Application> pageOfApplications = applicationService.getPageOfApplications(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listApplicationsView.render(currentPage, orderBy, orderDir, filterString));
+        LazyHtml content = new LazyHtml(listApplicationsView.render(pageOfApplications, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("application.list"), new InternalLink(Messages.get("commons.create"), routes.ApplicationController.createApplication()), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -67,6 +67,7 @@ public final class ApplicationController extends AbstractJudgelsController {
     @Transactional(readOnly = true)
     public Result viewApplication(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
+
         LazyHtml content = new LazyHtml(viewApplicationView.render(application));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("application.application") + " #" + application.getId() + ": " + application.getName(), new InternalLink(Messages.get("commons.update"), routes.ApplicationController.updateApplicationGeneral(application.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
@@ -82,57 +83,57 @@ public final class ApplicationController extends AbstractJudgelsController {
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createApplication() {
-        Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class);
+        Form<ApplicationUpsertForm> applicationUpsertForm = Form.form(ApplicationUpsertForm.class);
 
-        return showCreateApplication(form);
+        return showCreateApplication(applicationUpsertForm);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateApplication() {
-        Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class).bindFromRequest();
+        Form<ApplicationUpsertForm> applicationUpsertForm = Form.form(ApplicationUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showCreateApplication(form);
-        } else {
-            ApplicationUpsertForm applicationUpsertForm = form.get();
-            applicationService.createApplication(applicationUpsertForm.name, ApplicationType.valueOf(applicationUpsertForm.type));
-
-            return redirect(routes.ApplicationController.index());
+        if (formHasErrors(applicationUpsertForm)) {
+            return showCreateApplication(applicationUpsertForm);
         }
+
+        ApplicationUpsertForm applicationUpsertData = applicationUpsertForm.get();
+        applicationService.createApplication(applicationUpsertData.name, ApplicationType.valueOf(applicationUpsertData.type));
+
+        return redirect(routes.ApplicationController.index());
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateApplicationGeneral(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        ApplicationUpsertForm applicationUpsertForm = new ApplicationUpsertForm();
-        applicationUpsertForm.name = application.getName();
-        applicationUpsertForm.type = application.getType().name();
+        ApplicationUpsertForm applicationUpsertData = new ApplicationUpsertForm();
+        applicationUpsertData.name = application.getName();
+        applicationUpsertData.type = application.getType().name();
 
-        Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class).fill(applicationUpsertForm);
+        Form<ApplicationUpsertForm> applicationUpsertForm = Form.form(ApplicationUpsertForm.class).fill(applicationUpsertData);
 
-        return showUpdateApplicationGeneral(form, application);
+        return showUpdateApplicationGeneral(applicationUpsertForm, application);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postUpdateApplicationGeneral(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        Form<ApplicationUpsertForm> form = Form.form(ApplicationUpsertForm.class).bindFromRequest();
+        Form<ApplicationUpsertForm> applicationUpsertForm = Form.form(ApplicationUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors()) {
-            return showUpdateApplicationGeneral(form, application);
-        } else {
-            ApplicationUpsertForm applicationUpsertForm = form.get();
-            applicationService.updateApplication(application.getId(), applicationUpsertForm.name, ApplicationType.valueOf(applicationUpsertForm.type));
-
-            return redirect(routes.ApplicationController.index());
+        if (formHasErrors(applicationUpsertForm)) {
+            return showUpdateApplicationGeneral(applicationUpsertForm, application);
         }
+
+        ApplicationUpsertForm applicationUpsertData = applicationUpsertForm.get();
+        applicationService.updateApplication(application.getId(), applicationUpsertData.name, ApplicationType.valueOf(applicationUpsertData.type));
+
+        return redirect(routes.ApplicationController.index());
     }
 
-    private Result showCreateApplication(Form<ApplicationUpsertForm> form) {
-        LazyHtml content = new LazyHtml(createApplicationView.render(form));
+    private Result showCreateApplication(Form<ApplicationUpsertForm> applicationUpsertForm) {
+        LazyHtml content = new LazyHtml(createApplicationView.render(applicationUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.create"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -143,8 +144,8 @@ public final class ApplicationController extends AbstractJudgelsController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
-    private Result showUpdateApplicationGeneral(Form<ApplicationUpsertForm> form, Application application) {
-        LazyHtml content = new LazyHtml(updateApplicationGeneralView.render(form, application.getId()));
+    private Result showUpdateApplicationGeneral(Form<ApplicationUpsertForm> applicationUpsertForm, Application application) {
+        LazyHtml content = new LazyHtml(updateApplicationGeneralView.render(applicationUpsertForm, application.getId()));
         content.appendLayout(c -> tabLayout.render(ImmutableList.of(
               new InternalLink(Messages.get("application.update"), routes.ApplicationController.updateApplicationGeneral(application.getId())),
               new InternalLink(Messages.get("application.version"), routes.ApplicationVersionController.viewApplicationVersions(application.getId()))

@@ -54,9 +54,9 @@ public final class ApplicationVersionController extends AbstractJudgelsControlle
     @Transactional(readOnly = true)
     public Result listApplicationVersions(long applicationId, long page, String orderBy, String orderDir, String filterString) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        Page<ApplicationVersion> currentPage = applicationVersionService.pageApplicationVersions(application.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Page<ApplicationVersion> pageOfApplicationVersions = applicationVersionService.getPageOfApplicationVersions(application.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listApplicationVersionsView.render(application.getId(), currentPage, orderBy, orderDir, filterString));
+        LazyHtml content = new LazyHtml(listApplicationVersionsView.render(application.getId(), pageOfApplicationVersions, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("application.version.list"), new InternalLink(Messages.get("commons.create"), routes.ApplicationVersionController.createApplicationVersion(application.getId())), c));
         content.appendLayout(c -> tabLayout.render(ImmutableList.of(
               new InternalLink(Messages.get("application.update"), routes.ApplicationController.updateApplicationGeneral(application.getId())),
@@ -77,42 +77,42 @@ public final class ApplicationVersionController extends AbstractJudgelsControlle
     @AddCSRFToken
     public Result createApplicationVersion(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        Form<ApplicationVersionUpsertForm> form = Form.form(ApplicationVersionUpsertForm.class);
+        Form<ApplicationVersionUpsertForm> applicationVersionUpsertForm = Form.form(ApplicationVersionUpsertForm.class);
 
-        return showCreateApplicationVersion(application, form);
+        return showCreateApplicationVersion(application, applicationVersionUpsertForm);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateApplicationVersion(long applicationId) throws ApplicationNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        Form<ApplicationVersionUpsertForm> form = Form.form(ApplicationVersionUpsertForm.class).bindFromRequest();
+        Form<ApplicationVersionUpsertForm> applicationVersionUpsertForm = Form.form(ApplicationVersionUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showCreateApplicationVersion(application, form);
-        } else {
-            ApplicationVersionUpsertForm applicationVersionUpsertForm = form.get();
-            applicationVersionService.createApplicationVersion(application.getJid(), applicationVersionUpsertForm.name);
-
-            return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
+        if (formHasErrors(applicationVersionUpsertForm)) {
+            return showCreateApplicationVersion(application, applicationVersionUpsertForm);
         }
+
+        ApplicationVersionUpsertForm applicationVersionUpsertData = applicationVersionUpsertForm.get();
+        applicationVersionService.createApplicationVersion(application.getJid(), applicationVersionUpsertData.name);
+
+        return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
     }
 
     @Transactional
     public Result removeApplicationVersion(long applicationId, long applicationVersionId) throws ApplicationNotFoundException, ApplicationVersionNotFoundException {
         Application application = applicationService.findByApplicationId(applicationId);
-        ApplicationVersion applicationVersion = applicationVersionService.findByApplicationVersionId(applicationVersionId);
-        if (application.getJid().equals(applicationVersion.getApplicationJid())) {
-            applicationVersionService.removeApplicationVersion(applicationVersionId);
-
-            return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
-        } else {
+        ApplicationVersion applicationVersion = applicationVersionService.findApplicationVersionById(applicationVersionId);
+        if (!application.getJid().equals(applicationVersion.getApplicationJid())) {
             return badRequest();
         }
+
+        applicationVersionService.removeApplicationVersion(applicationVersionId);
+
+        return redirect(routes.ApplicationVersionController.viewApplicationVersions(application.getId()));
     }
 
-    private Result showCreateApplicationVersion(Application application, Form<ApplicationVersionUpsertForm> form) {
-        LazyHtml content = new LazyHtml(createApplicationVersionView.render(application.getId(), form));
+    private Result showCreateApplicationVersion(Application application, Form<ApplicationVersionUpsertForm> applicationVersionUpsertForm) {
+        LazyHtml content = new LazyHtml(createApplicationVersionView.render(application.getId(), applicationVersionUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.version.create"), c));
         content.appendLayout(c -> tabLayout.render(ImmutableList.of(
               new InternalLink(Messages.get("application.update"), routes.ApplicationController.updateApplicationGeneral(application.getId())),

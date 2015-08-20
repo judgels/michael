@@ -9,5 +9,4 @@ public final class DashboardUpsertForm {
 
     @Constraints.Required
     public String description;
-
 }

@@ -28,7 +28,7 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Page<Operation> pageOperations(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<Operation> getPageOfOperations(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = operationDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
         List<OperationModel> operationModels = operationDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -38,7 +38,7 @@ public final class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Operation findByOperationId(long operationId) throws OperationNotFoundException {
+    public Operation findOperationById(long operationId) throws OperationNotFoundException {
         OperationModel operationModel = operationDao.findById(operationId);
         if (operationModel != null) {
             return createOperationFromModel(operationModel);

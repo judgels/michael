@@ -107,117 +107,130 @@ public final class OperationOneMachineOneAppExecAdapter implements OperationAdap
 
         OperationOneMachineExecConf execConf = new Gson().fromJson(conf, OperationOneMachineExecConf.class);
         if (EnumUtils.isValidEnum(OperationExecTerminationType.class, execConf.terminationType)) {
-            try {
-                if (applicationService.existByApplicationJid(execForm.applicationJid)) {
-                    Application application = applicationService.findByApplicationJid(execForm.applicationJid);
-                    ApplicationVersion applicationVersion = applicationVersionService.findByApplicationVersionId(execForm.versionId);
-                    if (application.getJid().equals(applicationVersion.getApplicationJid())) {
-                        if (machineService.existByMachineJid(execForm.machineJid)) {
-                            Machine machine = machineService.findByMachineJid(execForm.machineJid);
-                            MachineAccess machineAccess = machineAccessService.findByMachineAccessId(execForm.accessId);
-
-                            if (machine.getJid().equals(machineAccess.getMachineJid())) {
-                                JSch jSch = new JSch();
-                                Session session = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine, machineAccess);
-
-                                if (session != null) {
-                                    try {
-                                        Channel channel = session.openChannel("shell");
-                                        try {
-                                            InputStream input = channel.getInputStream();
-                                            PrintStream printStream = new PrintStream(channel.getOutputStream());
-
-                                            channel.connect();
-
-                                            String commandsString = execConf.command;
-                                            commandsString = commandsString.replace("<[(BASE_DIR)]>", machine.getBaseDir());
-                                            commandsString = commandsString.replace("<[(APP_NAME)]>", application.getName());
-                                            commandsString = commandsString.replace("<[(APP_VERSION)]>", applicationVersion.getName());
-                                            String[] commands = commandsString.split("\n");
-                                            for (String commandString : commands) {
-                                                printStream.println(commandString);
-                                            }
-                                            printStream.flush();
-                                            switch (OperationExecTerminationType.valueOf(execConf.terminationType)) {
-                                                case AVAILABLE_TERMINATION_KEY:
-                                                    final String terminationValue = execConf.terminationValue;
-                                                    printStream.println(terminationValue);
-                                                    printStream.flush();
-                                                    StringBuilder sb = new StringBuilder();
-                                                    boolean end = false;
-                                                    while (!end) {
-                                                        int readByte = input.read();
-                                                        sb.append((char) readByte);
-                                                        if ((readByte == (int) '#') && (sb.toString().equals(terminationValue))) {
-                                                            end = true;
-                                                        }
-                                                        if (sb.length() == terminationValue.length()) {
-                                                            sb.deleteCharAt(0);
-                                                        }
-                                                    }
-                                                    break;
-                                                case GENERATED_TERMINATION_KEY:
-                                                    final String terminationKey = "#$JUDGELS_END_SHELL$#";
-                                                    printStream.println(terminationKey);
-                                                    printStream.flush();
-                                                    StringBuilder sb2 = new StringBuilder();
-                                                    boolean end2 = false;
-                                                    while (!end2) {
-                                                        int readByte = input.read();
-                                                        sb2.append((char) readByte);
-                                                        if ((readByte == (int) '#') && (sb2.toString().equals(terminationKey))) {
-                                                            end2 = true;
-                                                        }
-                                                        if (sb2.length() == terminationKey.length()) {
-                                                            sb2.deleteCharAt(0);
-                                                        }
-                                                    }
-                                                    break;
-                                                case EXIT_TERMINATION_KEY:
-                                                    printStream.println("exit");
-                                                    printStream.flush();
-                                                    while (channel.isConnected()) {
-                                                    }
-                                                    break;
-                                                case TIME_TERMINATION:
-                                                    try {
-                                                        Thread.sleep(Long.valueOf(execConf.terminationValue));
-                                                    } catch (InterruptedException e) {
-                                                        return false;
-                                                    }
-                                                    break;
-                                                default:
-                                                    return false;
-                                            }
-
-                                            printStream.close();
-                                        } finally {
-                                            channel.disconnect();
-                                        }
-                                    } finally {
-                                        session.disconnect();
-                                    }
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                return false;
-                            }
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } catch (ApplicationVersionNotFoundException | MachineAccessNotFoundException | JSchException | IOException e) {
-                return false;
-            }
-        } else {
             return false;
         }
+
+        if (!applicationService.applicationExistsByJid(execForm.applicationJid)) {
+            return false;
+        }
+
+        Application application = applicationService.findByApplicationJid(execForm.applicationJid);
+        ApplicationVersion applicationVersion;
+        try {
+            applicationVersion = applicationVersionService.findApplicationVersionById(execForm.versionId);
+        } catch (ApplicationVersionNotFoundException e) {
+            return false;
+        }
+        if (!application.getJid().equals(applicationVersion.getApplicationJid())) {
+            return false;
+        }
+
+        if (machineService.machineExistsByJid(execForm.machineJid)) {
+            return false;
+        }
+
+        Machine machine = machineService.findMachineByJid(execForm.machineJid);
+        MachineAccess machineAccess;
+        try {
+            machineAccess = machineAccessService.findMachineAccessById(execForm.accessId);
+        } catch (MachineAccessNotFoundException e) {
+            return false;
+        }
+
+        if (!machine.getJid().equals(machineAccess.getMachineJid())) {
+            return false;
+        }
+
+        JSch jSch = new JSch();
+        Session session;
+        try {
+            session = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine, machineAccess);
+        } catch (MachineAccessNotFoundException | JSchException | IOException e) {
+            return false;
+        }
+
+        if (session == null) {
+            return false;
+        }
+
+        try {
+            Channel channel = session.openChannel("shell");
+            try {
+                InputStream input = channel.getInputStream();
+                PrintStream printStream = new PrintStream(channel.getOutputStream());
+
+                channel.connect();
+
+                String commandsString = execConf.command;
+                commandsString = commandsString.replace("<[(BASE_DIR)]>", machine.getBaseDir());
+                commandsString = commandsString.replace("<[(APP_NAME)]>", application.getName());
+                commandsString = commandsString.replace("<[(APP_VERSION)]>", applicationVersion.getName());
+                String[] commands = commandsString.split("\n");
+                for (String commandString : commands) {
+                    printStream.println(commandString);
+                }
+                printStream.flush();
+                switch (OperationExecTerminationType.valueOf(execConf.terminationType)) {
+                    case AVAILABLE_TERMINATION_KEY:
+                        final String terminationValue = execConf.terminationValue;
+                        printStream.println(terminationValue);
+                        printStream.flush();
+                        StringBuilder sb = new StringBuilder();
+                        boolean end = false;
+                        while (!end) {
+                            int readByte = input.read();
+                            sb.append((char) readByte);
+                            if ((readByte == (int) '#') && (sb.toString().equals(terminationValue))) {
+                                end = true;
+                            }
+                            if (sb.length() == terminationValue.length()) {
+                                sb.deleteCharAt(0);
+                            }
+                        }
+                        break;
+                    case GENERATED_TERMINATION_KEY:
+                        final String terminationKey = "#$JUDGELS_END_SHELL$#";
+                        printStream.println(terminationKey);
+                        printStream.flush();
+                        StringBuilder sb2 = new StringBuilder();
+                        boolean end2 = false;
+                        while (!end2) {
+                            int readByte = input.read();
+                            sb2.append((char) readByte);
+                            if ((readByte == (int) '#') && (sb2.toString().equals(terminationKey))) {
+                                end2 = true;
+                            }
+                            if (sb2.length() == terminationKey.length()) {
+                                sb2.deleteCharAt(0);
+                            }
+                        }
+                        break;
+                    case EXIT_TERMINATION_KEY:
+                        printStream.println("exit");
+                        printStream.flush();
+                        while (channel.isConnected()) {
+                        }
+                        break;
+                    case TIME_TERMINATION:
+                        try {
+                            Thread.sleep(Long.valueOf(execConf.terminationValue));
+                        } catch (InterruptedException e) {
+                            return false;
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+
+                printStream.close();
+            } finally {
+                channel.disconnect();
+            }
+        } catch (JSchException | IOException e) {
+            return false;
+        } finally {
+            session.disconnect();
+        }
+        return true;
     }
 }

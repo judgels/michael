@@ -13,6 +13,4 @@ public abstract class DashboardMachineModel_ extends AbstractModel_ {
     public static volatile SingularAttribute<DashboardMachineModel, Long> id;
     public static volatile SingularAttribute<DashboardMachineModel, String> dashboardJid;
     public static volatile SingularAttribute<DashboardMachineModel, String> machineJid;
-
 }
-

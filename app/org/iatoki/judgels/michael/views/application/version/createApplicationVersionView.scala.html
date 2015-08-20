@@ -1,17 +1,19 @@
-@(applicationId: Long, form: Form[org.iatoki.judgels.michael.forms.ApplicationVersionUpsertForm])
-
 @import play.i18n.Messages
 @import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.michael.forms.ApplicationVersionUpsertForm
+@import org.iatoki.judgels.michael.controllers.routes
+
+@(applicationId: Long, applicationVersionUpsertForm: Form[ApplicationVersionUpsertForm])
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 
-@formErrorView(form)
+@formErrorView(applicationVersionUpsertForm)
 
-@b3.form(org.iatoki.judgels.michael.controllers.routes.ApplicationVersionController.postCreateApplicationVersion(applicationId)) {
+@b3.form(routes.ApplicationVersionController.postCreateApplicationVersion(applicationId)) {
 
     @helper.CSRF.formField
 
-    @b3.text(form("name"), '_label -> Messages.get("application.version.name"))
+    @b3.text(applicationVersionUpsertForm("name"), '_label -> Messages.get("application.version.name"))
 
     @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
 }

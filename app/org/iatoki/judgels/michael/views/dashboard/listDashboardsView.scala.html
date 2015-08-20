@@ -1,25 +1,26 @@
-@(page: org.iatoki.judgels.play.Page[org.iatoki.judgels.michael.Dashboard], orderBy: String, orderDir: String, filterString: String)
-
-@import org.iatoki.judgels.michael.controllers.routes
-
 @import play.i18n.Messages
 @import org.iatoki.judgels.play.views.html.table.tableView
 @import org.iatoki.judgels.play.views.html.table.tableHeadersView
 @import org.iatoki.judgels.play.views.html.table.searchView
 @import org.iatoki.judgels.play.views.html.table.paginationView
+@import org.iatoki.judgels.play.Page
+@import org.iatoki.judgels.michael.Dashboard
+@import org.iatoki.judgels.michael.controllers.routes
 
-@searchView(page.getPageIndex, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)
+@(pageOfDashboards: Page[Dashboard], orderBy: String, orderDir: String, filterString: String)
+
+@searchView(pageOfDashboards.getPageIndex, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)
 
 <div class="clearfix"></div>
 
 @tableView() {
-    @tableHeadersView(page.getPageIndex, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)(
+    @tableHeadersView(pageOfDashboards.getPageIndex, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)(
         "id" -> Messages.get("commons.id"),
         "jid" -> Messages.get("commons.jid"),
         "name" -> Messages.get("dashboard.name")
     )
     <tbody>
-    @for(dashboard <- page.getData) {
+    @for(dashboard <- pageOfDashboards.getData) {
         <tr>
             <td>@dashboard.getId</td>
             <td>@dashboard.getJid</td>
@@ -33,4 +34,4 @@
     </tbody>
 }
 
-@paginationView(page, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)
+@paginationView(pageOfDashboards, orderBy, orderDir, filterString, routes.DashboardController.listDashboards)

@@ -1,7 +1,8 @@
-@import org.iatoki.judgels.michael.adapters.MachineWatcherAdapter
-@(machine: org.iatoki.judgels.michael.Machine, adapters: List[MachineWatcherAdapter])
-
 @import play.i18n.Messages
+@import org.iatoki.judgels.michael.Machine
+@import org.iatoki.judgels.michael.adapters.MachineWatcherAdapter
+
+@(machine: Machine, adapters: List[MachineWatcherAdapter])
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 

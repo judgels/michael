@@ -7,9 +7,9 @@ import org.iatoki.judgels.michael.OperationType;
 
 public interface OperationService {
 
-    Page<Operation> pageOperations(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
+    Page<Operation> getPageOfOperations(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
 
-    Operation findByOperationId(long operationId) throws OperationNotFoundException;
+    Operation findOperationById(long operationId) throws OperationNotFoundException;
 
     void createOperation(String name, OperationType types, String conf);
 

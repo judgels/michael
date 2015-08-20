@@ -29,7 +29,7 @@ public final class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Page<Application> pageApplications(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<Application> getPageOfApplications(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = applicationDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
         List<ApplicationModel> applicationModels = applicationDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -39,12 +39,12 @@ public final class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<Application> findAll() {
-        return applicationDao.findAll().stream().map(a -> createApplicationFromModel(a)).collect(Collectors.toList());
+    public List<Application> getAllApplications() {
+        return applicationDao.getAll().stream().map(a -> createApplicationFromModel(a)).collect(Collectors.toList());
     }
 
     @Override
-    public boolean existByApplicationJid(String applicationJid) {
+    public boolean applicationExistsByJid(String applicationJid) {
         return applicationDao.existsByJid(applicationJid);
     }
 

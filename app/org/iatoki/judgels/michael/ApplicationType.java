@@ -4,5 +4,4 @@ public enum ApplicationType {
 
     JUDGELS_PLAY,
     SBT
-
 }

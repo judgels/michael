@@ -29,11 +29,11 @@ public final class UserController extends AbstractJudgelsController {
         Form<LoginForm> loginForm = Form.form(LoginForm.class).bindFromRequest();
         if (loginForm.hasErrors()) {
             return showLogin(loginForm);
-        } else {
-            session().clear();
-            session("username", "michael");
-            return redirect(routes.DashboardController.index());
         }
+
+        session().clear();
+        session("username", "michael");
+        return redirect(routes.DashboardController.index());
     }
 
     public Result logout() {
@@ -41,8 +41,8 @@ public final class UserController extends AbstractJudgelsController {
         return redirect("/");
     }
 
-    private Result showLogin(Form<LoginForm> form) {
-        LazyHtml content = new LazyHtml(indexView.render(form));
+    private Result showLogin(Form<LoginForm> loginForm) {
+        LazyHtml content = new LazyHtml(indexView.render(loginForm));
         content.appendLayout(c -> centerLayout.render(c));
         ControllerUtils.getInstance().appendTemplateLayout(content, "Login");
 

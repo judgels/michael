@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface ApplicationVersionService {
 
-    Page<ApplicationVersion> pageApplicationVersions(String applicationJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
+    Page<ApplicationVersion> getPageOfApplicationVersions(String applicationJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
 
-    List<ApplicationVersion> findByApplicationJid(String applicationJid);
+    List<ApplicationVersion> getApplicationVersionByApplicationJid(String applicationJid);
 
-    ApplicationVersion findByApplicationVersionId(long applicationVersionId) throws ApplicationVersionNotFoundException;
+    ApplicationVersion findApplicationVersionById(long applicationVersionId) throws ApplicationVersionNotFoundException;
 
     void createApplicationVersion(String applicationJid, String name);
 

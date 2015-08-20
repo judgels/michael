@@ -14,5 +14,4 @@ public final class OperationOneMachineExecConfForm {
     public String terminationType;
 
     public String terminationValue;
-
 }

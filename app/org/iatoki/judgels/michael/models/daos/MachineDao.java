@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MachineDao extends JudgelsDao<MachineModel> {
 
-    List<MachineModel> findMachinesNotInMachineJids(Collection<String> machineJids);
+    List<MachineModel> getMachinesNotInJids(Collection<String> machineJids);
 }

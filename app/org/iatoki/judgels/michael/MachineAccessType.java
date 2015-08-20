@@ -4,5 +4,4 @@ public enum MachineAccessType {
 
     KEY,
     PASSWORD
-
 }

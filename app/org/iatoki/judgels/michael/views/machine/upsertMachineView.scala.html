@@ -1,10 +1,11 @@
-@(form: Form[org.iatoki.judgels.michael.forms.MachineUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
-
 @import play.i18n.Messages
 @import org.iatoki.judgels.michael.MachineType
+@import org.iatoki.judgels.michael.forms.MachineUpsertForm
 
-@b3.text(form("instanceName"), '_label -> Messages.get("machine.instanceName"))
-@b3.text(form("displayName"), '_label -> Messages.get("machine.displayName"))
-@b3.text(form("baseDir"), '_label -> Messages.get("machine.baseDir"))
-@b3.select(form("type"), MachineType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.type"), 'class -> "form-control selectpicker")
-@b3.text(form("ipAddress"), '_label -> Messages.get("machine.ipAddress"))
+@(machineUpsertForm: Form[MachineUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
+
+@b3.text(machineUpsertForm("instanceName"), '_label -> Messages.get("machine.instanceName"))
+@b3.text(machineUpsertForm("displayName"), '_label -> Messages.get("machine.displayName"))
+@b3.text(machineUpsertForm("baseDir"), '_label -> Messages.get("machine.baseDir"))
+@b3.select(machineUpsertForm("type"), MachineType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.type"), 'class -> "form-control selectpicker")
+@b3.text(machineUpsertForm("ipAddress"), '_label -> Messages.get("machine.ipAddress"))

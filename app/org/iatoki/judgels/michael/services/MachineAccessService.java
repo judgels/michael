@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface MachineAccessService {
 
-    Page<MachineAccess> pageMachineAccesses(String machineJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
+    Page<MachineAccess> getPageOfMachineAccesses(String machineJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
 
-    List<MachineAccess> findByMachineJid(String machineJid);
+    List<MachineAccess> getMachineAccessesByMachineJid(String machineJid);
 
-    MachineAccess findByMachineAccessId(long machineAccessId) throws MachineAccessNotFoundException;
+    MachineAccess findMachineAccessById(long machineAccessId) throws MachineAccessNotFoundException;
 
-    <T> T getMachineAccessConf(long machineAccessId, Class<T> clazz) throws MachineAccessNotFoundException;
+    <T> T getMachineAccessConfById(long machineAccessId, Class<T> clazz) throws MachineAccessNotFoundException;
 
     void createMachineAccess(String machineJid, String name, MachineAccessType types, String conf);
 }

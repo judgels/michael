@@ -12,6 +12,4 @@ public abstract class DashboardModel_ extends AbstractJudgelsModel_ {
 
     public static volatile SingularAttribute<DashboardModel, String> name;
     public static volatile SingularAttribute<DashboardModel, String> description;
-
 }
-

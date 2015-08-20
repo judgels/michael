@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DashboardMachineDao extends Dao<Long, DashboardMachineModel> {
 
-    boolean existByDashboardJidAndMachineJid(String dashboardJid, String machineJid);
+    boolean existsByDashboardJidAndMachineJid(String dashboardJid, String machineJid);
 
-    List<String> findMachineJidsByDashboardJid(String dashboardJid);
+    List<String> getMachineJidsByDashboardJid(String dashboardJid);
 }

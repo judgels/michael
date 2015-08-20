@@ -6,9 +6,9 @@ import org.iatoki.judgels.michael.DashboardNotFoundException;
 
 public interface DashboardService {
 
-    Page<Dashboard> pageDashboards(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
+    Page<Dashboard> getPageOfDashboards(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
 
-    Dashboard findByDashboardId(long dashboardId) throws DashboardNotFoundException;
+    Dashboard findDashboardById(long dashboardId) throws DashboardNotFoundException;
 
     void createDashboard(String name, String description);
 

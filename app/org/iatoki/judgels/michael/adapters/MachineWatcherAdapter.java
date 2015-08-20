@@ -8,5 +8,4 @@ public interface MachineWatcherAdapter {
     Html renderWatcher();
 
     MachineWatcherType getType();
-
 }

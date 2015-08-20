@@ -14,5 +14,4 @@ public class ApplicationModel extends AbstractJudgelsModel {
     public String name;
 
     public String type;
-
 }

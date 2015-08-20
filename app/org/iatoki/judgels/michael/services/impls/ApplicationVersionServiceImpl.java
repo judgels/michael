@@ -29,7 +29,7 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
     }
 
     @Override
-    public Page<ApplicationVersion> pageApplicationVersions(String applicationJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<ApplicationVersion> getPageOfApplicationVersions(String applicationJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = applicationVersionDao.countByFilters(filterString, ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of());
         List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -39,13 +39,13 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
     }
 
     @Override
-    public List<ApplicationVersion> findByApplicationJid(String applicationJid) {
+    public List<ApplicationVersion> getApplicationVersionByApplicationJid(String applicationJid) {
         List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of(), 0, -1);
         return applicationVersionModels.stream().map(m -> createApplicationVersionFromModel(m)).collect(Collectors.toList());
     }
 
     @Override
-    public ApplicationVersion findByApplicationVersionId(long applicationVersionId) throws ApplicationVersionNotFoundException {
+    public ApplicationVersion findApplicationVersionById(long applicationVersionId) throws ApplicationVersionNotFoundException {
         ApplicationVersionModel applicationVersionModel = applicationVersionDao.findById(applicationVersionId);
         if (applicationVersionModel != null) {
             return createApplicationVersionFromModel(applicationVersionModel);

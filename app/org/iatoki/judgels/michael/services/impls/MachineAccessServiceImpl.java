@@ -31,7 +31,7 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     }
 
     @Override
-    public Page<MachineAccess> pageMachineAccesses(String machineJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<MachineAccess> getPageOfMachineAccesses(String machineJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = machineAccessDao.countByFilters(filterString, ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of());
         List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -41,13 +41,13 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     }
 
     @Override
-    public List<MachineAccess> findByMachineJid(String machineJid) {
+    public List<MachineAccess> getMachineAccessesByMachineJid(String machineJid) {
         List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of(), 0, -1);
         return machineAccessModels.stream().map(m -> createMachineAccessFromModel(m)).collect(Collectors.toList());
     }
 
     @Override
-    public MachineAccess findByMachineAccessId(long machineAccessId) throws MachineAccessNotFoundException {
+    public MachineAccess findMachineAccessById(long machineAccessId) throws MachineAccessNotFoundException {
         MachineAccessModel machineAccessModel = machineAccessDao.findById(machineAccessId);
         if (machineAccessModel != null) {
             return createMachineAccessFromModel(machineAccessModel);
@@ -57,7 +57,7 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     }
 
     @Override
-    public <T> T getMachineAccessConf(long machineAccessId, Class<T> clazz) throws MachineAccessNotFoundException {
+    public <T> T getMachineAccessConfById(long machineAccessId, Class<T> clazz) throws MachineAccessNotFoundException {
         MachineAccessModel machineAccessModel = machineAccessDao.findById(machineAccessId);
         if (machineAccessModel != null) {
             return new Gson().fromJson(machineAccessModel.conf, clazz);

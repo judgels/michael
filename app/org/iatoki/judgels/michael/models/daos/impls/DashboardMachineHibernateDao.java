@@ -22,7 +22,7 @@ public final class DashboardMachineHibernateDao extends AbstractHibernateDao<Lon
     }
 
     @Override
-    public boolean existByDashboardJidAndMachineJid(String dashboardJid, String machineJid) {
+    public boolean existsByDashboardJidAndMachineJid(String dashboardJid, String machineJid) {
         CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<DashboardMachineModel> root = query.from(DashboardMachineModel.class);
@@ -33,7 +33,7 @@ public final class DashboardMachineHibernateDao extends AbstractHibernateDao<Lon
     }
 
     @Override
-    public List<String> findMachineJidsByDashboardJid(String dashboardJid) {
+    public List<String> getMachineJidsByDashboardJid(String dashboardJid) {
         CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
         CriteriaQuery<String> query = cb.createQuery(String.class);
         Root<DashboardMachineModel> root = query.from(DashboardMachineModel.class);

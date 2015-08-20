@@ -8,19 +8,19 @@ import java.util.List;
 
 public interface MachineWatcherService {
 
-    List<MachineWatcherType> findEnabledWatcherByMachineJid(String machineJid);
+    List<MachineWatcherType> getEnabledWatchersByMachineJid(String machineJid);
 
     boolean isWatcherActivated(String machineJid, MachineWatcherType types);
 
-    MachineWatcher findByWatcherId(long watcherId) throws MachineWatcherNotFoundException;
+    MachineWatcher findMachineWatcherById(long watcherId) throws MachineWatcherNotFoundException;
 
-    MachineWatcher findByMachineJidAndWatcherType(String machineJid, MachineWatcherType types);
+    MachineWatcher findMachineWatcherByMachineJidAndType(String machineJid, MachineWatcherType types);
 
-    List<MachineWatcher> findAll(String machineJid);
+    List<MachineWatcher> getAllMachineWatchers(String machineJid);
 
-    void createWatcher(String machineJid, MachineWatcherType types, String conf);
+    void createMachineWatcher(String machineJid, MachineWatcherType types, String conf);
 
-    void updateWatcher(long machineWatcherId, String machineJid, MachineWatcherType types, String conf);
+    void updateMachineWatcher(long machineWatcherId, String machineJid, MachineWatcherType types, String conf);
 
-    void removeWatcher(String machineJid, MachineWatcherType types);
+    void removeMachineWatcher(String machineJid, MachineWatcherType types);
 }

@@ -49,14 +49,14 @@ public final class DashboardController extends AbstractJudgelsController {
 
     private static final long PAGE_SIZE = 20;
 
-    private final DashboardService dashboardService;
     private final DashboardMachineService dashboardMachineService;
+    private final DashboardService dashboardService;
     private final MachineWatcherService machineWatcherService;
 
     @Inject
-    public DashboardController(DashboardService dashboardService, DashboardMachineService dashboardMachineService, MachineWatcherService machineWatcherService) {
-        this.dashboardService = dashboardService;
+    public DashboardController(DashboardMachineService dashboardMachineService, DashboardService dashboardService, MachineWatcherService machineWatcherService) {
         this.dashboardMachineService = dashboardMachineService;
+        this.dashboardService = dashboardService;
         this.machineWatcherService = machineWatcherService;
     }
 
@@ -67,9 +67,9 @@ public final class DashboardController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result listDashboards(long page, String orderBy, String orderDir, String filterString) {
-        Page<Dashboard> currentPage = dashboardService.pageDashboards(page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Page<Dashboard> pageOfDashboards = dashboardService.getPageOfDashboards(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listDashboardsView.render(currentPage, orderBy, orderDir, filterString));
+        LazyHtml content = new LazyHtml(listDashboardsView.render(pageOfDashboards, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.list"), new InternalLink(Messages.get("commons.create"), routes.DashboardController.createDashboard()), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -82,26 +82,26 @@ public final class DashboardController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result viewDashboard(long dashboardId) throws DashboardNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        List<Machine> machineList = dashboardMachineService.findAllIncludedMachinesByDashboardJid(dashboard.getJid());
-        Map<MachineWatcherType, List<MachineWatcherAdapter>> adapterMap = Maps.newHashMap();
-        for (Machine machine : machineList) {
-            List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        List<Machine> machinesInDashboard = dashboardMachineService.getMachinesInDashboardByDashboardJid(dashboard.getJid());
+        Map<MachineWatcherType, List<MachineWatcherAdapter>> watcherAdapters = Maps.newHashMap();
+        for (Machine machine : machinesInDashboard) {
+            List<MachineWatcher> machineWatchers = machineWatcherService.getAllMachineWatchers(machine.getJid());
             if (machine.getType().equals(MachineType.AWS_EC2)) {
                 for (MachineWatcher machineWatcher : machineWatchers) {
                     MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
                     if (factory != null) {
-                        if (!adapterMap.containsKey(machineWatcher.getType())) {
-                            adapterMap.put(machineWatcher.getType(), Lists.newArrayList());
+                        if (!watcherAdapters.containsKey(machineWatcher.getType())) {
+                            watcherAdapters.put(machineWatcher.getType(), Lists.newArrayList());
                         }
-                        List<MachineWatcherAdapter> adapters = adapterMap.get(machineWatcher.getType());
+                        List<MachineWatcherAdapter> adapters = watcherAdapters.get(machineWatcher.getType());
                         adapters.add(factory.createMachineWatcherAdapter(machine, machineWatcher.getConf()));
                     }
                 }
             }
         }
 
-        LazyHtml content = new LazyHtml(viewDashboardView.render(dashboard, adapterMap));
+        LazyHtml content = new LazyHtml(viewDashboardView.render(dashboard, watcherAdapters));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), new InternalLink(Messages.get("commons.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -116,57 +116,57 @@ public final class DashboardController extends AbstractJudgelsController {
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createDashboard() {
-        Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class);
+        Form<DashboardUpsertForm> dashboardUpsertForm = Form.form(DashboardUpsertForm.class);
 
-        return showCreateDashboard(form);
+        return showCreateDashboard(dashboardUpsertForm);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateDashboard() {
-        Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class).bindFromRequest();
+        Form<DashboardUpsertForm> dashboardUpsertForm = Form.form(DashboardUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showCreateDashboard(form);
-        } else {
-            DashboardUpsertForm dashboardUpsertForm = form.get();
-            dashboardService.createDashboard(dashboardUpsertForm.name, dashboardUpsertForm.description);
-
-            return redirect(routes.DashboardController.index());
+        if (formHasErrors(dashboardUpsertForm)) {
+            return showCreateDashboard(dashboardUpsertForm);
         }
+
+        DashboardUpsertForm dashboardUpsertData = dashboardUpsertForm.get();
+        dashboardService.createDashboard(dashboardUpsertData.name, dashboardUpsertData.description);
+
+        return redirect(routes.DashboardController.index());
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateDashboardGeneral(long dashboardId) throws DashboardNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        DashboardUpsertForm dashboardUpsertForm = new DashboardUpsertForm();
-        dashboardUpsertForm.name = dashboard.getName();
-        dashboardUpsertForm.description = dashboard.getDescription();
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        DashboardUpsertForm dashboardUpsertData = new DashboardUpsertForm();
+        dashboardUpsertData.name = dashboard.getName();
+        dashboardUpsertData.description = dashboard.getDescription();
 
-        Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class).fill(dashboardUpsertForm);
+        Form<DashboardUpsertForm> dashboardUpsertForm = Form.form(DashboardUpsertForm.class).fill(dashboardUpsertData);
 
-        return showUpdateDashboardGeneral(form, dashboard);
+        return showUpdateDashboardGeneral(dashboardUpsertForm, dashboard);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postUpdateDashboardGeneral(long dashboardId) throws DashboardNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        Form<DashboardUpsertForm> form = Form.form(DashboardUpsertForm.class).bindFromRequest();
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        Form<DashboardUpsertForm> dashboardUpsertForm = Form.form(DashboardUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors()) {
-            return showUpdateDashboardGeneral(form, dashboard);
-        } else {
-            DashboardUpsertForm dashboardUpsertForm = form.get();
-            dashboardService.updateDashboard(dashboard.getId(), dashboardUpsertForm.name, dashboardUpsertForm.description);
-
-            return redirect(routes.DashboardController.index());
+        if (formHasErrors(dashboardUpsertForm)) {
+            return showUpdateDashboardGeneral(dashboardUpsertForm, dashboard);
         }
+
+        DashboardUpsertForm dashboardUpsertData = dashboardUpsertForm.get();
+        dashboardService.updateDashboard(dashboard.getId(), dashboardUpsertData.name, dashboardUpsertData.description);
+
+        return redirect(routes.DashboardController.index());
     }
 
-    private Result showCreateDashboard(Form<DashboardUpsertForm> form) {
-        LazyHtml content = new LazyHtml(createDashboardView.render(form));
+    private Result showCreateDashboard(Form<DashboardUpsertForm> dashboardUpsertForm) {
+        LazyHtml content = new LazyHtml(createDashboardView.render(dashboardUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("dashboard.create"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -177,8 +177,8 @@ public final class DashboardController extends AbstractJudgelsController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
-    private Result showUpdateDashboardGeneral(Form<DashboardUpsertForm> form, Dashboard dashboard) {
-        LazyHtml content = new LazyHtml(updateDashboardGeneralView.render(form, dashboard.getId()));
+    private Result showUpdateDashboardGeneral(Form<DashboardUpsertForm> dashboardUpsertForm, Dashboard dashboard) {
+        LazyHtml content = new LazyHtml(updateDashboardGeneralView.render(dashboardUpsertForm, dashboard.getId()));
         content.appendLayout(c -> tabLayout.render(ImmutableList.of(
               new InternalLink(Messages.get("dashboard.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId())),
               new InternalLink(Messages.get("dashboard.machine"), routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()))

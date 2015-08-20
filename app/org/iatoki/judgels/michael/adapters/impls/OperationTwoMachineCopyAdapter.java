@@ -104,74 +104,89 @@ public final class OperationTwoMachineCopyAdapter implements OperationAdapter {
         OperationTwoMachineCopyForm copyForm = realForm.get();
 
         OperationTwoMachineCopyConf copyConf = new Gson().fromJson(conf, OperationTwoMachineCopyConf.class);
+        if (!applicationService.applicationExistsByJid(copyForm.applicationJid)) {
+            return false;
+        }
+        Application application = applicationService.findByApplicationJid(copyForm.applicationJid);
+        ApplicationVersion applicationVersion;
         try {
-            if (applicationService.existByApplicationJid(copyForm.applicationJid)) {
-                Application application = applicationService.findByApplicationJid(copyForm.applicationJid);
-                ApplicationVersion applicationVersion = applicationVersionService.findByApplicationVersionId(copyForm.versionId);
-                if (application.getJid().equals(applicationVersion.getApplicationJid())) {
-                    if (machineService.existByMachineJid(copyForm.machineJid1)) {
-                        Machine machine1 = machineService.findByMachineJid(copyForm.machineJid1);
-                        MachineAccess machineAccess1 = machineAccessService.findByMachineAccessId(copyForm.accessId1);
+            applicationVersion = applicationVersionService.findApplicationVersionById(copyForm.versionId);
+        } catch (ApplicationVersionNotFoundException e) {
+            return false;
+        }
 
-                        if (machine1.getJid().equals(machineAccess1.getMachineJid())) {
-                            if (machineService.existByMachineJid(copyForm.machineJid2)) {
-                                Machine machine2 = machineService.findByMachineJid(copyForm.machineJid2);
-                                MachineAccess machineAccess2 = machineAccessService.findByMachineAccessId(copyForm.accessId2);
+        if (!application.getJid().equals(applicationVersion.getApplicationJid())) {
+            return false;
+        }
 
-                                if (machine2.getJid().equals(machineAccess2.getMachineJid())) {
-                                    JSch jSch = new JSch();
-                                    Session session1 = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine1, machineAccess1);
-                                    Session session2 = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine2, machineAccess2);
+        if (!machineService.machineExistsByJid(copyForm.machineJid1)) {
+            return false;
+        }
 
-                                    if ((session1 != null) && (session2 != null)) {
-                                        String filename1 = machine1.getBaseDir() + copyConf.sourceFile;
-                                        filename1 = filename1.replace("<[(APP_NAME)]>", application.getName());
-                                        filename1 = filename1.replace("<[(APP_VERSION)]>", applicationVersion.getName());
-                                        String filename2 = machine2.getBaseDir() + copyConf.targetFile;
-                                        filename2 = filename2.replace("<[(APP_NAME)]>", application.getName());
-                                        filename2 = filename2.replace("<[(APP_VERSION)]>", applicationVersion.getName());
-                                        File tempFile = File.createTempFile(FilenameUtils.getBaseName(filename2), FilenameUtils.getExtension(filename2));
+        Machine machine1 = machineService.findMachineByJid(copyForm.machineJid1);
+        MachineAccess machineAccess1;
+        try {
+            machineAccess1 = machineAccessService.findMachineAccessById(copyForm.accessId1);
+        } catch (MachineAccessNotFoundException e) {
+            return false;
+        }
 
-                                        ChannelSftp channel = (ChannelSftp) session1.openChannel("sftp");
-                                        channel.connect();
-                                        channel.cd(FilenameUtils.getFullPathNoEndSeparator(filename1));
-                                        channel.get(FilenameUtils.getName(filename1), new FileOutputStream(tempFile));
-                                        channel.disconnect();
+        if (!machine1.getJid().equals(machineAccess1.getMachineJid())) {
+            return false;
+        }
 
-                                        channel = (ChannelSftp) session2.openChannel("sftp");
-                                        channel.connect();
-                                        channel.cd(FilenameUtils.getFullPathNoEndSeparator(filename2));
-                                        channel.put(new FileInputStream(tempFile), FilenameUtils.getName(filename2));
-                                        channel.disconnect();
+        if (!machineService.machineExistsByJid(copyForm.machineJid2)) {
+            return false;
+        }
 
-                                        session1.disconnect();
-                                        session2.disconnect();
+        Machine machine2 = machineService.findMachineByJid(copyForm.machineJid2);
+        MachineAccess machineAccess2;
+        try {
+            machineAccess2 = machineAccessService.findMachineAccessById(copyForm.accessId2);
+        } catch (MachineAccessNotFoundException e) {
+            return false;
+        }
 
-                                        tempFile.delete();
+        if (!machine2.getJid().equals(machineAccess2.getMachineJid())) {
+            return false;
+        }
 
-                                        return true;
-                                    } else {
-                                        return false;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                return false;
-                            }
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else {
+        try {
+            JSch jSch = new JSch();
+            Session session1 = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine1, machineAccess1);
+            Session session2 = MachineAccessUtils.getMachineSession(machineAccessService, jSch, machine2, machineAccess2);
+
+            if ((session1 == null) || (session2 == null)) {
                 return false;
             }
-        } catch (ApplicationVersionNotFoundException | MachineAccessNotFoundException | JSchException | SftpException | IOException e) {
+
+            String filename1 = machine1.getBaseDir() + copyConf.sourceFile;
+            filename1 = filename1.replace("<[(APP_NAME)]>", application.getName());
+            filename1 = filename1.replace("<[(APP_VERSION)]>", applicationVersion.getName());
+            String filename2 = machine2.getBaseDir() + copyConf.targetFile;
+            filename2 = filename2.replace("<[(APP_NAME)]>", application.getName());
+            filename2 = filename2.replace("<[(APP_VERSION)]>", applicationVersion.getName());
+            File tempFile = File.createTempFile(FilenameUtils.getBaseName(filename2), FilenameUtils.getExtension(filename2));
+
+            ChannelSftp channel = (ChannelSftp) session1.openChannel("sftp");
+            channel.connect();
+            channel.cd(FilenameUtils.getFullPathNoEndSeparator(filename1));
+            channel.get(FilenameUtils.getName(filename1), new FileOutputStream(tempFile));
+            channel.disconnect();
+
+            channel = (ChannelSftp) session2.openChannel("sftp");
+            channel.connect();
+            channel.cd(FilenameUtils.getFullPathNoEndSeparator(filename2));
+            channel.put(new FileInputStream(tempFile), FilenameUtils.getName(filename2));
+            channel.disconnect();
+
+            session1.disconnect();
+            session2.disconnect();
+
+            tempFile.delete();
+
+            return true;
+        } catch (MachineAccessNotFoundException | JSchException | SftpException | IOException e) {
             return false;
         }
     }

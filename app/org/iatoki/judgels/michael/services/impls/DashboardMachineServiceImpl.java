@@ -36,12 +36,12 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     }
 
     @Override
-    public boolean existByDashboardJidAndMachineJid(String dashboardJid, String machineJid) {
-        return dashboardMachineDao.existByDashboardJidAndMachineJid(dashboardJid, machineJid);
+    public boolean dashboardMachineExists(String dashboardJid, String machineJid) {
+        return dashboardMachineDao.existsByDashboardJidAndMachineJid(dashboardJid, machineJid);
     }
 
     @Override
-    public DashboardMachine findByDashboardMachineId(long dashboardMachineId) throws DashboardMachineNotFoundException {
+    public DashboardMachine findDashboardMachineById(long dashboardMachineId) throws DashboardMachineNotFoundException {
         DashboardMachineModel dashboardMachineModel = dashboardMachineDao.findById(dashboardMachineId);
         if (dashboardMachineModel != null) {
             return createDashboardMachineFromModel(dashboardMachineModel);
@@ -51,7 +51,7 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     }
 
     @Override
-    public Page<DashboardMachine> pageDashboardMachines(String dashboardJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<DashboardMachine> getPageOfDashboardMachines(String dashboardJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = dashboardMachineDao.countByFilters(filterString, ImmutableMap.of(DashboardMachineModel_.dashboardJid, dashboardJid), ImmutableMap.of());
         List<DashboardMachineModel> dashboardMachineModels = dashboardMachineDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(DashboardMachineModel_.dashboardJid, dashboardJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -61,17 +61,17 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     }
 
     @Override
-    public List<Machine> findAllIncludedMachinesByDashboardJid(String dashboardJid) {
-        List<String> includedMachineJids = dashboardMachineDao.findMachineJidsByDashboardJid(dashboardJid);
+    public List<Machine> getMachinesInDashboardByDashboardJid(String dashboardJid) {
+        List<String> includedMachineJids = dashboardMachineDao.getMachineJidsByDashboardJid(dashboardJid);
         List<MachineModel> machineModels = machineDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(), ImmutableMap.of(MachineModel_.jid, includedMachineJids), 0, -1);
 
         return machineModels.stream().map(m -> createMachineFromModel(m)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Machine> findAllNotIncludedMachinesByDashboardJid(String dashboardJid) {
-        List<String> includedMachineJids = dashboardMachineDao.findMachineJidsByDashboardJid(dashboardJid);
-        List<MachineModel> machineModels = machineDao.findMachinesNotInMachineJids(includedMachineJids);
+    public List<Machine> getMachinesNotInMachinesByDashboardJid(String dashboardJid) {
+        List<String> includedMachineJids = dashboardMachineDao.getMachineJidsByDashboardJid(dashboardJid);
+        List<MachineModel> machineModels = machineDao.getMachinesNotInJids(includedMachineJids);
 
         return machineModels.stream().map(m -> createMachineFromModel(m)).collect(Collectors.toList());
     }

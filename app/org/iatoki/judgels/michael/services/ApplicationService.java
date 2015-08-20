@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface ApplicationService {
 
-    Page<Application> pageApplications(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
+    Page<Application> getPageOfApplications(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString);
 
-    List<Application> findAll();
+    List<Application> getAllApplications();
 
-    boolean existByApplicationJid(String applicationJid);
+    boolean applicationExistsByJid(String applicationJid);
 
     Application findByApplicationJid(String applicationJid);
 

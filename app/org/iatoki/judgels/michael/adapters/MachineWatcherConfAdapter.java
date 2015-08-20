@@ -19,5 +19,4 @@ public interface MachineWatcherConfAdapter {
     String processRequestForm(Form form);
 
     MachineWatcherAdapter createMachineWatcherAdapter(Machine machine, String conf);
-
 }

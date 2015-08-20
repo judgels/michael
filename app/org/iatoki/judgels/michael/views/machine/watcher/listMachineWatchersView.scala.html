@@ -1,20 +1,16 @@
-@(machineId: Long, enabledWatchers: List[org.iatoki.judgels.michael.MachineWatcherType], unenabledWatchers: List[org.iatoki.judgels.michael.MachineWatcherType])
-
-@import org.iatoki.judgels.michael.controllers.routes
-
 @import play.i18n.Messages
-@import org.iatoki.judgels.play.views.html.table.tableView
-@import org.iatoki.judgels.play.views.html.table.tableHeadersView
-@import org.iatoki.judgels.play.views.html.table.searchView
-@import org.iatoki.judgels.play.views.html.table.paginationView
+@import org.iatoki.judgels.michael.controllers.routes
+@import org.iatoki.judgels.michael.MachineWatcherType
+
+@(machineId: Long, enabledWatchers: List[MachineWatcherType], unenabledWatchers: List[MachineWatcherType])
 
 <h3>@Messages.get("machine.watcher.active")</h3>
 @for(enabledWatcher <- enabledWatchers) {
     <div class="well clearfix">
         @enabledWatcher.name()
         <div class="pull-right">
-            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.updateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.update")</a>
-            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.deactivateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.deactivate")</a>
+            <a href="@routes.MachineWatcherController.updateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.update")</a>
+            <a href="@routes.MachineWatcherController.deactivateMachineWatcher(machineId, enabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.deactivate")</a>
         </div>
     </div>
 }
@@ -24,7 +20,7 @@
     <div class="well clearfix">
         @unenabledWatcher.name()
         <div class="pull-right">
-            <a href="@org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.activateMachineWatcher(machineId, unenabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.activate")</a>
+            <a href="@routes.MachineWatcherController.activateMachineWatcher(machineId, unenabledWatcher.name())" class="btn btn-primary">@Messages.get("machine.watcher.activate")</a>
         </div>
     </div>
 }

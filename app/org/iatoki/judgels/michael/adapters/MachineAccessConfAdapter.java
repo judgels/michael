@@ -18,5 +18,4 @@ public interface MachineAccessConfAdapter {
     String getNameFromForm(Form form);
 
     String processRequestForm(Form form);
-
 }

@@ -23,7 +23,7 @@ public final class MachineHibernateDao extends AbstractJudgelsHibernateDao<Machi
     }
 
     @Override
-    public List<MachineModel> findMachinesNotInMachineJids(Collection<String> machineJids) {
+    public List<MachineModel> getMachinesNotInJids(Collection<String> machineJids) {
         CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
         CriteriaQuery<MachineModel> query = cb.createQuery(MachineModel.class);
         Root<MachineModel> root = query.from(MachineModel.class);

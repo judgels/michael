@@ -6,5 +6,4 @@ public final class OperationCreateForm {
 
     @Constraints.Required
     public String operationType;
-
 }

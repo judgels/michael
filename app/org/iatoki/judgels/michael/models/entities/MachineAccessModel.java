@@ -24,5 +24,4 @@ public class MachineAccessModel extends AbstractModel {
 
     @Column(columnDefinition = "TEXT")
     public String conf;
-
 }

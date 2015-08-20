@@ -22,5 +22,4 @@ public class MachineWatcherModel extends AbstractModel {
 
     @Column(columnDefinition = "TEXT")
     public String conf;
-
 }

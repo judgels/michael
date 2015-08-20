@@ -1,17 +1,19 @@
-@(form: Form[org.iatoki.judgels.michael.forms.ApplicationUpsertForm])
-
 @import play.i18n.Messages
 @import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.michael.forms.ApplicationUpsertForm
+@import org.iatoki.judgels.michael.controllers.routes
+
+@(applicationUpsertForm: Form[ApplicationUpsertForm])
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 
-@formErrorView(form)
+@formErrorView(applicationUpsertForm)
 
-@b3.form(org.iatoki.judgels.michael.controllers.routes.ApplicationController.postCreateApplication()) {
+@b3.form(routes.ApplicationController.postCreateApplication()) {
 
     @helper.CSRF.formField
 
-    @upsertApplicationView(form)
+    @upsertApplicationView(applicationUpsertForm)
 
     @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.create") }
 }

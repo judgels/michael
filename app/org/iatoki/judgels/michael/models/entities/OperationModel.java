@@ -18,5 +18,4 @@ public class OperationModel extends AbstractJudgelsModel {
 
     @Column(columnDefinition = "TEXT")
     public String conf;
-
 }

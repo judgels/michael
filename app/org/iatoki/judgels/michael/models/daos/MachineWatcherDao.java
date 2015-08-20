@@ -5,8 +5,7 @@ import org.iatoki.judgels.michael.models.entities.MachineWatcherModel;
 
 public interface MachineWatcherDao extends Dao<Long, MachineWatcherModel> {
 
-    boolean existByMachineJidAndWatcherType(String machineJid, String watcherType);
+    boolean existsByMachineJidAndWatcherType(String machineJid, String watcherType);
 
     MachineWatcherModel findByMachineJidAndWatcherType(String machineJid, String watcherType);
-
 }

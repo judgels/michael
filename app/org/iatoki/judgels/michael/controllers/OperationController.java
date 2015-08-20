@@ -43,16 +43,16 @@ public final class OperationController extends AbstractJudgelsController {
 
     private final ApplicationService applicationService;
     private final ApplicationVersionService applicationVersionService;
-    private final MachineService machineService;
     private final MachineAccessService machineAccessService;
+    private final MachineService machineService;
     private final OperationService operationService;
 
     @Inject
-    public OperationController(ApplicationService applicationService, ApplicationVersionService applicationVersionService, MachineService machineService, MachineAccessService machineAccessService, OperationService operationService) {
+    public OperationController(ApplicationService applicationService, ApplicationVersionService applicationVersionService, MachineAccessService machineAccessService, MachineService machineService, OperationService operationService) {
         this.applicationService = applicationService;
         this.applicationVersionService = applicationVersionService;
-        this.machineService = machineService;
         this.machineAccessService = machineAccessService;
+        this.machineService = machineService;
         this.operationService = operationService;
     }
 
@@ -63,124 +63,123 @@ public final class OperationController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result listOperations(long page, String orderBy, String orderDir, String filterString) {
-        Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-        Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Form<OperationCreateForm> operationCreateForm = Form.form(OperationCreateForm.class);
+        Page<Operation> pageOfOperations = operationService.getPageOfOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
+        return showListCreateOperation(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm);
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
-        if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
-            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
-            if (adapter != null) {
-                Form form = adapter.generateConfForm();
-                return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
-            } else {
-                Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-                form.reject("error.operation.undefined");
-                Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+        if (!EnumUtils.isValidEnum(OperationType.class, operationType)) {
+            Form<OperationCreateForm> operationCreateForm = Form.form(OperationCreateForm.class);
+            operationCreateForm.reject("error.operation.undefined");
+            Page<Operation> pageOfOperations = operationService.getPageOfOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-                return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
-            }
-        } else {
-            Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-            form.reject("error.operation.undefined");
-            Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
-
-            return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
+            return showListCreateOperation(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm);
         }
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
+        if (operationAdapter == null) {
+            Form<OperationCreateForm> operationCreateForm = Form.form(OperationCreateForm.class);
+            operationCreateForm.reject("error.operation.undefined");
+            Page<Operation> pageOfOperations = operationService.getPageOfOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateOperation(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm);
+        }
+
+        Form operationConfForm = operationAdapter.generateConfForm();
+        return showCreateOperation(operationType, operationAdapter.getConfHtml(operationConfForm, routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateOperation(String operationType, long page, String orderBy, String orderDir, String filterString) {
-        if (EnumUtils.isValidEnum(OperationType.class, operationType)) {
-            OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
-            if (adapter != null) {
-                Form form = adapter.bindConfFormFromRequest(request());
-                if (form.hasErrors() || form.hasGlobalErrors()) {
-                    return showCreateOperation(operationType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
-                } else {
-                    operationService.createOperation(adapter.getNameFromConfForm(form), OperationType.valueOf(operationType), adapter.processConfForm(form));
+        if (!EnumUtils.isValidEnum(OperationType.class, operationType)) {
+            Form<OperationCreateForm> operationCreateForm = Form.form(OperationCreateForm.class);
+            operationCreateForm.reject("error.operation.undefined");
+            Page<Operation> pageOfOperations = operationService.getPageOfOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-                    return redirect(routes.OperationController.index());
-                }
-            } else {
-                Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-                form.reject("error.operation.undefined");
-                Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
-
-                return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
-            }
-        } else {
-            Form<OperationCreateForm> form = Form.form(OperationCreateForm.class);
-            form.reject("error.operation.undefined");
-            Page<Operation> currentPage = operationService.pageOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
-
-            return showListCreateOperation(currentPage, orderBy, orderDir, filterString, form);
+            return showListCreateOperation(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm);
         }
+
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operationType));
+        if (operationAdapter == null) {
+            Form<OperationCreateForm> operationCreateForm = Form.form(OperationCreateForm.class);
+            operationCreateForm.reject("error.operation.undefined");
+            Page<Operation> pageOfOperations = operationService.getPageOfOperations(page, PAGE_SIZE, orderBy, orderDir, filterString);
+
+            return showListCreateOperation(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm);
+        }
+
+        Form operationConfForm = operationAdapter.bindConfFormFromRequest(request());
+        if (formHasErrors(operationConfForm)) {
+            return showCreateOperation(operationType, operationAdapter.getConfHtml(operationConfForm, routes.OperationController.postCreateOperation(operationType, page, orderBy, orderDir, filterString), Messages.get("commons.create")), page, orderBy, orderDir, filterString);
+        }
+
+        operationService.createOperation(operationAdapter.getNameFromConfForm(operationConfForm), OperationType.valueOf(operationType), operationAdapter.processConfForm(operationConfForm));
+
+        return redirect(routes.OperationController.index());
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateOperation(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
+        Operation operation = operationService.findOperationById(operationId);
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
-        Form form = adapter.generateConfForm(operation.getName(), operation.getConf());
-        Html html = adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update"));
+        Form operationConfForm = operationAdapter.generateConfForm(operation.getName(), operation.getConf());
+        Html html = operationAdapter.getConfHtml(operationConfForm, routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update"));
         return showUpdateOperation(operation, html);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postUpdateOperation(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
+        Operation operation = operationService.findOperationById(operationId);
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
-        Form form = adapter.bindConfFormFromRequest(request());
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showUpdateOperation(operation, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update")));
-        } else {
-            operationService.updateOperation(operation.getId(), adapter.getNameFromConfForm(form), OperationType.valueOf(operation.getType()), adapter.processConfForm(form));
-
-            return redirect(routes.OperationController.index());
+        Form operationConfForm = operationAdapter.bindConfFormFromRequest(request());
+        if (formHasErrors(operationConfForm)) {
+            return showUpdateOperation(operation, operationAdapter.getConfHtml(operationConfForm, routes.OperationController.postUpdateOperation(operation.getId()), Messages.get("commons.update")));
         }
+
+        operationService.updateOperation(operation.getId(), operationAdapter.getNameFromConfForm(operationConfForm), OperationType.valueOf(operation.getType()), operationAdapter.processConfForm(operationConfForm));
+
+        return redirect(routes.OperationController.index());
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result runOperation(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
+        Operation operation = operationService.findOperationById(operationId);
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
-        Form form = adapter.generateRunForm();
-        Html html = adapter.getRunHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postRunOperation(operation.getId()), Messages.get("operation.run"), machineService.findAll(), applicationService.findAll());
+        Form operationRunForm = operationAdapter.generateRunForm();
+        Html html = operationAdapter.getRunHtml(operationRunForm, routes.OperationController.postRunOperation(operation.getId()), Messages.get("operation.run"), machineService.getAllMachines(), applicationService.getAllApplications());
         return showRunOperation(operation, html);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postRunOperation(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
-        OperationAdapter adapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
+        Operation operation = operationService.findOperationById(operationId);
+        OperationAdapter operationAdapter = OperationUtils.getOperationAdapter(OperationType.valueOf(operation.getType()));
 
-        Form form = adapter.bindRunFormFromRequest(request());
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showRunOperation(operation, adapter.getRunHtml(form, org.iatoki.judgels.michael.controllers.routes.OperationController.postRunOperation(operation.getId()), Messages.get("operation.run"), machineService.findAll(), applicationService.findAll()));
-        } else {
-            if (adapter.runOperation(form, machineService, machineAccessService, applicationService, applicationVersionService, operation.getConf())) {
-                return redirect(org.iatoki.judgels.michael.controllers.routes.OperationController.operationSuccess(operation.getId()));
-            } else {
-                return redirect(org.iatoki.judgels.michael.controllers.routes.OperationController.operationFail(operation.getId()));
-            }
+        Form operationRunForm = operationAdapter.bindRunFormFromRequest(request());
+        if (formHasErrors(operationRunForm)) {
+            return showRunOperation(operation, operationAdapter.getRunHtml(operationRunForm, org.iatoki.judgels.michael.controllers.routes.OperationController.postRunOperation(operation.getId()), Messages.get("operation.run"), machineService.getAllMachines(), applicationService.getAllApplications()));
         }
+
+        if (!operationAdapter.runOperation(operationRunForm, machineService, machineAccessService, applicationService, applicationVersionService, operation.getConf())) {
+            return redirect(org.iatoki.judgels.michael.controllers.routes.OperationController.operationFail(operation.getId()));
+        }
+
+        return redirect(org.iatoki.judgels.michael.controllers.routes.OperationController.operationSuccess(operation.getId()));
     }
 
-    private Result showListCreateOperation(Page<Operation> currentPage, String orderBy, String orderDir, String filterString, Form<OperationCreateForm> form) {
-        LazyHtml content = new LazyHtml(listCreateOperationsView.render(currentPage, orderBy, orderDir, filterString, form));
+    private Result showListCreateOperation(Page<Operation> pageOfOperations, String orderBy, String orderDir, String filterString, Form<OperationCreateForm> operationCreateForm) {
+        LazyHtml content = new LazyHtml(listCreateOperationsView.render(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.list"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -228,7 +227,7 @@ public final class OperationController extends AbstractJudgelsController {
     }
 
     public Result operationSuccess(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
+        Operation operation = operationService.findOperationById(operationId);
 
         LazyHtml content = new LazyHtml(messageView.render(Messages.get("operation.success")));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.operation") + " #" + operation.getId() + ": " + operation.getName(), c));
@@ -242,7 +241,7 @@ public final class OperationController extends AbstractJudgelsController {
     }
 
     public Result operationFail(long operationId) throws OperationNotFoundException {
-        Operation operation = operationService.findByOperationId(operationId);
+        Operation operation = operationService.findOperationById(operationId);
 
         LazyHtml content = new LazyHtml(messageView.render(Messages.get("operation.fail")));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.operation") + " #" + operation.getId() + ": " + operation.getName(), c));
@@ -253,6 +252,5 @@ public final class OperationController extends AbstractJudgelsController {
         ));
         ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Result");
         return ControllerUtils.getInstance().lazyOk(content);
-
     }
 }

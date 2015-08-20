@@ -18,5 +18,4 @@ public class DashboardMachineModel extends AbstractModel {
     public String dashboardJid;
 
     public String machineJid;
-
 }

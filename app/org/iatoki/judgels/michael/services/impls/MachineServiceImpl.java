@@ -29,12 +29,12 @@ public final class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public List<Machine> findAll() {
-        return machineDao.findAll().stream().map(m -> createMachineFromModel(m)).collect(Collectors.toList());
+    public List<Machine> getAllMachines() {
+        return machineDao.getAll().stream().map(m -> createMachineFromModel(m)).collect(Collectors.toList());
     }
 
     @Override
-    public Page<Machine> pageMachines(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
+    public Page<Machine> getPageOfMachines(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = machineDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
         List<MachineModel> machineModels = machineDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
 
@@ -44,17 +44,17 @@ public final class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public boolean existByMachineJid(String machineJid) {
+    public boolean machineExistsByJid(String machineJid) {
         return machineDao.existsByJid(machineJid);
     }
 
     @Override
-    public Machine findByMachineJid(String machineJid) {
+    public Machine findMachineByJid(String machineJid) {
         return createMachineFromModel(machineDao.findByJid(machineJid));
     }
 
     @Override
-    public Machine findByMachineId(long machineId) throws MachineNotFoundException {
+    public Machine findMachineById(long machineId) throws MachineNotFoundException {
         MachineModel machineModel = machineDao.findById(machineId);
         if (machineModel != null) {
             return createMachineFromModel(machineModel);

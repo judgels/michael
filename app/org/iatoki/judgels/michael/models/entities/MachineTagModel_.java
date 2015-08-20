@@ -13,6 +13,4 @@ public abstract class MachineTagModel_ extends AbstractModel_ {
     public static volatile SingularAttribute<MachineTagModel, Long> id;
     public static volatile SingularAttribute<MachineTagModel, String> machineJid;
     public static volatile SingularAttribute<MachineTagModel, String> tag;
-
 }
-

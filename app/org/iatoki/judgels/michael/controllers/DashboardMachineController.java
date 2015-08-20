@@ -38,13 +38,13 @@ public final class DashboardMachineController extends AbstractJudgelsController 
 
     private static final long PAGE_SIZE = 20;
 
-    private final DashboardService dashboardService;
     private final DashboardMachineService dashboardMachineService;
+    private final DashboardService dashboardService;
 
     @Inject
-    public DashboardMachineController(DashboardService dashboardService, DashboardMachineService dashboardMachineService) {
-        this.dashboardService = dashboardService;
+    public DashboardMachineController(DashboardMachineService dashboardMachineService, DashboardService dashboardService) {
         this.dashboardMachineService = dashboardMachineService;
+        this.dashboardService = dashboardService;
     }
 
     @Transactional(readOnly = true)
@@ -56,53 +56,53 @@ public final class DashboardMachineController extends AbstractJudgelsController 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result listCreateDashboardMachines(long dashboardId, long page, String orderBy, String orderDir, String filterString) throws DashboardNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        Form<DashboardMachineCreateForm> form = Form.form(DashboardMachineCreateForm.class);
-        Page<DashboardMachine> currentPage = dashboardMachineService.pageDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        Form<DashboardMachineCreateForm> dashboardMachineCreateForm = Form.form(DashboardMachineCreateForm.class);
+        Page<DashboardMachine> pageOfDashboardMachines = dashboardMachineService.getPageOfDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        return showListCreateDashboardMachines(dashboard, currentPage, page, orderBy, orderDir, filterString, form, dashboardMachineService.findAllNotIncludedMachinesByDashboardJid(dashboard.getJid()));
+        return showListCreateDashboardMachines(dashboard, pageOfDashboardMachines, orderBy, orderDir, filterString, dashboardMachineCreateForm, dashboardMachineService.getMachinesNotInMachinesByDashboardJid(dashboard.getJid()));
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateDashboardMachine(long dashboardId, long page, String orderBy, String orderDir, String filterString) throws DashboardNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        Form<DashboardMachineCreateForm> form = Form.form(DashboardMachineCreateForm.class).bindFromRequest();
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        Form<DashboardMachineCreateForm> dashboardMachineCreateForm = Form.form(DashboardMachineCreateForm.class).bindFromRequest();
 
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            Page<DashboardMachine> currentPage = dashboardMachineService.pageDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+        if (formHasErrors(dashboardMachineCreateForm)) {
+            Page<DashboardMachine> pageOfDashboardMachines = dashboardMachineService.getPageOfDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-            return showListCreateDashboardMachines(dashboard, currentPage, page, orderBy, orderDir, filterString, form, dashboardMachineService.findAllNotIncludedMachinesByDashboardJid(dashboard.getJid()));
+            return showListCreateDashboardMachines(dashboard, pageOfDashboardMachines, orderBy, orderDir, filterString, dashboardMachineCreateForm, dashboardMachineService.getMachinesNotInMachinesByDashboardJid(dashboard.getJid()));
         } else {
-            DashboardMachineCreateForm createForm = form.get();
-            if (!dashboardMachineService.existByDashboardJidAndMachineJid(dashboard.getJid(), createForm.machineJid)) {
-                dashboardMachineService.createDashboardMachine(dashboard.getJid(), createForm.machineJid);
+            DashboardMachineCreateForm dashboardMachineCreateData = dashboardMachineCreateForm.get();
+            if (!dashboardMachineService.dashboardMachineExists(dashboard.getJid(), dashboardMachineCreateData.machineJid)) {
+                dashboardMachineService.createDashboardMachine(dashboard.getJid(), dashboardMachineCreateData.machineJid);
 
-                return redirect(org.iatoki.judgels.michael.controllers.routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()));
+                return redirect(routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()));
             } else {
-                form.reject("error.dashboard.machine.machineIsAlreadyExist");
-                Page<DashboardMachine> currentPage = dashboardMachineService.pageDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
+                dashboardMachineCreateForm.reject("error.dashboard.machine.machineIsAlreadyExist");
+                Page<DashboardMachine> pageOfDashboardMachines = dashboardMachineService.getPageOfDashboardMachines(dashboard.getJid(), page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-                return showListCreateDashboardMachines(dashboard, currentPage, page, orderBy, orderDir, filterString, form, dashboardMachineService.findAllNotIncludedMachinesByDashboardJid(dashboard.getJid()));
+                return showListCreateDashboardMachines(dashboard, pageOfDashboardMachines, orderBy, orderDir, filterString, dashboardMachineCreateForm, dashboardMachineService.getMachinesNotInMachinesByDashboardJid(dashboard.getJid()));
             }
         }
     }
 
     @Transactional
     public Result removeDashboardMachine(long dashboardId, long dashboardMachineId) throws DashboardNotFoundException, DashboardMachineNotFoundException {
-        Dashboard dashboard = dashboardService.findByDashboardId(dashboardId);
-        DashboardMachine dashboardMachine = dashboardMachineService.findByDashboardMachineId(dashboardMachineId);
-        if (dashboard.getJid().equals(dashboardMachine.getDashboardJid())) {
-            dashboardMachineService.removeDashboardMachine(dashboardMachine.getId());
-
-            return redirect(org.iatoki.judgels.michael.controllers.routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()));
-        } else {
+        Dashboard dashboard = dashboardService.findDashboardById(dashboardId);
+        DashboardMachine dashboardMachine = dashboardMachineService.findDashboardMachineById(dashboardMachineId);
+        if (!dashboard.getJid().equals(dashboardMachine.getDashboardJid())) {
             throw new UnsupportedOperationException();
         }
+
+        dashboardMachineService.removeDashboardMachine(dashboardMachine.getId());
+
+        return redirect(routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()));
     }
 
-    private Result showListCreateDashboardMachines(Dashboard dashboard, Page<DashboardMachine> currentPage, long page, String orderBy, String orderDir, String filterString, Form<DashboardMachineCreateForm> form, List<Machine> machines) {
-        LazyHtml content = new LazyHtml(listCreateDashboardMachinesView.render(dashboard.getId(), currentPage, orderBy, orderDir, filterString, form, dashboardMachineService.findAllNotIncludedMachinesByDashboardJid(dashboard.getJid())));
+    private Result showListCreateDashboardMachines(Dashboard dashboard, Page<DashboardMachine> pageOfDashboardMachines, String orderBy, String orderDir, String filterString, Form<DashboardMachineCreateForm> dashboardMachineCreateForm, List<Machine> machines) {
+        LazyHtml content = new LazyHtml(listCreateDashboardMachinesView.render(dashboard.getId(), pageOfDashboardMachines, orderBy, orderDir, filterString, dashboardMachineCreateForm, dashboardMachineService.getMachinesNotInMachinesByDashboardJid(dashboard.getJid())));
         content.appendLayout(c -> headingLayout.render(Messages.get("dashboard.machine.list"), c));
         appendTabLayout(content, dashboard);
         ControllerUtils.getInstance().appendSidebarLayout(content);

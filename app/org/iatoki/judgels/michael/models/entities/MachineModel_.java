@@ -16,4 +16,3 @@ public abstract class MachineModel_ extends AbstractJudgelsModel_ {
     public static volatile SingularAttribute<MachineModel, String> type;
     public static volatile SingularAttribute<MachineModel, String> ipAddress;
 }
-

@@ -1,11 +1,11 @@
 package org.iatoki.judgels.michael.controllers.apis;
 
-import com.google.gson.Gson;
-import org.iatoki.judgels.michael.services.ApplicationVersionService;
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
+import org.iatoki.judgels.michael.services.ApplicationVersionService;
+import org.iatoki.judgels.play.controllers.apis.AbstractJudgelsAPIController;
 import play.data.DynamicForm;
 import play.db.jpa.Transactional;
-import play.mvc.Controller;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @Security.Authenticated(value = LoggedIn.class)
 @Singleton
 @Named
-public final class ApplicationVersionAPIController extends Controller {
+public final class ApplicationVersionAPIController extends AbstractJudgelsAPIController {
 
     private final ApplicationVersionService applicationVersionService;
 
@@ -27,12 +27,12 @@ public final class ApplicationVersionAPIController extends Controller {
 
     @Transactional(readOnly = true)
     public Result versionList() {
-        DynamicForm form = DynamicForm.form().bindFromRequest();
-        String applicationJid = form.get("applicationJid");
-        if (applicationJid != null) {
-            return ok(new Gson().toJson(applicationVersionService.findByApplicationJid(applicationJid)));
-        } else {
+        DynamicForm dForm = DynamicForm.form().bindFromRequest();
+        String applicationJid = dForm.get("applicationJid");
+        if (applicationJid == null) {
             return badRequest();
         }
+
+        return ok(Json.toJson(applicationVersionService.getApplicationVersionByApplicationJid(applicationJid)).toString());
     }
 }

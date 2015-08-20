@@ -13,6 +13,5 @@ public abstract class ApplicationVersionModel_ extends AbstractModel_ {
     public static volatile SingularAttribute<ApplicationVersionModel, Long> id;
     public static volatile SingularAttribute<ApplicationVersionModel, String> applicationJid;
     public static volatile SingularAttribute<ApplicationVersionModel, String> name;
-
 }
 

@@ -50,8 +50,8 @@ public final class MachineWatcherController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result viewMachineWatchers(long machineId) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        List<MachineWatcherType> enabledWatchers = machineWatcherService.findEnabledWatcherByMachineJid(machine.getJid());
+        Machine machine = machineService.findMachineById(machineId);
+        List<MachineWatcherType> enabledWatchers = machineWatcherService.getEnabledWatchersByMachineJid(machine.getJid());
         List<MachineWatcherType> unenabledWatchers = Lists.newArrayList(MachineWatcherType.values());
         unenabledWatchers.removeAll(enabledWatchers);
 
@@ -71,117 +71,118 @@ public final class MachineWatcherController extends AbstractJudgelsController {
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result activateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
-            if (!machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
-                MachineWatcherConfAdapter adapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
-                if (adapter != null) {
-                    return showActivateMachineWatcher(machine, watcherType, adapter.getConfHtml(adapter.generateForm(), org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.activate")));
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            } else {
-                return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-            }
-        } else {
+        Machine machine = machineService.findMachineById(machineId);
+        if (!EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
             throw new UnsupportedOperationException();
         }
+
+        if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
+        }
+
+        MachineWatcherConfAdapter machineWatcherConfAdapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
+        if (machineWatcherConfAdapter == null) {
+            throw new UnsupportedOperationException();
+        }
+
+        return showActivateMachineWatcher(machine, watcherType, machineWatcherConfAdapter.getConfHtml(machineWatcherConfAdapter.generateForm(), routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.activate")));
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postActivateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
-            if (!machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
-                MachineWatcherConfAdapter adapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
-                if (adapter != null) {
-                    Form form = adapter.bindFormFromRequest(request());
-                    if (form.hasErrors() || form.hasGlobalErrors()) {
-                        return showActivateMachineWatcher(machine, watcherType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.activate")));
-                    } else {
-                        String conf = adapter.processRequestForm(form);
-                        machineWatcherService.createWatcher(machine.getJid(), MachineWatcherType.valueOf(watcherType), conf);
-
-                        return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            } else {
-                return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-            }
-        } else {
+        Machine machine = machineService.findMachineById(machineId);
+        if (!EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
             throw new UnsupportedOperationException();
         }
+
+        if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
+        }
+
+        MachineWatcherConfAdapter machineWatcherConfAdapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
+        if (machineWatcherConfAdapter == null) {
+            throw new UnsupportedOperationException();
+        }
+
+        Form machineWatcherConfForm = machineWatcherConfAdapter.bindFormFromRequest(request());
+        if (formHasErrors(machineWatcherConfForm)) {
+            return showActivateMachineWatcher(machine, watcherType, machineWatcherConfAdapter.getConfHtml(machineWatcherConfForm, routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.activate")));
+        }
+
+        String conf = machineWatcherConfAdapter.processRequestForm(machineWatcherConfForm);
+        machineWatcherService.createMachineWatcher(machine.getJid(), MachineWatcherType.valueOf(watcherType), conf);
+
+        return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
-            if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
-                MachineWatcherConfAdapter adapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
-                if (adapter != null) {
-                    MachineWatcher machineWatcher = machineWatcherService.findByMachineJidAndWatcherType(machine.getJid(), MachineWatcherType.valueOf(watcherType));
-                    return showUpdateMachineWatcher(machine, watcherType, adapter.getConfHtml(adapter.generateForm(machineWatcher.getConf()), org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.postUpdateMachineWatcher(machine.getId(), machineWatcher.getId(), watcherType), Messages.get("machine.watcher.update")));
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            } else {
-                return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-            }
-        } else {
+        Machine machine = machineService.findMachineById(machineId);
+        if (!EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
             throw new UnsupportedOperationException();
         }
+
+        if (!machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
+        }
+
+        MachineWatcherConfAdapter machineWatcherConfAdapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
+        if (machineWatcherConfAdapter == null) {
+            throw new UnsupportedOperationException();
+        }
+
+        MachineWatcher machineWatcher = machineWatcherService.findMachineWatcherByMachineJidAndType(machine.getJid(), MachineWatcherType.valueOf(watcherType));
+        return showUpdateMachineWatcher(machine, watcherType, machineWatcherConfAdapter.getConfHtml(machineWatcherConfAdapter.generateForm(machineWatcher.getConf()), routes.MachineWatcherController.postUpdateMachineWatcher(machine.getId(), machineWatcher.getId(), watcherType), Messages.get("machine.watcher.update")));
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postUpdateMachineWatcher(long machineId, long machineWatcherId, String watcherType) throws MachineNotFoundException, MachineWatcherNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        MachineWatcher machineWatcher = machineWatcherService.findByWatcherId(machineWatcherId);
-        if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
-            if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
-                MachineWatcherConfAdapter adapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
-                if (adapter != null) {
-                    Form form = adapter.bindFormFromRequest(request());
-                    if (form.hasErrors() || form.hasGlobalErrors()) {
-                        return showUpdateMachineWatcher(machine, watcherType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.update")));
-                    } else {
-                        if (machine.getJid().equals(machineWatcher.getMachineJid())) {
-                            String conf = adapter.processRequestForm(form);
-                            machineWatcherService.updateWatcher(machineWatcher.getId(), machine.getJid(), MachineWatcherType.valueOf(watcherType), conf);
+        Machine machine = machineService.findMachineById(machineId);
+        MachineWatcher machineWatcher = machineWatcherService.findMachineWatcherById(machineWatcherId);
 
-                            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-                        } else {
-                            form.reject("error.notMachineWatcher");
-                            return showUpdateMachineWatcher(machine, watcherType, adapter.getConfHtml(form, org.iatoki.judgels.michael.controllers.routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.update")));
-                        }
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            } else {
-                return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-            }
-        } else {
+        if (!EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
             throw new UnsupportedOperationException();
         }
+
+        if (!machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
+        }
+
+        MachineWatcherConfAdapter machineWatcherConfAdapter = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, MachineWatcherType.valueOf(watcherType));
+        if (machineWatcherConfAdapter == null) {
+            throw new UnsupportedOperationException();
+        }
+
+        Form machineWatcherConfForm = machineWatcherConfAdapter.bindFormFromRequest(request());
+        if (formHasErrors(machineWatcherConfForm)) {
+            return showUpdateMachineWatcher(machine, watcherType, machineWatcherConfAdapter.getConfHtml(machineWatcherConfForm, routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.update")));
+        }
+
+        if (!machine.getJid().equals(machineWatcher.getMachineJid())) {
+            machineWatcherConfForm.reject("error.notMachineWatcher");
+            return showUpdateMachineWatcher(machine, watcherType, machineWatcherConfAdapter.getConfHtml(machineWatcherConfForm, routes.MachineWatcherController.postActivateMachineWatcher(machine.getId(), watcherType), Messages.get("machine.watcher.update")));
+        }
+
+        String machineWatcherConf = machineWatcherConfAdapter.processRequestForm(machineWatcherConfForm);
+        machineWatcherService.updateMachineWatcher(machineWatcher.getId(), machine.getJid(), MachineWatcherType.valueOf(watcherType), machineWatcherConf);
+
+        return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
     }
 
     @Transactional
     public Result deactivateMachineWatcher(long machineId, String watcherType) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        if (EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
-            if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
-                machineWatcherService.removeWatcher(machine.getJid(), MachineWatcherType.valueOf(watcherType));
-            }
-            return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
-        } else {
+        Machine machine = machineService.findMachineById(machineId);
+        if (!EnumUtils.isValidEnum(MachineWatcherType.class, watcherType)) {
             throw new UnsupportedOperationException();
         }
+
+        if (machineWatcherService.isWatcherActivated(machine.getJid(), MachineWatcherType.valueOf(watcherType))) {
+            machineWatcherService.removeMachineWatcher(machine.getJid(), MachineWatcherType.valueOf(watcherType));
+        }
+        return redirect(routes.MachineWatcherController.viewMachineWatchers(machine.getId()));
     }
 
     private Result showActivateMachineWatcher(Machine machine, String watcherType, Html html) {

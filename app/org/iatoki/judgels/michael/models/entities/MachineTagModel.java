@@ -18,5 +18,4 @@ public class MachineTagModel extends AbstractModel {
     public String machineJid;
 
     public String tag;
-
 }

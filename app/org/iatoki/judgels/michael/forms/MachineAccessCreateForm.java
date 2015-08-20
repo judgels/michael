@@ -6,5 +6,4 @@ public final class MachineAccessCreateForm {
 
     @Constraints.Required
     public String machineAccessType;
-
 }

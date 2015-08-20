@@ -59,9 +59,9 @@ public final class MachineController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result listMachines(long page, String orderBy, String orderDir, String filterString) {
-        Page<Machine> currentPage = machineService.pageMachines(page, PAGE_SIZE, orderBy, orderDir, filterString);
+        Page<Machine> pageOfMachines = machineService.getPageOfMachines(page, PAGE_SIZE, orderBy, orderDir, filterString);
 
-        LazyHtml content = new LazyHtml(listMachinesView.render(currentPage, orderBy, orderDir, filterString));
+        LazyHtml content = new LazyHtml(listMachinesView.render(pageOfMachines, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.list"), new InternalLink(Messages.get("commons.create"), routes.MachineController.createMachine()), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -74,19 +74,19 @@ public final class MachineController extends AbstractJudgelsController {
 
     @Transactional(readOnly = true)
     public Result viewMachine(long machineId) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        List<MachineWatcher> machineWatchers = machineWatcherService.findAll(machine.getJid());
-        ImmutableList.Builder<MachineWatcherAdapter> machineWatcherAdapterBuilder = ImmutableList.builder();
+        Machine machine = machineService.findMachineById(machineId);
+        List<MachineWatcher> machineWatchers = machineWatcherService.getAllMachineWatchers(machine.getJid());
+        ImmutableList.Builder<MachineWatcherAdapter> machineWatcherAdaptersBuilder = ImmutableList.builder();
         if (machine.getType().equals(MachineType.AWS_EC2)) {
             for (MachineWatcher machineWatcher : machineWatchers) {
                 MachineWatcherConfAdapter factory = MachineWatcherUtils.getMachineWatcherConfAdapter(machine, machineWatcher.getType());
                 if (factory != null) {
-                    machineWatcherAdapterBuilder.add(factory.createMachineWatcherAdapter(machine, machineWatcher.getConf()));
+                    machineWatcherAdaptersBuilder.add(factory.createMachineWatcherAdapter(machine, machineWatcher.getConf()));
                 }
             }
         }
 
-        LazyHtml content = new LazyHtml(viewMachineView.render(machine, machineWatcherAdapterBuilder.build()));
+        LazyHtml content = new LazyHtml(viewMachineView.render(machine, machineWatcherAdaptersBuilder.build()));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.machine") + " #" + machine.getId() + ": " + machine.getDisplayName(), new InternalLink(Messages.get("commons.update"), routes.MachineController.updateMachineGeneral(machine.getId())), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -101,60 +101,60 @@ public final class MachineController extends AbstractJudgelsController {
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result createMachine() {
-        Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class);
+        Form<MachineUpsertForm> machineUpsertForm = Form.form(MachineUpsertForm.class);
 
-        return showCreateMachine(form);
+        return showCreateMachine(machineUpsertForm);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postCreateMachine() {
-        Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class).bindFromRequest();
+        Form<MachineUpsertForm> machineUpsertForm = Form.form(MachineUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors() || form.hasGlobalErrors()) {
-            return showCreateMachine(form);
-        } else {
-            MachineUpsertForm machineUpsertForm = form.get();
-            machineService.createMachine(machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineType.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
-
-            return redirect(routes.MachineController.index());
+        if (formHasErrors(machineUpsertForm)) {
+            return showCreateMachine(machineUpsertForm);
         }
+
+        MachineUpsertForm machineUpsertData = machineUpsertForm.get();
+        machineService.createMachine(machineUpsertData.instanceName, machineUpsertData.displayName, machineUpsertData.baseDir, MachineType.valueOf(machineUpsertData.type), machineUpsertData.ipAddress);
+
+        return redirect(routes.MachineController.index());
     }
 
     @Transactional(readOnly = true)
     @AddCSRFToken
     public Result updateMachineGeneral(long machineId) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        MachineUpsertForm machineUpsertForm = new MachineUpsertForm();
-        machineUpsertForm.instanceName = machine.getInstanceName();
-        machineUpsertForm.displayName = machine.getDisplayName();
-        machineUpsertForm.baseDir = machine.getBaseDir();
-        machineUpsertForm.type = machine.getType().name();
-        machineUpsertForm.ipAddress = machine.getIpAddress();
+        Machine machine = machineService.findMachineById(machineId);
+        MachineUpsertForm machineUpsertData = new MachineUpsertForm();
+        machineUpsertData.instanceName = machine.getInstanceName();
+        machineUpsertData.displayName = machine.getDisplayName();
+        machineUpsertData.baseDir = machine.getBaseDir();
+        machineUpsertData.type = machine.getType().name();
+        machineUpsertData.ipAddress = machine.getIpAddress();
 
-        Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class).fill(machineUpsertForm);
+        Form<MachineUpsertForm> machineUpsertForm = Form.form(MachineUpsertForm.class).fill(machineUpsertData);
 
-        return showUpdateMachineGeneral(form, machine);
+        return showUpdateMachineGeneral(machineUpsertForm, machine);
     }
 
     @Transactional
     @RequireCSRFCheck
     public Result postUpdateMachineGeneral(long machineId) throws MachineNotFoundException {
-        Machine machine = machineService.findByMachineId(machineId);
-        Form<MachineUpsertForm> form = Form.form(MachineUpsertForm.class).bindFromRequest();
+        Machine machine = machineService.findMachineById(machineId);
+        Form<MachineUpsertForm> machineUpsertForm = Form.form(MachineUpsertForm.class).bindFromRequest();
 
-        if (form.hasErrors()) {
-            return showUpdateMachineGeneral(form, machine);
-        } else {
-            MachineUpsertForm machineUpsertForm = form.get();
-            machineService.updateMachine(machine.getId(), machineUpsertForm.instanceName, machineUpsertForm.displayName, machineUpsertForm.baseDir, MachineType.valueOf(machineUpsertForm.type), machineUpsertForm.ipAddress);
-
-            return redirect(routes.MachineController.index());
+        if (formHasErrors(machineUpsertForm)) {
+            return showUpdateMachineGeneral(machineUpsertForm, machine);
         }
+
+        MachineUpsertForm machineUpsertData = machineUpsertForm.get();
+        machineService.updateMachine(machine.getId(), machineUpsertData.instanceName, machineUpsertData.displayName, machineUpsertData.baseDir, MachineType.valueOf(machineUpsertData.type), machineUpsertData.ipAddress);
+
+        return redirect(routes.MachineController.index());
     }
 
-    private Result showCreateMachine(Form<MachineUpsertForm> form) {
-        LazyHtml content = new LazyHtml(createMachineView.render(form));
+    private Result showCreateMachine(Form<MachineUpsertForm> machineUpsertForm) {
+        LazyHtml content = new LazyHtml(createMachineView.render(machineUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.create"), c));
         ControllerUtils.getInstance().appendSidebarLayout(content);
         ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
@@ -165,8 +165,8 @@ public final class MachineController extends AbstractJudgelsController {
         return ControllerUtils.getInstance().lazyOk(content);
     }
 
-    private Result showUpdateMachineGeneral(Form<MachineUpsertForm> form, Machine machine) {
-        LazyHtml content = new LazyHtml(updateMachineGeneralView.render(form, machine.getId()));
+    private Result showUpdateMachineGeneral(Form<MachineUpsertForm> machineUpsertForm, Machine machine) {
+        LazyHtml content = new LazyHtml(updateMachineGeneralView.render(machineUpsertForm, machine.getId()));
         content.appendLayout(c -> tabLayout.render(ImmutableList.of(
               new InternalLink(Messages.get("machine.update"), routes.MachineController.updateMachineGeneral(machine.getId())),
               new InternalLink(Messages.get("machine.access"), routes.MachineAccessController.viewMachineAccesses(machine.getId())),

@@ -9,5 +9,4 @@ public final class ApplicationUpsertForm {
 
     @Constraints.Required
     public String type;
-
 }

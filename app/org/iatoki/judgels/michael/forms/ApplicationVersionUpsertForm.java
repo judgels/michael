@@ -6,5 +6,4 @@ public final class ApplicationVersionUpsertForm {
 
     @Constraints.Required
     public String name;
-
 }

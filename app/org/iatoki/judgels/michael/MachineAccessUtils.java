@@ -36,7 +36,7 @@ public final class MachineAccessUtils {
     public static Session getMachineSession(MachineAccessService machineAccessService, JSch jSch, Machine machine, MachineAccess machineAccess) throws IOException, JSchException, MachineAccessNotFoundException {
         Session session = null;
         if (MachineAccessType.KEY.name().equals(machineAccess.getType())) {
-            MachineAccessKeyConf conf = machineAccessService.getMachineAccessConf(machineAccess.getId(), MachineAccessKeyConf.class);
+            MachineAccessKeyConf conf = machineAccessService.getMachineAccessConfById(machineAccess.getId(), MachineAccessKeyConf.class);
             File temp = File.createTempFile("tempkey", ".pem");
             FileUtils.writeStringToFile(temp, conf.key);
             temp.setReadOnly();
@@ -48,7 +48,7 @@ public final class MachineAccessUtils {
 
             temp.delete();
         } else if (MachineAccessType.PASSWORD.name().equals(machineAccess.getType())) {
-            MachineAccessPasswordConf conf = machineAccessService.getMachineAccessConf(machineAccess.getId(), MachineAccessPasswordConf.class);
+            MachineAccessPasswordConf conf = machineAccessService.getMachineAccessConfById(machineAccess.getId(), MachineAccessPasswordConf.class);
 
             session = jSch.getSession(conf.username, machine.getIpAddress(), conf.port);
             session.setPassword(conf.password);

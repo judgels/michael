@@ -34,5 +34,4 @@ public interface OperationAdapter {
     Form bindRunFormFromRequest(Http.Request request);
 
     boolean runOperation(Form form, MachineService machineService, MachineAccessService machineAccessService, ApplicationService applicationService, ApplicationVersionService applicationVersionService, String conf);
-
 }

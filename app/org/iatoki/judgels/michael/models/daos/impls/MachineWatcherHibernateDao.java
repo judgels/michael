@@ -21,7 +21,7 @@ public final class MachineWatcherHibernateDao extends AbstractHibernateDao<Long,
     }
 
     @Override
-    public boolean existByMachineJidAndWatcherType(String machineJid, String watcherType) {
+    public boolean existsByMachineJidAndWatcherType(String machineJid, String watcherType) {
         CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<MachineWatcherModel> root = query.from(MachineWatcherModel.class);

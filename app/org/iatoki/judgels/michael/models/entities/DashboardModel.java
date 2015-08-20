@@ -14,5 +14,4 @@ public class DashboardModel extends AbstractJudgelsModel {
     public String name;
 
     public String description;
-
 }

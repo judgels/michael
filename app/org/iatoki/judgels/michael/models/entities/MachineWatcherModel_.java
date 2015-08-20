@@ -14,6 +14,4 @@ public abstract class MachineWatcherModel_ extends AbstractModel_ {
     public static volatile SingularAttribute<MachineWatcherModel, String> machineJid;
     public static volatile SingularAttribute<MachineWatcherModel, String> type;
     public static volatile SingularAttribute<MachineWatcherModel, String> conf;
-
 }
-

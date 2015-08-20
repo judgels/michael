@@ -1,17 +1,19 @@
-@(form: Form[org.iatoki.judgels.michael.forms.DashboardUpsertForm], modelId: Long)
-
 @import play.i18n.Messages
 @import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.michael.forms.DashboardUpsertForm
+@import org.iatoki.judgels.michael.controllers.routes
+
+@(dashboardUpsertForm: Form[DashboardUpsertForm], dashboardId: Long)
 
 @implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
 
-@formErrorView(form)
+@formErrorView(dashboardUpsertForm)
 
-@b3.form(org.iatoki.judgels.michael.controllers.routes.DashboardController.postUpdateDashboardGeneral(modelId)) {
+@b3.form(routes.DashboardController.postUpdateDashboardGeneral(dashboardId)) {
 
     @helper.CSRF.formField
 
-    @upsertDashboardView(form)
+    @upsertDashboardView(dashboardUpsertForm)
 
     @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.update") }
 }
