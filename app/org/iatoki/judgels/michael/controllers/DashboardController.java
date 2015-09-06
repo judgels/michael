@@ -71,13 +71,13 @@ public final class DashboardController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(listDashboardsView.render(pageOfDashboards, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.list"), new InternalLink(Messages.get("commons.create"), routes.DashboardController.createDashboard()), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Dashboards");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Dashboards");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -103,14 +103,14 @@ public final class DashboardController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(viewDashboardView.render(dashboard, watcherAdapters));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), new InternalLink(Messages.get("commons.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId())), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index()),
               new InternalLink(Messages.get("dashboard.view"), routes.DashboardController.viewDashboard(dashboard.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - View");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - View");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -168,13 +168,13 @@ public final class DashboardController extends AbstractJudgelsController {
     private Result showCreateDashboard(Form<DashboardUpsertForm> dashboardUpsertForm) {
         LazyHtml content = new LazyHtml(createDashboardView.render(dashboardUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("dashboard.create"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index()),
               new InternalLink(Messages.get("dashboard.create"), routes.DashboardController.createDashboard())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Create");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Create");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showUpdateDashboardGeneral(Form<DashboardUpsertForm> dashboardUpsertForm, Dashboard dashboard) {
@@ -184,12 +184,12 @@ public final class DashboardController extends AbstractJudgelsController {
               new InternalLink(Messages.get("dashboard.machine"), routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()))
         ), c));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("dashboard.dashboard") + " #" + dashboard.getId() + ": " + dashboard.getName(), new InternalLink(Messages.get("commons.enter"), routes.DashboardController.viewDashboard(dashboard.getId())), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index()),
               new InternalLink(Messages.get("dashboard.update"), routes.DashboardController.updateDashboardGeneral(dashboard.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Update");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Update");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 }

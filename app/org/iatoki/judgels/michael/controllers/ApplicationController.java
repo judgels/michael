@@ -55,13 +55,13 @@ public final class ApplicationController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(listApplicationsView.render(pageOfApplications, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("application.list"), new InternalLink(Messages.get("commons.create"), routes.ApplicationController.createApplication()), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -70,14 +70,14 @@ public final class ApplicationController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(viewApplicationView.render(application));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("application.application") + " #" + application.getId() + ": " + application.getName(), new InternalLink(Messages.get("commons.update"), routes.ApplicationController.updateApplicationGeneral(application.getId())), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index()),
               new InternalLink(Messages.get("application.view"), routes.ApplicationController.viewApplication(application.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Application - View");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Application - View");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -135,13 +135,13 @@ public final class ApplicationController extends AbstractJudgelsController {
     private Result showCreateApplication(Form<ApplicationUpsertForm> applicationUpsertForm) {
         LazyHtml content = new LazyHtml(createApplicationView.render(applicationUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.create"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index()),
               new InternalLink(Messages.get("application.create"), routes.ApplicationController.createApplication())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Application - Create");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Application - Create");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showUpdateApplicationGeneral(Form<ApplicationUpsertForm> applicationUpsertForm, Application application) {
@@ -151,12 +151,12 @@ public final class ApplicationController extends AbstractJudgelsController {
               new InternalLink(Messages.get("application.version"), routes.ApplicationVersionController.viewApplicationVersions(application.getId()))
         ), c));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.application") + " #" + application.getId() + ": " + application.getName(), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index()),
               new InternalLink(Messages.get("application.update"), routes.ApplicationController.updateApplicationGeneral(application.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Application - Update");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Application - Update");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 }

@@ -63,14 +63,14 @@ public final class ApplicationVersionController extends AbstractJudgelsControlle
               new InternalLink(Messages.get("application.version"), routes.ApplicationVersionController.viewApplicationVersions(application.getId()))
         ), c));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.application") + " #" + application.getId() + ": " + application.getName(), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.version.list"), routes.ApplicationVersionController.viewApplicationVersions(application.getId())),
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -119,15 +119,15 @@ public final class ApplicationVersionController extends AbstractJudgelsControlle
               new InternalLink(Messages.get("application.version"), routes.ApplicationVersionController.viewApplicationVersions(application.getId()))
         ), c));
         content.appendLayout(c -> headingLayout.render(Messages.get("application.application") + " #" + application.getId() + ": " + application.getName(), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("application.applications"), routes.ApplicationController.index()),
               new InternalLink(Messages.get("application.version.create"), routes.ApplicationVersionController.createApplicationVersion(application.getId())),
               new InternalLink(Messages.get("application.version.list"), routes.ApplicationVersionController.viewApplicationVersions(application.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Applications");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
 }

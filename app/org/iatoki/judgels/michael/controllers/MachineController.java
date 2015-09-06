@@ -63,13 +63,13 @@ public final class MachineController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(listMachinesView.render(pageOfMachines, orderBy, orderDir, filterString));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.list"), new InternalLink(Messages.get("commons.create"), routes.MachineController.createMachine()), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machines");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machines");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -88,14 +88,14 @@ public final class MachineController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(viewMachineView.render(machine, machineWatcherAdaptersBuilder.build()));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.machine") + " #" + machine.getId() + ": " + machine.getDisplayName(), new InternalLink(Messages.get("commons.update"), routes.MachineController.updateMachineGeneral(machine.getId())), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.view"), routes.MachineController.viewMachine(machine.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - View");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - View");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -156,13 +156,13 @@ public final class MachineController extends AbstractJudgelsController {
     private Result showCreateMachine(Form<MachineUpsertForm> machineUpsertForm) {
         LazyHtml content = new LazyHtml(createMachineView.render(machineUpsertForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.create"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.create"), routes.MachineController.createMachine())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Create");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Create");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showUpdateMachineGeneral(Form<MachineUpsertForm> machineUpsertForm, Machine machine) {
@@ -173,12 +173,12 @@ public final class MachineController extends AbstractJudgelsController {
               new InternalLink(Messages.get("machine.watcher"), routes.MachineWatcherController.viewMachineWatchers(machine.getId()))
         ), c));
         content.appendLayout(c -> headingWithActionLayout.render(Messages.get("machine.machine") + " #" + machine.getId() + ": " + machine.getDisplayName(), new InternalLink(Messages.get("commons.enter"), routes.MachineController.viewMachine(machine.getId())), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.update"), routes.MachineController.updateMachineGeneral(machine.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Update");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Update");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 }

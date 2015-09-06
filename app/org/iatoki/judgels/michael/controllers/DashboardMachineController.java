@@ -105,14 +105,14 @@ public final class DashboardMachineController extends AbstractJudgelsController 
         LazyHtml content = new LazyHtml(listCreateDashboardMachinesView.render(dashboard.getId(), pageOfDashboardMachines, orderBy, orderDir, filterString, dashboardMachineCreateForm, dashboardMachineService.getMachinesNotInMachinesByDashboardJid(dashboard.getJid())));
         content.appendLayout(c -> headingLayout.render(Messages.get("dashboard.machine.list"), c));
         appendTabLayout(content, dashboard);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("dashboard.dashboards"), routes.DashboardController.index()),
               new InternalLink(Messages.get("dashboard.machine.list"), routes.DashboardMachineController.viewDashboardMachines(dashboard.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Machines");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Dashboard - Machines");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private void appendTabLayout(LazyHtml content, Dashboard dashboard) {

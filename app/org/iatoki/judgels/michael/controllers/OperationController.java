@@ -181,49 +181,49 @@ public final class OperationController extends AbstractJudgelsController {
     private Result showListCreateOperation(Page<Operation> pageOfOperations, String orderBy, String orderDir, String filterString, Form<OperationCreateForm> operationCreateForm) {
         LazyHtml content = new LazyHtml(listCreateOperationsView.render(pageOfOperations, orderBy, orderDir, filterString, operationCreateForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.list"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index())
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operations");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operations");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showCreateOperation(String operationType, Html html, long page, String orderBy, String orderDir, String filterString) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.create"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
               new InternalLink(Messages.get("operation.create"), routes.OperationController.createOperation(operationType, page, orderBy, orderDir, filterString))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Create");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Create");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showUpdateOperation(Operation operation, Html html) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.update"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
               new InternalLink(Messages.get("operation.update"), routes.OperationController.updateOperation(operation.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Update");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Update");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showRunOperation(Operation operation, Html html) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.run"), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
               new InternalLink(Messages.get("operation.run"), routes.OperationController.runOperation(operation.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Run");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Run");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     public Result operationSuccess(long operationId) throws OperationNotFoundException {
@@ -231,13 +231,13 @@ public final class OperationController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(messageView.render(Messages.get("operation.success")));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.operation") + " #" + operation.getId() + ": " + operation.getName(), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
               new InternalLink(Messages.get("operation.result.success"), routes.OperationController.operationSuccess(operation.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Result");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Result");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     public Result operationFail(long operationId) throws OperationNotFoundException {
@@ -245,12 +245,12 @@ public final class OperationController extends AbstractJudgelsController {
 
         LazyHtml content = new LazyHtml(messageView.render(Messages.get("operation.fail")));
         content.appendLayout(c -> headingLayout.render(Messages.get("operation.operation") + " #" + operation.getId() + ": " + operation.getName(), c));
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("operation.operations"), routes.OperationController.index()),
               new InternalLink(Messages.get("operation.result.success"), routes.OperationController.operationSuccess(operation.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Result");
-        return ControllerUtils.getInstance().lazyOk(content);
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Operation - Result");
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 }

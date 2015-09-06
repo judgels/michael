@@ -125,29 +125,29 @@ public final class MachineAccessController extends AbstractJudgelsController {
         LazyHtml content = new LazyHtml(listCreateMachineAccessesView.render(machine.getId(), pageOfMachineAccesses, orderBy, orderDir, filterString, machineAccessCreateForm));
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.access.list"), c));
         appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.access.list"), routes.MachineAccessController.viewMachineAccesses(machine.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Accesses");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Accesses");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showCreateMachineAccess(Machine machine, String accessType, Html html, long page, String orderBy, String orderDir, String filterString) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.access.create"), c));
         appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.access.list"), routes.MachineAccessController.viewMachineAccesses(machine.getId())),
               new InternalLink(Messages.get("machine.access.create"), routes.MachineAccessController.createMachineAccess(machine.getId(), accessType, page, orderBy, orderDir, filterString))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machines - Create");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machines - Create");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private void appendTabLayout(LazyHtml content, Machine machine) {

@@ -44,8 +44,8 @@ public final class UserController extends AbstractJudgelsController {
     private Result showLogin(Form<LoginForm> loginForm) {
         LazyHtml content = new LazyHtml(indexView.render(loginForm));
         content.appendLayout(c -> centerLayout.render(c));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Login");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Login");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 }

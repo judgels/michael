@@ -58,14 +58,14 @@ public final class MachineWatcherController extends AbstractJudgelsController {
         LazyHtml content = new LazyHtml(listMachineWatchersView.render(machine.getId(), enabledWatchers, unenabledWatchers));
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.watcher.list"), c));
         appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.watcher.list"), routes.MachineWatcherController.viewMachineWatchers(machine.getId()))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     @Transactional(readOnly = true)
@@ -189,30 +189,30 @@ public final class MachineWatcherController extends AbstractJudgelsController {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.watcher.activate"), c));
         appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.watcher.list"), routes.MachineWatcherController.viewMachineWatchers(machine.getId())),
               new InternalLink(Messages.get("machine.watcher.activate"), routes.MachineWatcherController.activateMachineWatcher(machine.getId(), watcherType))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private Result showUpdateMachineWatcher(Machine machine, String watcherType, Html html) {
         LazyHtml content = new LazyHtml(html);
         content.appendLayout(c -> headingLayout.render(Messages.get("machine.watcher.update"), c));
         appendTabLayout(content, machine);
-        ControllerUtils.getInstance().appendSidebarLayout(content);
-        ControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
+        MichaelControllerUtils.getInstance().appendSidebarLayout(content);
+        MichaelControllerUtils.getInstance().appendBreadcrumbsLayout(content, ImmutableList.of(
               new InternalLink(Messages.get("machine.machines"), routes.MachineController.index()),
               new InternalLink(Messages.get("machine.watcher.list"), routes.MachineWatcherController.viewMachineWatchers(machine.getId())),
               new InternalLink(Messages.get("machine.watcher.update"), routes.MachineWatcherController.updateMachineWatcher(machine.getId(), watcherType))
         ));
-        ControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
+        MichaelControllerUtils.getInstance().appendTemplateLayout(content, "Machine - Watchers");
 
-        return ControllerUtils.getInstance().lazyOk(content);
+        return MichaelControllerUtils.getInstance().lazyOk(content);
     }
 
     private void appendTabLayout(LazyHtml content, Machine machine) {
