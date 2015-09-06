@@ -2,10 +2,10 @@ package org.iatoki.judgels.michael.controllers.apis;
 
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
 import org.iatoki.judgels.michael.services.ApplicationVersionService;
-import org.iatoki.judgels.play.controllers.apis.AbstractJudgelsAPIController;
 import play.data.DynamicForm;
 import play.db.jpa.Transactional;
 import play.libs.Json;
+import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @Security.Authenticated(value = LoggedIn.class)
 @Singleton
 @Named
-public final class ApplicationVersionAPIController extends AbstractJudgelsAPIController {
+public final class ApplicationVersionAPIController extends Controller {
 
     private final ApplicationVersionService applicationVersionService;
 
