@@ -11,11 +11,11 @@ import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
 import org.iatoki.judgels.michael.services.MachineService;
 import org.iatoki.judgels.michael.services.MachineWatcherService;
+import org.iatoki.judgels.play.controllers.apis.AbstractJudgelsAPIController;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.libs.Json;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
@@ -27,7 +27,7 @@ import java.util.Date;
 @Security.Authenticated(value = LoggedIn.class)
 @Singleton
 @Named
-public final class MachineWatcherAPIController extends Controller {
+public final class MachineWatcherAPIController extends AbstractJudgelsAPIController {
 
     private final MachineService machineService;
     private final MachineWatcherService machineWatcherService;
