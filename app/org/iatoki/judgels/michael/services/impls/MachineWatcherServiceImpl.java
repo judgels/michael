@@ -29,7 +29,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
 
     @Override
     public List<MachineWatcherType> getEnabledWatchersByMachineJid(String machineJid) {
-        List<MachineWatcherModel> machineWatcherModels = machineWatcherDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(MachineWatcherModel_.machineJid, machineJid), ImmutableMap.of(), 0, -1);
+        List<MachineWatcherModel> machineWatcherModels = machineWatcherDao.findSortedByFiltersEq("id", "asc", "", ImmutableMap.of(MachineWatcherModel_.machineJid, machineJid), 0, -1);
         return machineWatcherModels.stream().map(m -> MachineWatcherType.valueOf(m.type)).collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public final class MachineWatcherServiceImpl implements MachineWatcherService {
 
     @Override
     public List<MachineWatcher> getAllMachineWatchers(String machineJid) {
-        return machineWatcherDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(MachineWatcherModel_.machineJid, machineJid), ImmutableMap.of(), 0, -1).stream().map(m -> createMachineWatcherFromModel(m)).collect(Collectors.toList());
+        return machineWatcherDao.findSortedByFiltersEq("id", "asc", "", ImmutableMap.of(MachineWatcherModel_.machineJid, machineJid), 0, -1).stream().map(m -> createMachineWatcherFromModel(m)).collect(Collectors.toList());
     }
 
     @Override

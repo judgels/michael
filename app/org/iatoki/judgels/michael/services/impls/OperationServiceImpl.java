@@ -30,7 +30,7 @@ public final class OperationServiceImpl implements OperationService {
     @Override
     public Page<Operation> getPageOfOperations(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = operationDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
-        List<OperationModel> operationModels = operationDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<OperationModel> operationModels = operationDao.findSortedByFilters(orderBy, orderDir, filterString, pageIndex * pageSize, pageSize);
 
         List<Operation> operations = Lists.transform(operationModels, m -> createOperationFromModel(m));
 

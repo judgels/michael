@@ -36,7 +36,7 @@ public final class MachineServiceImpl implements MachineService {
     @Override
     public Page<Machine> getPageOfMachines(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = machineDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
-        List<MachineModel> machineModels = machineDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<MachineModel> machineModels = machineDao.findSortedByFilters(orderBy, orderDir, filterString, pageIndex * pageSize, pageSize);
 
         List<Machine> machines = Lists.transform(machineModels, m -> createMachineFromModel(m));
 

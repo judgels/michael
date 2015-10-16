@@ -31,7 +31,7 @@ public final class ApplicationServiceImpl implements ApplicationService {
     @Override
     public Page<Application> getPageOfApplications(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = applicationDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
-        List<ApplicationModel> applicationModels = applicationDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<ApplicationModel> applicationModels = applicationDao.findSortedByFilters(orderBy, orderDir, filterString, pageIndex * pageSize, pageSize);
 
         List<Application> applications = Lists.transform(applicationModels, m -> createApplicationFromModel(m));
 

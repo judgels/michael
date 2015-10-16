@@ -53,7 +53,7 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     @Override
     public Page<DashboardMachine> getPageOfDashboardMachines(String dashboardJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = dashboardMachineDao.countByFilters(filterString, ImmutableMap.of(DashboardMachineModel_.dashboardJid, dashboardJid), ImmutableMap.of());
-        List<DashboardMachineModel> dashboardMachineModels = dashboardMachineDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(DashboardMachineModel_.dashboardJid, dashboardJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<DashboardMachineModel> dashboardMachineModels = dashboardMachineDao.findSortedByFiltersEq(orderBy, orderDir, filterString, ImmutableMap.of(DashboardMachineModel_.dashboardJid, dashboardJid), pageIndex * pageSize, pageSize);
 
         List<DashboardMachine> dashboardMachines = Lists.transform(dashboardMachineModels, m -> createDashboardMachineFromModel(m));
 
@@ -63,7 +63,7 @@ public final class DashboardMachineServiceImpl implements DashboardMachineServic
     @Override
     public List<Machine> getMachinesInDashboardByDashboardJid(String dashboardJid) {
         List<String> includedMachineJids = dashboardMachineDao.getMachineJidsByDashboardJid(dashboardJid);
-        List<MachineModel> machineModels = machineDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(), ImmutableMap.of(MachineModel_.jid, includedMachineJids), 0, -1);
+        List<MachineModel> machineModels = machineDao.findSortedByFiltersIn("id", "asc", "", ImmutableMap.of(MachineModel_.jid, includedMachineJids), 0, -1);
 
         return machineModels.stream().map(m -> createMachineFromModel(m)).collect(Collectors.toList());
     }

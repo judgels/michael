@@ -31,7 +31,7 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
     @Override
     public Page<ApplicationVersion> getPageOfApplicationVersions(String applicationJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = applicationVersionDao.countByFilters(filterString, ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of());
-        List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFiltersEq(orderBy, orderDir, filterString, ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), pageIndex * pageSize, pageSize);
 
         List<ApplicationVersion> machineAccesses = Lists.transform(applicationVersionModels, m -> createApplicationVersionFromModel(m));
 
@@ -40,7 +40,7 @@ public final class ApplicationVersionServiceImpl implements ApplicationVersionSe
 
     @Override
     public List<ApplicationVersion> getApplicationVersionByApplicationJid(String applicationJid) {
-        List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), ImmutableMap.of(), 0, -1);
+        List<ApplicationVersionModel> applicationVersionModels = applicationVersionDao.findSortedByFiltersEq("id", "asc", "", ImmutableMap.of(ApplicationVersionModel_.applicationJid, applicationJid), 0, -1);
         return applicationVersionModels.stream().map(m -> createApplicationVersionFromModel(m)).collect(Collectors.toList());
     }
 

@@ -29,7 +29,7 @@ public final class DashboardServiceImpl implements DashboardService {
     @Override
     public Page<Dashboard> getPageOfDashboards(long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = dashboardDao.countByFilters(filterString, ImmutableMap.of(), ImmutableMap.of());
-        List<DashboardModel> dashboardModels = dashboardDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<DashboardModel> dashboardModels = dashboardDao.findSortedByFilters(orderBy, orderDir, filterString, pageIndex * pageSize, pageSize);
 
         List<Dashboard> dashboards = Lists.transform(dashboardModels, m -> createDashboardFromModel(m));
 

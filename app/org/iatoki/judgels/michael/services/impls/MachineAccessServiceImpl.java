@@ -33,7 +33,7 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
     @Override
     public Page<MachineAccess> getPageOfMachineAccesses(String machineJid, long pageIndex, long pageSize, String orderBy, String orderDir, String filterString) {
         long totalPages = machineAccessDao.countByFilters(filterString, ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of());
-        List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFilters(orderBy, orderDir, filterString, ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of(), pageIndex * pageSize, pageSize);
+        List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFiltersEq(orderBy, orderDir, filterString, ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), pageIndex * pageSize, pageSize);
 
         List<MachineAccess> machineAccesses = Lists.transform(machineAccessModels, m -> createMachineAccessFromModel(m));
 
@@ -42,7 +42,7 @@ public final class MachineAccessServiceImpl implements MachineAccessService {
 
     @Override
     public List<MachineAccess> getMachineAccessesByMachineJid(String machineJid) {
-        List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFilters("id", "asc", "", ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), ImmutableMap.of(), 0, -1);
+        List<MachineAccessModel> machineAccessModels = machineAccessDao.findSortedByFiltersEq("id", "asc", "", ImmutableMap.of(MachineAccessModel_.machineJid, machineJid), 0, -1);
         return machineAccessModels.stream().map(m -> createMachineAccessFromModel(m)).collect(Collectors.toList());
     }
 
