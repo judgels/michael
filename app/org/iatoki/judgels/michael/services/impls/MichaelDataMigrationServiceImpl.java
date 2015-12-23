@@ -1,6 +1,6 @@
 package org.iatoki.judgels.michael.services.impls;
 
-import org.iatoki.judgels.play.services.impls.AbstractBaseDataMigrationServiceImpl;
+import org.iatoki.judgels.play.migration.AbstractBaseDataMigrationServiceImpl;
 
 import java.sql.SQLException;
 
