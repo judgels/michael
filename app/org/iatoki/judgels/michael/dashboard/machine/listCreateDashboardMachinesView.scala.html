@@ -1,0 +1,49 @@
+@import org.iatoki.judgels.michael.dashboard.machine.DashboardMachine
+@import org.iatoki.judgels.michael.dashboard.machine.DashboardMachineCreateForm
+@import play.i18n.Messages
+@import org.iatoki.judgels.michael.machine.Machine
+@import org.iatoki.judgels.play.views.html.table.tableView
+@import org.iatoki.judgels.play.views.html.table.tableHeadersView
+@import org.iatoki.judgels.play.views.html.table.paginationView
+@import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.play.Page
+@import org.iatoki.judgels.michael.dashboard.machine.routes
+
+@(dashboardId: Long, pageOfDashboardMachines: Page[DashboardMachine], orderBy: String, orderDir: String, filterString: String, dashboardMachineCreateForm: Form[DashboardMachineCreateForm], machines: List[Machine])
+
+@listFunc(newPageIndex: scala.Long, newOrderBy: String, newOrderDir: String, newFilterString: String) = @{routes.DashboardMachineController.listCreateDashboardMachines(dashboardId, newPageIndex, newOrderBy, newOrderDir, newFilterString)}
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(dashboardMachineCreateForm)
+
+@b3.form(routes.DashboardMachineController.postCreateDashboardMachine(dashboardId)) {
+
+    @helper.CSRF.formField
+
+    @b3.select(dashboardMachineCreateForm("machineJid"), machines.map(m => (m.getJid -> m.getDisplayName)).toSeq, '_label -> Messages.get("machine.machine"), 'class -> "form-control selectpicker")
+
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.add") }
+}
+
+<div class="clearfix"></div>
+
+@tableView() {
+    @tableHeadersView(pageOfDashboardMachines.getPageIndex, orderBy, orderDir, filterString, listFunc)(
+        "id" -> Messages.get("commons.id"),
+        "machineJid" -> Messages.get("dashboard.machine.machineJid")
+    )
+    <tbody>
+    @for(dashboardMachine <- pageOfDashboardMachines.getData) {
+        <tr>
+            <td>@dashboardMachine.getId</td>
+            <td>@dashboardMachine.getMachineJid</td>
+            <td class="text-center">
+                <a href="@routes.DashboardMachineController.removeDashboardMachine(dashboardId, dashboardMachine.getId)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+            </td>
+        </tr>
+    }
+    </tbody>
+}
+
+@paginationView(pageOfDashboardMachines, orderBy, orderDir, filterString, listFunc)

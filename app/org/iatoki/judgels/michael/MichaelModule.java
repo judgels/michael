@@ -2,7 +2,6 @@ package org.iatoki.judgels.michael;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.iatoki.judgels.michael.services.impls.MichaelDataMigrationServiceImpl;
 import org.iatoki.judgels.play.JudgelsPlayProperties;
 import org.iatoki.judgels.play.config.AbstractJudgelsPlayModule;
 import org.iatoki.judgels.play.general.GeneralName;

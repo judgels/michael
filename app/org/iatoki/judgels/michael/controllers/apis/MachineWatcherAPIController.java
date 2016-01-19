@@ -1,16 +1,16 @@
 package org.iatoki.judgels.michael.controllers.apis;
 
 import org.apache.commons.lang3.EnumUtils;
-import org.iatoki.judgels.michael.Machine;
-import org.iatoki.judgels.michael.MachineNotFoundException;
-import org.iatoki.judgels.michael.MachineWatcher;
-import org.iatoki.judgels.michael.MachineWatcherType;
-import org.iatoki.judgels.michael.MachineWatcherUtils;
-import org.iatoki.judgels.michael.adapters.GraphMachineWatcherAdapter;
-import org.iatoki.judgels.michael.adapters.MachineWatcherConfAdapter;
+import org.iatoki.judgels.michael.machine.Machine;
+import org.iatoki.judgels.michael.machine.MachineNotFoundException;
+import org.iatoki.judgels.michael.machine.watcher.MachineWatcher;
+import org.iatoki.judgels.michael.machine.watcher.MachineWatcherType;
+import org.iatoki.judgels.michael.machine.watcher.MachineWatcherUtils;
+import org.iatoki.judgels.michael.machine.watcher.GraphMachineWatcherAdapter;
+import org.iatoki.judgels.michael.machine.watcher.MachineWatcherConfAdapter;
 import org.iatoki.judgels.michael.controllers.securities.LoggedIn;
-import org.iatoki.judgels.michael.services.MachineService;
-import org.iatoki.judgels.michael.services.MachineWatcherService;
+import org.iatoki.judgels.michael.machine.MachineService;
+import org.iatoki.judgels.michael.machine.watcher.MachineWatcherService;
 import org.iatoki.judgels.play.controllers.apis.AbstractJudgelsAPIController;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -20,13 +20,11 @@ import play.mvc.Result;
 import play.mvc.Security;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Date;
 
 @Security.Authenticated(value = LoggedIn.class)
 @Singleton
-@Named
 public final class MachineWatcherAPIController extends AbstractJudgelsAPIController {
 
     private final MachineService machineService;

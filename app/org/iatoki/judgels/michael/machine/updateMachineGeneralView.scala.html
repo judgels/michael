@@ -1,0 +1,19 @@
+@import org.iatoki.judgels.michael.machine.MachineUpsertForm
+@import play.i18n.Messages
+@import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.michael.machine.routes
+
+@(machineUpsertForm: Form[MachineUpsertForm], machineId: Long)
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(machineUpsertForm)
+
+@b3.form(routes.MachineController.postUpdateMachineGeneral(machineId)) {
+
+    @helper.CSRF.formField
+
+    @upsertMachineView(machineUpsertForm)
+
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("commons.update") }
+}

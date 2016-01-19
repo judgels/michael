@@ -1,0 +1,23 @@
+@import org.iatoki.judgels.michael.operation.OperationTwoMachineCopyConfForm
+@import play.i18n.Messages
+@import play.api.mvc.Call
+@import org.iatoki.judgels.play.views.html.formErrorView
+
+@(operationTwoMachineCopyConfForm: Form[OperationTwoMachineCopyConfForm], target: Call, submitLabel: String)
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(operationTwoMachineCopyConfForm)
+
+@b3.form(target) {
+
+    @helper.CSRF.formField
+
+    @b3.text(operationTwoMachineCopyConfForm("name"), '_label -> Messages.get("operation.name"))
+    @b3.text(operationTwoMachineCopyConfForm("sourceFile"), '_label -> Messages.get("operation.copy.sourceFile"))
+    @b3.text(operationTwoMachineCopyConfForm("targetFile"), '_label -> Messages.get("operation.copy.targetFile"))
+
+    @b3.submit('class -> "btn btn-primary") { @submitLabel }
+}
+
+

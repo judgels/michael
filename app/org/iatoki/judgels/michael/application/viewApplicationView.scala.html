@@ -1,0 +1,27 @@
+@import org.iatoki.judgels.michael.application.Application
+@import play.i18n.Messages
+
+@(application: Application)
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>@Messages.get("commons.id")</td>
+            <td>@application.getId</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("commons.jid")</td>
+            <td>@application.getJid</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("application.name")</td>
+            <td>@application.getName</td>
+        </tr>
+        <tr>
+            <td>@Messages.get("application.type")</td>
+            <td>@application.getType</td>
+        </tr>
+    </tbody>
+</table>

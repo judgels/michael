@@ -1,0 +1,11 @@
+@import org.iatoki.judgels.michael.machine.MachineUpsertForm
+@import org.iatoki.judgels.michael.machine.MachineType
+@import play.i18n.Messages
+
+@(machineUpsertForm: Form[MachineUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
+
+@b3.text(machineUpsertForm("instanceName"), '_label -> Messages.get("machine.instanceName"))
+@b3.text(machineUpsertForm("displayName"), '_label -> Messages.get("machine.displayName"))
+@b3.text(machineUpsertForm("baseDir"), '_label -> Messages.get("machine.baseDir"))
+@b3.select(machineUpsertForm("type"), MachineType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("machine.type"), 'class -> "form-control selectpicker")
+@b3.text(machineUpsertForm("ipAddress"), '_label -> Messages.get("machine.ipAddress"))

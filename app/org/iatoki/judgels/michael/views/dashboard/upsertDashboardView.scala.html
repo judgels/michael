@@ -1,7 +1,0 @@
-@import play.i18n.Messages
-@import org.iatoki.judgels.michael.forms.DashboardUpsertForm
-
-@(dashboardUpsertForm: Form[DashboardUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
-
-@b3.text(dashboardUpsertForm("name"), '_label -> Messages.get("dashboard.name"))
-@b3.text(dashboardUpsertForm("description"), '_label -> Messages.get("dashboard.description"))

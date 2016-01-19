@@ -1,0 +1,17 @@
+@import org.iatoki.judgels.michael.user.LoginForm
+@import play.i18n.Messages
+@import org.iatoki.judgels.play.views.html.formErrorView
+
+@(loginForm: Form[LoginForm])
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-xs-2", "col-xs-10") }
+
+<h2>@Messages.get("login.heading.login")</h2>
+
+@formErrorView(loginForm)
+
+@b3.form(action = org.iatoki.judgels.michael.user.routes.UserController.postLogin()) {
+    @b3.text(loginForm("username"), '_label -> "username")
+    @b3.password(loginForm("password"), '_label -> "password")
+    @b3.submit('class -> "btn btn-primary") { @Messages.get("general.login") }
+}

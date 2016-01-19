@@ -1,0 +1,8 @@
+@import org.iatoki.judgels.michael.application.ApplicationUpsertForm
+@import org.iatoki.judgels.michael.application.ApplicationType
+@import play.i18n.Messages
+
+@(applicationUpsertForm: Form[ApplicationUpsertForm])(implicit fieldConstructor: b3.B3FieldConstructor)
+
+@b3.text(applicationUpsertForm("name"), '_label -> Messages.get("application.name"))
+@b3.select(applicationUpsertForm("type"), ApplicationType.values.map(e => (e.name() -> e.name())).toSeq, '_label -> Messages.get("application.type"), 'class -> "form-control selectpicker")

@@ -17,7 +17,7 @@ public final class LoggedIn extends Security.Authenticator {
 
     @Override
     public Result onUnauthorized(Context ctx) {
-        return redirect(org.iatoki.judgels.michael.controllers.routes.UserController.login());
+        return redirect(org.iatoki.judgels.michael.user.routes.UserController.login());
     }
 
 }

@@ -1,0 +1,31 @@
+@import org.iatoki.judgels.michael.application.Application
+@import play.i18n.Messages
+@import org.iatoki.judgels.michael.machine.Machine
+@import play.api.mvc.Call
+@import org.iatoki.judgels.michael.operation.OperationOneMachineExecForm
+@import org.iatoki.judgels.play.views.html.formErrorView
+@import org.iatoki.judgels.michael.controllers.apis.routes
+
+@(operationOneMachineExecForm: Form[OperationOneMachineExecForm], target: Call, submitLabel: String, machines: List[Machine], applications: List[Application])
+
+@implicitFieldConstructor = @{ b3.horizontal.fieldConstructor("col-md-2", "col-md-10") }
+
+@formErrorView(operationOneMachineExecForm)
+
+@b3.form(target) {
+    @helper.CSRF.formField
+
+    @b3.select(operationOneMachineExecForm("machineJid"), machines.map(m => (m.getJid -> m.getDisplayName)).toSeq, '_label -> Messages.get("operation.singleMachine.machine"), 'class -> "form-control selectpicker")
+    @b3.select(operationOneMachineExecForm("accessId"), Seq(), '_label -> Messages.get("operation.singleMachine.access"), 'class -> "selectpicker access_autocomplete", 'machineRef -> "machineJid")
+    @b3.select(operationOneMachineExecForm("applicationJid"), applications.map(a => (a.getJid -> a.getName)).toSeq, '_label -> Messages.get("operation.singleMachine.application"), 'class -> "form-control selectpicker")
+    @b3.select(operationOneMachineExecForm("versionId"), Seq(), '_label -> Messages.get("operation.singleMachine.version"), 'class -> "selectpicker version_autocomplete", 'applicationRef -> "applicationJid")
+
+    <script type="text/javascript">
+        var accessListURL = "@routes.MachineAccessAPIController.accessList()";
+        var versionListURL = "@routes.ApplicationVersionAPIController.versionList()";
+    </script>
+    <script type="text/javascript" src="@controllers.routes.Assets.versioned("javascripts/machineAccess.js")"></script>
+    <script type="text/javascript" src="@controllers.routes.Assets.versioned("javascripts/applicationVersion.js")"></script>
+
+    @b3.submit('class -> "btn btn-primary") { @submitLabel }
+}
