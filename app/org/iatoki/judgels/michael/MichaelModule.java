@@ -6,7 +6,7 @@ import org.iatoki.judgels.play.JudgelsPlayProperties;
 import org.iatoki.judgels.play.config.AbstractJudgelsPlayModule;
 import org.iatoki.judgels.play.general.GeneralName;
 import org.iatoki.judgels.play.general.GeneralVersion;
-import org.iatoki.judgels.play.migration.BaseDataMigrationService;
+import org.iatoki.judgels.play.migration.JudgelsDataMigrator;
 
 public class MichaelModule extends AbstractJudgelsPlayModule {
 
@@ -23,7 +23,7 @@ public class MichaelModule extends AbstractJudgelsPlayModule {
         MichaelProperties.buildInstance(config);
         // </DEPRECATED>
 
-        bind(BaseDataMigrationService.class).to(MichaelDataMigrationServiceImpl.class);
+        bind(JudgelsDataMigrator.class).to(MichaelDataMigrator.class);
     }
 
     @Override
